@@ -1,0 +1,27 @@
+.block1 { 
+   		overflow-y: scroll; /* прокрутка по вертикали */
+   		margin: 2px; /* Отступы вокруг элемента */
+    	width: 200px; 
+    	background: #ccc;
+    	height: 576px;
+    	padding: 5px;
+    	border: solid 1px black; 
+    	float: left;
+   }
+   .block2 { 
+   		margin: 2px; /* Отступы вокруг элемента */
+    	width: 400px; 
+    	background: #ccc;
+    	height: 576px;
+    	padding: 5px; 
+    	border: solid 1px black; 
+    	float: left; 
+   }
+   .informationR { 
+   		float: right;
+   		width: 200px;
+   }
+   .informationL { 
+   		float: left;
+   		width: 200px;
+   }

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head> 
+    <title>Login</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    
+    <!-- Есть вероятность что надо так для apatchTomcat может понадобится-->
+    <!--
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/bootstrap.min.css"/>
+    -->
+    <link rel="shortcut icon" type="image/x-icon" href="styles/static/img/favicon.ico"/>
+
+    <link rel="stylesheet" type="text/css" href="styles/static/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="styles/static/css/help-styles.css"/>
+    <link rel="stylesheet" type="text/css" href="styles/static/css/prism.css"/>
+    <link rel="stylesheet" type="text/css" href="styles/src/foxholder-styles.css"/>
+
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
+    <script src="styles/static/scripts/jquery.min.js"></script>
+    <script src="styles/static/scripts/bootstrap.min.js"></script>
+    <script src="styles/static/scripts/prism.js"></script>
+    <script src="styles/src/foxholder.js"></script>
+    <script src="styles/static/scripts/script.js"></script>
+  </head>
+    <body style='overflow-x:hidden;'>
+    <div class="row">
+    	<div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
+    		<div class="form-container-1">
+              <h3 class="text-center">Вход в систему</h3>    
+        		<form th:action="@{/login}" method="post">
+                	<input id="first-input-1" name="username" type="text" placeholder="Логин"  />
+                	<input id="second-input-1" name="password" type="password" placeholder="Пароль" />
+                	<button type="submit">Войти</button>
+        		</form>
+        	</div>
+        </div>
+      </div>
+    </body>
+</html>
