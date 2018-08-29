@@ -1,0 +1,4 @@
+https://learn.javascript.ru/modifying-document - генерация html через javascript
+https://learn.javascript.ru/json - как парсить json на стороне html страницы
+http://www.mkyong.com/spring-mvc/spring-4-mvc-ajax-hello-world-example/ - о создании класса доля отправки данных в json (User.java)  			@JsonView(Views.Public.class) -убрать
+http://devcolibri.com/2890 - хороший гайд по ajax
