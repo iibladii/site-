@@ -454,13 +454,14 @@ public class GreetingController {
 			return "The record already exists";
 		}
 	}
-	/*
+	
+	
 	@ResponseBody
 	@RequestMapping(value = "/adsl/adsl_create", method=RequestMethod.POST) /// ajax/adsl_update
-	public String get_adsl_create(@RequestParam(value = "adsl") String adsl) {
+	public String get_test_del(@RequestParam(value = "adsl") String adsl) {
 		System.out.print(adsl);
 		return "success";
-	}*/
+	}
 	
 	
 	//http://spring-projects.ru/guides/handling-form-submission/
