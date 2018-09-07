@@ -40,7 +40,6 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 	   }
 	    */
 	   
-	   //https://habrahabr.ru/post/111102/
 	   @Bean(name = "viewResolver")
 	   public InternalResourceViewResolver viewResolver() {
 		   InternalResourceViewResolver resolver = new InternalResourceViewResolver();

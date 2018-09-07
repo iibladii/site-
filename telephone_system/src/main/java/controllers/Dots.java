@@ -22,8 +22,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.NamedQuery;
 
-@Entity // This tells Hibernate to make a table out of this class
-
+@Entity
 public class Dots {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -31,9 +30,6 @@ public class Dots {
 
     private String dot;
 
-    //@OneToMany(mappedBy="subdivision")
-    //private List<Department> subdivision;
-    
     @ManyToOne
     private Telephone telephone;
     

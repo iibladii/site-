@@ -1,4 +1,4 @@
-package controllers;//https://dzone.com/articles/spring-security-4-authenticate-and-authorize-users   мануал по аутентификации через бд
+package controllers;
 
 import java.util.Iterator;
 
@@ -32,6 +32,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   	  "select username, role from user_roles where username = ?");
     }*/
 	@Autowired
+	/**
+	 * Переопределим метод авторизации
+	 * @param auth
+	 * @throws Exception
+	 */
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
     	auth.jdbcAuthentication().dataSource(dataSource)
   	  .usersByUsernameQuery(

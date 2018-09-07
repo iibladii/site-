@@ -12,12 +12,6 @@ import controllers.Role;
 import controllers.User;
 import controllers.User_Role;
 
-// This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
-// CRUD refers Create, Read, Update, Delete
-
-//https://www.petrikainulainen.net/programming/spring-framework/spring-data-jpa-tutorial-three-custom-queries-with-query-methods/ - manual
-
-
 public interface RoleRepository extends CrudRepository<Role, Long> {
 
 	//Получим все роли связаные с user=:name
@@ -32,4 +26,3 @@ public interface RoleRepository extends CrudRepository<Role, Long> {
 	@Query("SELECT Distinct r FROM Role r WHERE r.role IS EMPTY")
     public List<Role> find6();
 }
-//https://docs.spring.io/spring-data/jpa/docs/current/reference/html/

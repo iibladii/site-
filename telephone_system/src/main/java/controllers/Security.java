@@ -21,7 +21,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.NamedQuery;
 
-@Entity // This tells Hibernate to make a table out of this class
+@Entity
 
 public class Security {
     @Id

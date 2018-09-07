@@ -22,7 +22,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.NamedQuery;
 
-@Entity // This tells Hibernate to make a table out of this class
+@Entity
 public class Subdivision {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -34,13 +34,6 @@ public class Subdivision {
 
     @ManyToOne
     private Department department;
-    
-    
-    //@OneToMany(mappedBy="subdivision")
-    //private List<Department> subdivision;
-    
-    //@OneToMany(mappedBy="subdivision")
-    //private List<Telephone> telephone;
     
 	public Integer getId() {
 		return id;

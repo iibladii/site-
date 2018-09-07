@@ -23,8 +23,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.NamedQuery;
 
-@Entity // This tells Hibernate to make a table out of this class
-
+@Entity
 public class User_Role {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)

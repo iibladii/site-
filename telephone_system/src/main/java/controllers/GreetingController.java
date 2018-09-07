@@ -396,8 +396,16 @@ public class GreetingController {
 		
 	@ResponseBody
 	@RequestMapping(value = "/ajax/adsl_info")
+	/**
+	 * Информация об ADSL
+	 * @param name
+	 * @param elem
+	 * @param count
+	 * @return Список элементов
+	 */
 	public adslInfo get_adsl_info(@RequestParam(value = "name") String name,
-			@RequestParam(value = "elem") Integer elem) {
+			@RequestParam(value = "elem") Integer elem,
+			@RequestParam(value = "count", defaultValue = "20") Integer count) {
 		// Узнаем число записей и выберем записи с по
 		List<Adsl> adsl = adslRepository.findAll('%' + name + '%');
 		// Сортируем полученные значения
@@ -410,7 +418,7 @@ public class GreetingController {
 		Integer ch1 = 0;
 		while (iter2.hasNext()) {
 			ch1++;
-			if (ch1 <= elem * 20 && ch1 > (elem - 1) * 20) {
+			if (ch1 <= elem * count && ch1 > (elem - 1) * count) {
 				adsl_view.add(((Adsl) iter2.next()).getName());
 			} else
 				iter2.next();
@@ -592,7 +600,6 @@ public class GreetingController {
         }
 		return "success";
 	}
-
 	
 	@RequestMapping(value = "/department")
 	/**
@@ -612,28 +619,6 @@ public class GreetingController {
 	public String kooperators(Model model) {
 		return "cooperators";
 	}
-
-	/*
-	 * //Получим Информацию по конкретному пользователю
-	 * 
-	 * @RequestMapping(value= "/ajax/getUserInfo", method=RequestMethod.GET)
-	 * 
-	 * @ResponseBody public UserInfo getUserInfo(@RequestParam(value="name") String
-	 * name) { //Получим пользователей List<User> results =
-	 * userRepository.find(name); if(!results.isEmpty()) {//Если у данного
-	 * пользователя есть роли Iterator iterator = results.iterator(); User us =
-	 * (User)iterator.next(); //Сохраним Основные данные о пользователе UserInfo ui
-	 * = new UserInfo(us.getFirstname(),us.getSecondname(),us.getThirdname(),us.
-	 * getUsername()); //Приступим к поиску ролей //Получим таблицу с ролями
-	 * List<User_Role> ur = us.getRole(); Iterator iterator1 = ur.iterator();
-	 * //Сохраним наименование ролей while (iterator1.hasNext()) {
-	 * ui.add(((User_Role)iterator1.next()).getRole().getRoleName()); } return ui; }
-	 * else {//Если данный пользователь не имеет ролей User us =
-	 * userRepository.getUserInfo(name); UserInfo ui = new
-	 * UserInfo(us.getFirstname(),us.getSecondname(),us.getThirdname(),us.
-	 * getUsername()); return ui; } }
-	 */
-
 	
 	@RequestMapping(value = "/getUserNameRole", method = RequestMethod.GET)
 	@ResponseBody
@@ -650,9 +635,12 @@ public class GreetingController {
 		return sw;
 	}
 
-	// Получим логин ID пользователей
 	@RequestMapping(value = "/getUsers", method = RequestMethod.GET)
 	@ResponseBody
+	/**
+	 * Получение списка имён пользователей
+	 * @return
+	 */
 	public UserNameId getUsers() {
 		UserNameId unr = new UserNameId();
 		List<User> results = userRepository.findName();
@@ -688,9 +676,16 @@ public class GreetingController {
 	 * @param page
 	 * @return
 	 */
-	public table1 ajaxTest(@RequestParam String number, @RequestParam String att1, @RequestParam String att2,
-			@RequestParam String room, @RequestParam String department, @RequestParam String adsl,
-			@RequestParam String subdivision, @RequestParam String subdivision_code, @RequestParam Integer page) {
+	public table1 ajaxTest(@RequestParam String number,
+			@RequestParam String att1,
+			@RequestParam String att2,
+			@RequestParam String room,
+			@RequestParam String department,
+			@RequestParam String adsl,
+			@RequestParam String subdivision,
+			@RequestParam String subdivision_code,
+			@RequestParam Integer page,
+			@RequestParam(value="count", defaultValue = "20") Integer count) {
 		List<Telephone> results = telephoneRepository.find("%" + number + "%", "%" + att1 + "%", "%" + att2 + "%",
 				"%" + room + "%", "%" + department + "%", "%" + adsl + "%", "%" + subdivision + "%",
 				"%" + subdivision_code + "%");
@@ -723,6 +718,11 @@ public class GreetingController {
 
 	@ResponseBody
 	@RequestMapping(value = "/subdivision/get_dataList")
+	/**
+	 * Получение списка подразделений
+	 * @return Список подразделений
+	 * @throws JsonProcessingException
+	 */
 	public ResponseEntity<String> get_datatry() throws JsonProcessingException {
 		ArrayList<String> sd = new ArrayList<String>();
 		sd = (ArrayList<String>) subdivisionRepository.findAll_();
@@ -741,6 +741,13 @@ public class GreetingController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/subdivision/get_dataListJson")
+	/**
+	 * Получение списка подразделений в формате Json
+	 * @param search -
+	 * @param type -
+	 * @return Список подразделений
+	 * @throws JsonProcessingException
+	 */
 	public ResponseEntity<String> get_dataList(@RequestParam(value = "search") String search, @RequestParam(value = "type") String type) throws JsonProcessingException {
 		ArrayList<String> sd = new ArrayList<String>();
 		sd = (ArrayList<String>) subdivisionRepository.findAll_();
