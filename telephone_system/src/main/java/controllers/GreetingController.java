@@ -90,6 +90,12 @@ public class GreetingController {
 
 	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/greeting", method = RequestMethod.GET)
+	/**
+	 * Тестовый метод(del)
+	 * @param name
+	 * @param model
+	 * @return
+	 */
 	public String greeting(@RequestParam(value = "name", required = false, defaultValue = "World") String name,
 			Model model) {
 		model.addAttribute("name", name);
@@ -98,6 +104,11 @@ public class GreetingController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/load_data")
+	/**
+	 * Тестовй класс загрузка данных из файла(del)
+	 * @return
+	 * @throws IOException
+	 */
 	public String importData() throws IOException {
 		String response="";
 		

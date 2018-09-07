@@ -16,7 +16,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
-@EnableJpaRepositories("repository")//Тут указываем где лежат репозитории
+@EnableJpaRepositories("repository")
 public class MvcConfig extends WebMvcConfigurerAdapter {
 	   @Override
 	   public void addViewControllers(ViewControllerRegistry registry) {
