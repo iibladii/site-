@@ -106,6 +106,7 @@ public class GreetingController {
 	@RequestMapping(value = "/load_data")
 	/**
 	 * Тестовй класс загрузка данных из файла(del)
+	 * Наполнение дб из exel!!!
 	 * @return
 	 * @throws IOException
 	 */
@@ -148,6 +149,11 @@ public class GreetingController {
 	}
 	
 	@RequestMapping(value = "/kartoteka", method = RequestMethod.GET)
+	/**
+	 * Страница картотека
+	 * @param model
+	 * @return
+	 */
 	public String kartoteka(Model model) {
 		// List<User> results = userRepository.find("dd");
 		// name=WebSecurityConfig.getCurrentUsername();//Получим логин пользователя
@@ -156,46 +162,25 @@ public class GreetingController {
 	}
 	
 	@RequestMapping(value = "/subdivision", method = RequestMethod.GET)
+	/**
+	 * Страница подразделение
+	 * @param model
+	 * @return
+	 */
 	public String subdivision(Model model) {
 		// List<User> results = userRepository.find("dd");
 		// name=WebSecurityConfig.getCurrentUsername();//Получим логин пользователя
 		// model.addAttribute("name", name);
 		return "subdivision";
 	}
-	
-	/*
-	//!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	@RequestMapping(value = "/kartoteka", method = RequestMethod.GET)
-    public String addKartoteka(Model model) {
-        model.addAttribute("adsl", new ADSL());
-        return "kartoteka";
-    }
-	
-    @RequestMapping(value = "/kartoteka", method = RequestMethod.POST)
-    public String processAddKartoteka(@Valid @ModelAttribute("adsl") ADSL adsl, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "kartoteka";
-        }
-        //if(adslRepository.findAllcount(adsl.getField())>0) {
-        //	return "kartoteka";
-        //}
-        //else {
-        //	Adsl ad = new Adsl();
-        //	ad.setName(adsl.getField());
-        //	adslRepository.save(ad);
-        //}
-        return "kartoteka";
-    }
-	*/
-	
-	/*
-	 * insert in database User u = new User(); u.setEmail("dddd");
-	 * u.setName("dddd"); u.setLogin("login"); u.setPicture("http://fjfjs.com");
-	 * userRepository.save(u);
-	 */
 
 	@RequestMapping(value = "/ajax/getRole", method = RequestMethod.GET)
 	@ResponseBody
+	/**
+	 * Получение всех ролей пользователей
+	 * @param name имя пользователя
+	 * @return списов ролей пользователей в формате Json
+	 */
 	public UserInfoV2 getRole(@RequestParam(value = "name") String name) {
 		// Получим пользователей
 		List<User> results = userRepository.find(name);
@@ -215,9 +200,7 @@ public class GreetingController {
 				ui.add_(chr, str, "selected");
 				chr++;
 			}
-			////
-			// Получим роли не связаные с user=:name но связанные хотябы с одним
-			//// пользователем
+			// Получим роли не связаные с user=:name но связанные хотябы с одним пользователем
 			List<Role> res = roleRepository.find5(name);
 			Iterator iterator3 = res.iterator();
 			// Сохраним наименование ролей
@@ -241,26 +224,14 @@ public class GreetingController {
 		}
 	}
 
-	/*
-	 * @RequestMapping(value= "/ajax/test", method=RequestMethod.GET)
-	 * 
-	 * @ResponseBody public String getRole() { //Найдём роли которые используются
-	 * пользователем
-	 * 
-	 * //Найдём роли которые не используются пользователем, но используются одним из
-	 * пользователей
-	 * 
-	 * //Найдём роли которые не используются пользователями
-	 * 
-	 * Iterator iterator1 = roleRepository.find5("priya").iterator();
-	 * iterator1.next(); return ((Role)iterator1.next()).getRoleName();
-	 * 
-	 * //Iterator iterator1 = roleRepository.find4("priya").iterator(); //return
-	 * ((User_Role)iterator1.next()).getUser().getId(); }
-	 */
-
 		@ResponseBody
 		@RequestMapping(value = "/ajax/errorCable_info")
+		/**
+		 * Получение информации об аварийных кабелях
+		 * @param name наименование кабеля
+		 * @param elem порядковый номер записи с которого будет возвращено 20 записей
+		 * @return Список кабелей
+		 */
 		public errorCableInfo get_errorCable_info(@RequestParam(value = "name") String name,
 				@RequestParam(value = "elem") Integer elem) {
 			// Узнаем число записей и выберем записи с по
@@ -270,7 +241,6 @@ public class GreetingController {
 			Integer ch = errorCableRepository.findAllcount('%' + name + '%');
 			// Инициализация число элементов номер страницы
 			errorCableInfo adsl_view = new errorCableInfo(ch, elem);
-
 			// Сделаем набор
 			Iterator iter2 = adsl.iterator();
 			Integer ch1 = 0;
@@ -285,7 +255,12 @@ public class GreetingController {
 		}
 	
 		@ResponseBody
-		@RequestMapping(value = "/errorCable/errorCable_del") /// ajax/adsl_update   @RequestParam(value = "myData") JADSL name
+		@RequestMapping(value = "/errorCable/errorCable_del")
+		/**
+		 * Получение списка аварийных точек кабеля
+		 * @param name наименование кабеля
+		 * @return список аварий
+		 */
 		public String get_errorCable_del(@RequestParam(value = "name") List<String> name) {
 			//Обновим данные
 			for(int i = 0; i < name.size(); i++) {
@@ -300,10 +275,9 @@ public class GreetingController {
 		}
 		
 		@ResponseBody
-		@RequestMapping(value = "/errorCable/errorCable_update") /// ajax/adsl_update
+		@RequestMapping(value = "/errorCable/errorCable_update")
 		public String get_errorCable_update(@RequestParam(value = "name") String name,
 				@RequestParam(value = "oldName") String oldName) {
-			//System.out.println(name + "   " + oldName);
 			//Обновим данные
 			if(errorCableRepository.findAllcount(name)<1) {
 				List<ErrorCable> adsl = errorCableRepository.findAll(oldName);
@@ -313,11 +287,9 @@ public class GreetingController {
 					ad.setName(name);
 					errorCableRepository.save(ad);
 				}
-				//System.out.println(name + "   " + oldName);
 				return "Save success";
 			}
 			else{
-				//System.out.println("Запись с таким именем уже существует");
 				return "The record already exists";
 			}
 		}
@@ -335,22 +307,25 @@ public class GreetingController {
 	        }
 			return "success";
 		}
-////////////////////////////////////////////////////////////////////////////////////////////		
+		
 		@ResponseBody
 		@RequestMapping(value = "/subdivision/subdivision_info")
+		/**
+		 * Получение данных о подразделениях
+		 * @param name наименование
+		 * @param elem число запрошенных строк
+		 * @param code Код подразделения
+		 * @return
+		 */
 		public subdivision get_department_info(@RequestParam(value = "name") String name,
 				@RequestParam(value = "elem") Integer elem, @RequestParam(value= "code") String code) {
 			// Узнаем число записей и выберем записи с по
-		//	List<Subdivision> adsl = subdivisionRepository.findAll('%' + name + '%');
-			
 			List<Subdivision> adsl = subdivisionRepository.findAll_('%' + name + '%', '%' + code + '%');
-			
 			// Сортируем полученные значения
 			adsl.sort(Comparator.comparing(Subdivision::getName));
 			Integer ch = subdivisionRepository.findAllcount_('%' + name + '%', '%' + code + '%');
 			// Инициализация число элементов номер страницы
 			subdivision adsl_view = new subdivision(ch, elem);
-
 			// Сделаем набор
 			Iterator iter2 = adsl.iterator();
 			Integer ch1 = 0;
@@ -365,7 +340,12 @@ public class GreetingController {
 		}
 	
 		@ResponseBody
-		@RequestMapping(value = "/subdivision/subdivision_del") /// ajax/adsl_update   @RequestParam(value = "myData") JADSL name
+		@RequestMapping(value = "/subdivision/subdivision_del")
+		/**
+		 * Удаление подразделения
+		 * @param name Наименование подразделения(Уникальное значение)
+		 * @return
+		 */
 		public String get_department_del(@RequestParam(value = "name") List<String> name) {
 			//Обновим данные
 			for(int i = 0; i < name.size(); i++) {
@@ -380,10 +360,9 @@ public class GreetingController {
 		}
 		
 		@ResponseBody
-		@RequestMapping(value = "/subdivision/subdivision_update") /// ajax/adsl_update
+		@RequestMapping(value = "/subdivision/subdivision_update")
 		public String get_department_update(@RequestParam(value = "name") String name,
 				@RequestParam(value = "oldName") String oldName) {
-			//System.out.println(name + "   " + oldName);
 			//Обновим данные
 			if(subdivisionRepository.findAllcount(name)<1) {
 				List<Subdivision> adsl = subdivisionRepository.findAll(oldName);
@@ -393,11 +372,9 @@ public class GreetingController {
 					ad.setName(name);
 					subdivisionRepository.save(ad);
 				}
-				//System.out.println(name + "   " + oldName);
 				return "Save success";
 			}
 			else{
-				//System.out.println("Запись с таким именем уже существует");
 				return "The record already exists";
 			}
 		}
@@ -416,7 +393,7 @@ public class GreetingController {
 	        }
 			return "success";
 		}
-////////////////////////////////////////////////////////////////////////////////////////////
+		
 	@ResponseBody
 	@RequestMapping(value = "/ajax/adsl_info")
 	public adslInfo get_adsl_info(@RequestParam(value = "name") String name,
@@ -428,7 +405,6 @@ public class GreetingController {
 		Integer ch = adslRepository.findAllcount('%' + name + '%');
 		// Инициализация число элементов номер страницы
 		adslInfo adsl_view = new adslInfo(ch, elem);
-
 		// Сделаем набор
 		Iterator iter2 = adsl.iterator();
 		Integer ch1 = 0;
@@ -442,12 +418,16 @@ public class GreetingController {
 		return adsl_view;
 	}
 
-	// 127.0.0.1:8080/adsl/adsl_update?name=_aaaaaaaa&oldName=6
 	@ResponseBody
-	@RequestMapping(value = "/adsl/adsl_update") /// ajax/adsl_update
+	@RequestMapping(value = "/adsl/adsl_update")
+	/**
+	 * Обновление записей об ADSL
+	 * @param name наименование ADSL(Все записи уникальны)
+	 * @param oldName старое наименование
+	 * @return сообщение об успехе/ошибке сохранения
+	 */
 	public String get_adsl_update(@RequestParam(value = "name") String name,
 			@RequestParam(value = "oldName") String oldName) {
-		//System.out.println(name + "   " + oldName);
 		//Обновим данные
 		if(adslRepository.findAllcount(name)<1) {
 			List<Adsl> adsl = adslRepository.findAll(oldName);
@@ -457,43 +437,33 @@ public class GreetingController {
 				ad.setName(name);
 				adslRepository.save(ad);
 			}
-			//System.out.println(name + "   " + oldName);
 			return "Save success";
 		}
 		else{
-			//System.out.println("Запись с таким именем уже существует");
 			return "The record already exists";
 		}
 	}
 	
 	
 	@ResponseBody
-	@RequestMapping(value = "/adsl/adsl_create", method=RequestMethod.POST) /// ajax/adsl_update
+	@RequestMapping(value = "/adsl/adsl_create", method=RequestMethod.POST)
+	/**
+	 * Создание новой записи ADSL
+	 * @param adsl наименование ADSL
+	 * @return
+	 */
 	public String get_test_del(@RequestParam(value = "adsl") String adsl) {
 		System.out.print(adsl);
 		return "success";
 	}
 	
-	
-	//http://spring-projects.ru/guides/handling-form-submission/
-	/*
 	@ResponseBody
-	@RequestMapping(value="/greeting1", method=RequestMethod.GET)
-    public String greetingForm(Model model) {
-        model.addAttribute("greeting1", new Greeting());
-        return "adsl";
-    }
-	@ResponseBody
-    @RequestMapping(value="/greeting1", method=RequestMethod.POST)
-    public String greetingSubmit(@ModelAttribute Greeting greeting1, Model model) {
-        model.addAttribute("greeting1", greeting1);
-        return "adsl";
-    }*/
-	
-	//http://qaru.site/questions/178862/parsing-json-into-java-objects-in-spring-mvc - jsom spring mvc
-	//http://qaru.site/questions/168531/parsing-json-in-spring-mvc-using-jackson-json
-	@ResponseBody
-	@RequestMapping(value = "/adsl/adsl_del") /// ajax/adsl_update   @RequestParam(value = "myData") JADSL name
+	@RequestMapping(value = "/adsl/adsl_del")
+	/**
+	 * Удаление записи ADSL
+	 * @param name наименование записи
+	 * @return сообщение об успехе/ошибке удаления
+	 */
 	public String get_adsl_del(@RequestParam(value = "name") List<String> name) {
 		//Обновим данные
 		for(int i = 0; i < name.size(); i++) {
@@ -507,43 +477,24 @@ public class GreetingController {
 			return "Delete success";
 	}
 	
-	/*
-	 * //Get all ADSL.name
-	 * 
-	 * @ResponseBody
-	 * 
-	 * @RequestMapping(value= "/ajax/adsl") public List<Adsl>
-	 * get_dataAdsl(@RequestParam(value="name") String name) { List<Adsl> adsl =
-	 * adslRepository.findAll('%'+name+'%');
-	 * 
-	 * return adsl; }
-	 */
-	/*
-	@RequestMapping(value = "/adsl", method = RequestMethod.GET)
-    public String add(Model model) {
-        model.addAttribute("adsl", new ADSL());
-        return "adsl";
-    }
-	
-    @RequestMapping(value = "/adsl", method = RequestMethod.POST)
-    public String processAdd(@Valid @ModelAttribute("adsl") ADSL adsl, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "adsl";
-        }
-        if(adslRepository.findAllcount(adsl.getField())>0) {
-        	return "adsl";
-        }
-        else {
-        	Adsl ad = new Adsl();
-        	ad.setName(adsl.getField());
-        	adslRepository.save(ad);
-        }
-        return "adsl";
-    }
-	*/
-	
 	@ResponseBody
 	@RequestMapping(value = "/ajax/kartoteka_create")
+	/**
+	 * Создание новой записи
+	 * @param number Телефонный номер
+	 * @param addaedNumber Добавочный номер
+	 * @param security Сопоставляемый пульт безопасности
+	 * @param location Местоположение
+	 * @param subdivision Подразделение
+	 * @param subdivisionCode Код подразделения
+	 * @param d1 Параметр 1
+	 * @param d2 Параметр 1
+	 * @param d3 Параметр 1
+	 * @param d4 Параметр 1
+	 * @param d5 Параметр 1
+	 * @param note Заметки
+	 * @return сообщение об успехе/ошибке
+	 */
 	public String get_kartoteka_create(
 			@RequestParam(value = "number") String number,
 			@RequestParam(value = "addedNumber") String addaedNumber,//at1
@@ -605,20 +556,31 @@ public class GreetingController {
 		return "success";
 	}
 	
-	
-	
 	@RequestMapping(value = "/errorCable")
+	/**
+	 * Страница с записияи об авариях
+	 * @return
+	 */
 	public String errorCable() {
 		return "errorCable";
 	}
 	
 	@RequestMapping(value = "/adsl")
+	/**
+	 * Страница ADSL
+	 * @return
+	 */
 	public String adsl() {
 		return "adsl";
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/ajax/adsl_create")
+	/**
+	 * Создание новой записи ADSL
+	 * @param adsl
+	 * @return
+	 */
 	public String get_adsl_create(@RequestParam(value = "adsl") String adsl) {
 		if(adslRepository.findAllcount(adsl)>0) {
         	return "entry more then zero";
@@ -631,12 +593,22 @@ public class GreetingController {
 		return "success";
 	}
 
+	
 	@RequestMapping(value = "/department")
+	/**
+	 * Страница отдел
+	 * @return
+	 */
 	public String department() {
 		return "department";
 	}
 
 	@RequestMapping(value = "/cooperators", method = RequestMethod.GET)
+	/**
+	 * Страница сотрудники
+	 * @param model
+	 * @return
+	 */
 	public String kooperators(Model model) {
 		return "cooperators";
 	}
@@ -662,13 +634,15 @@ public class GreetingController {
 	 * getUsername()); return ui; } }
 	 */
 
-	// Получим логины роли пользователей для прорисовки элементов навигации
-	// доступных конкретному пользователю
+	
 	@RequestMapping(value = "/getUserNameRole", method = RequestMethod.GET)
 	@ResponseBody
+	/**
+	 * Получим логины роли пользователей для прорисовки элементов навигации доступных конкретному пользователю
+	 * @return Все логины сопоставленные с ними роли
+	 */
 	public SecurityView greeting() {
-		SecurityView sw = new SecurityView((String) WebSecurityConfig.getCurrentUsername());// Добавим в представление
-																							// имя текущего пользователя
+		SecurityView sw = new SecurityView((String) WebSecurityConfig.getCurrentUsername());// Добавим в представление имя текущего пользователя
 		Iterator iterator = WebSecurityConfig.getCurrentUserrole();// Найдём и вернём роли
 		while (iterator.hasNext()) {
 			sw.add(iterator.next().toString());
@@ -690,21 +664,30 @@ public class GreetingController {
 		return unr;
 	}
 
-	/*
-	 * @RequestMapping(value= "/kartoteka/page/*", method=RequestMethod.GET) public
-	 * String kartoteka1(@RequestParam(value="name", required=false,
-	 * defaultValue="World") String name, Model model) {
-	 * //name=WebSecurityConfig.getCurrentUsername(); model.addAttribute("name",
-	 * name); return "kartoteka"; }
+	/**
+	 * Тест соединения
+	 * @return test OK
 	 */
-
 	@RequestMapping(value = "/test")
 	public String test() {
-		return "test";
+		return "test OK";
 	}
 
 	@RequestMapping(value = "/ajaxtest", method = RequestMethod.GET)
 	@ResponseBody
+	/**
+	 * Тестовое заполнение()
+	 * @param number
+	 * @param att1
+	 * @param att2
+	 * @param room
+	 * @param department
+	 * @param adsl
+	 * @param subdivision
+	 * @param subdivision_code
+	 * @param page
+	 * @return
+	 */
 	public table1 ajaxTest(@RequestParam String number, @RequestParam String att1, @RequestParam String att2,
 			@RequestParam String room, @RequestParam String department, @RequestParam String adsl,
 			@RequestParam String subdivision, @RequestParam String subdivision_code, @RequestParam Integer page) {
@@ -738,90 +721,6 @@ public class GreetingController {
 		return tb;
 	}
 
-	/*
-	 * //http://www.java2s.com/Tutorials/Java/JPA/4325__JPA_Query_In_OneToMany.htm -
-	 * Единственный нормальный мануал по JPQL //Тестим ajax json
-	 * //http://devcolibri.com/2890 - про сторону сервера
-	 * //https://ru.stackoverflow.com/questions/624280/ajax-spring-mvc - про сторону
-	 * клиента //https://learn.javascript.ru/json - как распарсить на клиенте
-	 * 
-	 * @RequestMapping(value= "/test") public String test() { return "test"; }
-	 * 
-	 * //Сервис выдающий данные в формате json
-	 * 
-	 * @RequestMapping(value = "/ajaxtest", method = RequestMethod.GET)
-	 * 
-	 * @ResponseBody public table1 ajaxTest(){ List<User> results =
-	 * userRepository.find("dd"); table1 tb=new table1(); tb.add(1, "fdfd", "fdfd",
-	 * "fdfd", "fdfd", "fdfd", "fdfd", "fdfd"); tb.add(2, "fjdfhj", "fdfd", "fdfd",
-	 * "fdfd", "fdfd", "fdfd", "fdfd"); tb.add(3, "434", "456", "456", "45", "456",
-	 * "56", "4556");
-	 * 
-	 * 
-	 * //Вставляем через итератор Iterator iterator2 = results.iterator(); while
-	 * (iterator2.hasNext()) { User bus = (User) iterator2.next();
-	 * tb.add(4,bus.getName(), bus.getEmail(), "xozain", "room", "ult", "dot",
-	 * "adsl"); } return tb; } //Конец теста
-	 */
-
-	/*
-	 * //Тестим ajax solo //http://devcolibri.com/2890
-	 * 
-	 * @RequestMapping(value= "/test1") public String kartoteka() { return "test1";
-	 * }
-	 * 
-	 * @RequestMapping(value = "/ajaxtest1", method = RequestMethod.GET)
-	 * 
-	 * @ResponseBody public Set<String> ajaxTest() { Set<String> records = new
-	 * HashSet<String>(); records.add("<h1>Record #1</h1>");
-	 * records.add("Record #2"); return records; } //Конец теста
-	 */
-/*	
-	@ResponseBody
-	@RequestMapping(value = "/subdivision/get_dataList")
-	public companateSelect2 get_dataList() throws JsonProcessingException {
-		ArrayList<String> sd = new ArrayList<String>();
-		sd = (ArrayList<String>) subdivisionRepository.findAll_();
-		
-		
-		companateSelect2 cs2 = new companateSelect2();
-		for(int i = 1; i < sd.size()+1; i++) {
-			subdivisionSelect2 sd_ = new subdivisionSelect2(i, sd.get(i-1));
-			ObjectMapper mapper = new ObjectMapper();
-			String jsonInString = mapper.writeValueAsString(sd_);
-			cs2.add(jsonInString);
-		}
-		
-		//ObjectMapper mapper = new ObjectMapper();
-		//String jsonInString = mapper.writeValueAsString(cs2);		
-
-		return cs2;
-	}
-
-	
-//Соберём json и отправим его
-	@ResponseBody
-	@RequestMapping(value = "/subdivision/get_dataList")
-	public String get_dataList() throws JsonProcessingException {
-		String cs2 = "{"+
-		  "\"results\": ["+
-		    "{"+
-		      "\"id\": 1,"+
-		      "\"text\": \"Option 1\""+
-		    "},"+
-		    "{"+
-		      "\"id\": 2,"+
-		      "\"text\": \"Option 2\""+
-		    "}"+
-		  "],"+
-		  "\"pagination\": {"+
-		    "\"more\": true"+
-		  "}"+
-		  "}";
-		return cs2;
-	}
-*/
-	
 	@ResponseBody
 	@RequestMapping(value = "/subdivision/get_dataList")
 	public ResponseEntity<String> get_datatry() throws JsonProcessingException {
@@ -879,6 +778,5 @@ public class GreetingController {
 		HttpHeaders responseHeaders = new HttpHeaders();
 	    responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
 	    return new ResponseEntity<String>(cs2,responseHeaders, HttpStatus.OK);
-		//return cs2;
 	}
 }
