@@ -52,14 +52,6 @@ public class Department {
 	
 	public void setSubdivision(Subdivision subdivision) {
 		this.subdivision.add(subdivision);
-	}
-	//public Subdivision getSubdivision() {
-	//	return subdivision;
-	//}
-    
-	//public List<Telephone> getTelephone() {
-	//	return telephone;
-	//}
-    
+	} 
 }
 

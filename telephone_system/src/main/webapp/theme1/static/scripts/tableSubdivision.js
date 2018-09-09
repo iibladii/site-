@@ -182,7 +182,7 @@ $(document).on('click','#btn',function(){
 			//Отправим запрос на удаление
 			$.get("/subdivision/subdivision_del?name=" + encodeURIComponent(param) ,function(data,status){
 				if (!(status == "success")) {
-		    		  // обработать ошибку
+		    		  //обработать ошибку
 		    		  alert( status + ': ' + statusText ); // пример вывода: 404: Not Found
 		    		  //Оповестим об ошибке коммуникации
 		    		  loadInfo(document.getElementById("adsl_Name").value);
@@ -190,7 +190,7 @@ $(document).on('click','#btn',function(){
 					  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#550000">Ошибка: ' + status + '</p>';
 		    		}
 		    	else {
-		    		  // вывести результат
+		    		  //Вывести результат
 		    		  var rsp = data;
 		    		  if(rsp.toString() == "Delete success"){
 		    			  //Оповестим об успехе сохранения

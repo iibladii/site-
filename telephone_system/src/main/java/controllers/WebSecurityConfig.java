@@ -73,7 +73,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	            .antMatchers("/styles/**");
 	    }
 		
-		//Получим имя пользователя String str = WebSecurityConfig.getCurrentUsername();//Получим логин пользователя
+		//Получим имя пользователя String str = WebSecurityConfig.getCurrentUsername();
 		public static String getCurrentUsername() {
 		      Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		      //return auth.getAuthorities().toString();
@@ -85,5 +85,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		      return iterator;
 		      //return auth.getName();
 		}
-		
 }

@@ -36,11 +36,7 @@ public class Telephone {
  
     @ManyToOne
     private Adsl adsl;
-    
-    //@ManyToOne
-    //private Subdivision subdivision;
-    
-    //@ManyToOne
+
     @OneToMany(mappedBy="telephone")
     private List<Department> department;
     

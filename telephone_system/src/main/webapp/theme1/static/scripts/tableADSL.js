@@ -128,9 +128,6 @@ $(document).ready(function() {//При загрузке документа за�
 	blockInput();
 	loadADSLTable(1);
 });
-/*
-	if(!str.localeCompare("Удалит1")){
-*/
 
 //Обработка нажатия на кнопку удалить
 $(document).on('click','#btn',function(){
