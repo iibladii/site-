@@ -154,9 +154,8 @@ public class GreetingController {
 	 * @return
 	 */
 	public String kartoteka(Model model) {
-		// List<User> results = userRepository.find("dd");
-		// name=WebSecurityConfig.getCurrentUsername();//Получим логин пользователя
-		// model.addAttribute("name", name);
+		String name = WebSecurityConfig.getCurrentUsername();//Получим логин пользователя
+		model.addAttribute("name", name);
 		return "kartoteka";
 	}
 	
@@ -167,9 +166,8 @@ public class GreetingController {
 	 * @return
 	 */
 	public String subdivision(Model model) {
-		// List<User> results = userRepository.find("dd");
-		// name=WebSecurityConfig.getCurrentUsername();//Получим логин пользователя
-		// model.addAttribute("name", name);
+		String name = WebSecurityConfig.getCurrentUsername();//Получим логин пользователя
+		model.addAttribute("name", name);
 		return "subdivision";
 	}
 
@@ -663,17 +661,18 @@ public class GreetingController {
 	@RequestMapping(value = "/ajaxtest", method = RequestMethod.GET)
 	@ResponseBody
 	/**
-	 * Тестовое заполнение()
-	 * @param number
-	 * @param att1
-	 * @param att2
-	 * @param room
-	 * @param department
-	 * @param adsl
-	 * @param subdivision
-	 * @param subdivision_code
-	 * @param page
-	 * @return
+	 * Тестовое заполнение
+	 * @param number телефонный номер
+	 * @param att1 аттрибут1
+	 * @param att2 аттрибут2
+	 * @param room аудитория
+	 * @param department отдел
+	 * @param adsl адсл
+	 * @param subdivision подразделение
+	 * @param subdivision_code код подразделения
+	 * @param page номер страницы
+	 * @param count число строк в возвращаемом наборе
+	 * @return набор строк
 	 */
 	public table1 ajaxTest(@RequestParam String number,
 			@RequestParam String att1,
@@ -700,8 +699,8 @@ public class GreetingController {
 		int ch = 1;// Номер строки
 		while (iterator2.hasNext()) {
 			Telephone tl = (Telephone) iterator2.next();
-			if (ch > (page - 1) * 20) {
-				if (ch <= (page * 20)) {
+			if (ch > (page - 1) * count) {
+				if (ch <= (page * count)) {
 					for(Department dddd:tl.getDepartment())
 						for(Subdivision sddd:dddd.getSubdivision())
 							tb.add(ch, tl.getNumber(), tl.getAtt1(), tl.getAtt2(), tl.getRoom(),
@@ -742,12 +741,12 @@ public class GreetingController {
 	@RequestMapping(value = "/subdivision/get_dataListJson")
 	/**
 	 * Получение списка подразделений в формате Json
-	 * @param search -
-	 * @param type -
-	 * @return Список подразделений
+	 * @param search наименование подразделения
+	 * @param code код подразделения
+	 * @return Список подразделений в фоормате json(Cформатирован для загрузки в выпадающий список/select2)
 	 * @throws JsonProcessingException
 	 */
-	public ResponseEntity<String> get_dataList(@RequestParam(value = "search") String search, @RequestParam(value = "type") String type) throws JsonProcessingException {
+	public ResponseEntity<String> get_dataList(@RequestParam(value = "search") String search, @RequestParam(value = "type") String code) throws JsonProcessingException {
 		ArrayList<String> sd = new ArrayList<String>();
 		sd = (ArrayList<String>) subdivisionRepository.findAll_();
 		String cs2 = "{"+
