@@ -337,6 +337,46 @@ public class GreetingController {
 		}
 	
 		@ResponseBody
+		@RequestMapping(value = "/subdivision/department_del")
+		/**
+		 * Удаление подразделения
+		 * @param name Наименование подразделения(Уникальное значение)
+		 * @return
+		 */
+		public String department_del(@RequestParam(value = "name") List<String> name) {
+			//Обновим данные
+			for(int i = 0; i < name.size(); i++) {
+				List<Subdivision> adsl = subdivisionRepository.findAll(name.get(i));
+				Iterator iter2 = adsl.iterator();
+				while (iter2.hasNext()) {
+					Subdivision ad = ((Subdivision) iter2.next());
+					subdivisionRepository.delete(ad);
+				}
+			}
+				return "Delete success";
+		}
+		
+		@ResponseBody
+		@RequestMapping(value = "/subdivision/department_update")
+		public String department_update(@RequestParam(value = "name") String name,
+				@RequestParam(value = "oldName") String oldName) {
+			//Обновим данные
+			if(departmentRepository.findAllcount(name)<1) {
+				List<Department> adsl = departmentRepository.findAll(oldName);
+				Iterator iter2 = adsl.iterator();
+				while (iter2.hasNext()) {
+					Department ad = ((Department) iter2.next());
+					ad.setName(name);
+					departmentRepository.save(ad);
+				}
+				return "Save success";
+			}
+			else{
+				return "The record already exists";
+			}
+		}
+		
+		@ResponseBody
 		@RequestMapping(value = "/subdivision/subdivision_del")
 		/**
 		 * Удаление подразделения
@@ -457,8 +497,10 @@ public class GreetingController {
 	 * @param adsl наименование ADSL
 	 * @return
 	 */
-	public String get_test_del(@RequestParam(value = "adsl") String adsl) {
-		System.out.print(adsl);
+	public String get_test_del(@RequestParam(value = "adsl") String name) {
+		Adsl adsl = new Adsl();
+		adsl.setName(name);
+		adslRepository.save(adsl);
 		return "success";
 	}
 	
@@ -598,12 +640,12 @@ public class GreetingController {
 		return "success";
 	}
 	
-	@RequestMapping(value = "/department")
+	@RequestMapping(value = "/department", method = RequestMethod.GET)
 	/**
 	 * Страница отдел
 	 * @return
 	 */
-	public String department() {
+	public String department(Model model) {
 		return "department";
 	}
 
