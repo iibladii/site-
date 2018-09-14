@@ -22,7 +22,6 @@ public interface SubdivisionRepository extends CrudRepository<Subdivision, Long>
 	@Query(value = "select count(a) from Subdivision a WHERE a.name like :name and a.code like :code")
     Integer findAllcount_(@Param("name") String name, @Param("code") String code);
 	
-	
 	@Query(value = "select a from Subdivision a WHERE a.name like :name")
     List<Subdivision> findAll(@Param("name") String name);
 	

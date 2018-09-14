@@ -21,16 +21,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	DataSource dataSource;
-
-	/*
-    @Autowired
-    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-    	auth.jdbcAuthentication().dataSource(dataSource)
-  	  .usersByUsernameQuery(
-  	  "select username, password, enabled from users where username = ?")
-  	  .authoritiesByUsernameQuery(
-  	  "select username, role from user_roles where username = ?");
-    }*/
+	
 	@Autowired
 	/**
 	 * Переопределим метод авторизации
@@ -44,7 +35,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   	  .authoritiesByUsernameQuery(
   	  "select user.username, role.role_name from user,user_role,role where user.id = user_role.user_id and role.id = user_role.role_id and user.username = ?");
     }     
-        
         
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
@@ -83,6 +73,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		      Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		      Iterator iterator = auth.getAuthorities().iterator();
 		      return iterator;
-		      //return auth.getName();
 		}
 }

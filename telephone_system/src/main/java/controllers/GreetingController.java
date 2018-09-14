@@ -398,8 +398,16 @@ public class GreetingController {
 		
 		@ResponseBody
 		@RequestMapping(value = "/subdivision/subdivision_update")
+		/**
+		 * Иззменение наименования подразделения
+		 * @param name название подразделения
+		 * @param oldName старое наименование
+		 * @param code код подразделения
+		 * @return статус
+		 */
 		public String get_department_update(@RequestParam(value = "name") String name,
-				@RequestParam(value = "oldName") String oldName) {
+				@RequestParam(value = "oldName") String oldName,
+				@RequestParam(value = "code", defaultValue = "0") int code) {
 			//Обновим данные
 			if(subdivisionRepository.findAllcount(name)<1) {
 				List<Subdivision> adsl = subdivisionRepository.findAll(oldName);
