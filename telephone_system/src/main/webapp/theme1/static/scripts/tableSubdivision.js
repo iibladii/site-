@@ -1,5 +1,5 @@
 var flag=0;//Если 0-Режим просмотра 1-режим удаления
-var zap="";//Выделенная запись в таблице ADSL
+var zap="";var code=""//Выделенная запись в таблице ADSL
 var page=1;//Текущая страница
 
 function UNblockInput(){
@@ -14,24 +14,26 @@ function blockInput(){
 	$('#UserInfo select').attr('disabled', 'disabled');//Заблокируем
 }
 
+//Отправка запроса на получение данных-> получение результата запровс -> отображение полученных данных
 function loadADSLTable(elem){
 	$.get("/subdivision/subdivision_info?name="+encodeURIComponent(document.getElementById("ads_name_").value)+'&elem='+encodeURIComponent(elem)+"&code="+encodeURIComponent(document.getElementById("subdiv_code_").value),function(data,status){
 		var elem2 = document.getElementById("ADSLList");//Таблица
 		var adslList='<table border="1" id="usersTable">'+
 			'<thead>'+
 				'<tr>'+
-					'<th>Подразделение</th>'+
+					'<th>Код&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
+					'<th>Подразделение&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
 				'</tr>'+
 			'</thead>';
 			for(var i=0;i < parseInt(data.roleList.length); i++){
-				if(data.roleList[i]!=zap.toString()){
+				if(data.roleList[i]!=zap.toString() && data.codeList[i]!=zap.toString()){
 					adslList+='<tbody>'+
-					'<tr><td class="info">'+data.roleList[i]+'</td></tr>'+
+					'<tr><td class="info">'+data.codeList[i]+'</td><td class="info">'+data.roleList[i]+'</td></tr>'+
 					'</tbody>';
 				}
 				else{
 					adslList+='<tbody>'+
-					'<tr><td class="info" style="background: #cc0;">'+data.roleList[i]+'</td></tr>'+
+					'<tr><td class="info" style="background: #cc0;">'+data.codeList[i]+'</td><td class="info" style="background: #cc0;">'+data.roleList[i]+'</td></tr>'+
 					'</tbody>';
 				}
 			}
@@ -66,15 +68,16 @@ function loadADSLTableDel(elem){
 	$.get("/subdivision/subdivision_info?name="+encodeURIComponent(document.getElementById("ads_name_").value)+'&elem='+encodeURIComponent(elem)+"&code="+encodeURIComponent(document.getElementById("subdiv_code_").value),function(data,status){
 		var elem2 = document.getElementById("ADSLList");//Таблица
 		var adslList='<table border="1" id="usersTable">'+
-			'<thead>'+
+			'<thead>'+	
 				'<tr>'+
-					'<th>Подразделение&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th><th>&nbsp&nbsp</th>'+
+					'<th>Код&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
+					'<th>Подразделение&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
+					'<th>&nbsp&nbsp</th>'+
 				'</tr>'+
 			'</thead>';
 			for(var i=0;i < parseInt(data.roleList.length); i++){
-				
 				adslList+='<tbody>'+
-					'<tr><td class="info">'+data.roleList[i]+'</td><td class="del"></td></tr>'+
+					'<tr><td class="info">'+data.codeList[i]+'</td><td class="info">'+data.roleList[i]+'</td><td class="del"></td></tr>'+
 				'</tbody>';
 			}
 			adslList+='</table>';
@@ -104,7 +107,7 @@ function loadADSLTableDel(elem){
 	});
 }
 
-//Загрузка инфы
+//Загрузка данных
 function loadInfo(str){
 	var elem6 = document.getElementById("UserInfo");//Таблица
 	elem6.innerHTML=''+
@@ -128,7 +131,8 @@ function loadInfo(str){
 	'</div>';
 }
 
-$(document).ready(function() {//При загрузке документа заполним таблицу
+//При загрузке документа заполним таблицу
+$(document).ready(function() {
 	loadInfo("");
 	blockInput();
 	loadADSLTable(1);
@@ -157,7 +161,7 @@ $(document).on('click','#btn',function(){
 			'&nbsp;'+
 			'<button id="btn" style="cursor:pointer"><img src="styles/kartoteka/img/krest.png" style="vertical-align: middle"></img>Удалить</button>';
 		
-			//Инициализируем удаление выделенных строк/////////////////////////
+			//Инициализируем удаление выделенных строк
 			//Подготовим данные
 			var event = {
 					// Получаем текст из всех указанных элементов в виде массива выборкой
@@ -243,7 +247,7 @@ $(document).on("click", ".page-с", function (){
     $(document).on("click", "#poisk", function() {
     	loadInfo("");
     	blockInput();
-    	zap="";
+    	zap=""; code="";
     	if(flag==0)
     		loadADSLTable(1);
     	else
@@ -253,7 +257,6 @@ $(document).on("click", ".page-с", function (){
   //Обработка нажатия кнопки сохранить
     $(document).on("click", "#save", function() {
     	//Инициализируем сохранение
-    	alert("fdf");
     	var xhr = new XMLHttpRequest();
     	var params = 'name=' + encodeURIComponent(document.getElementById("adsl_Name").value) +
     	  '&oldName=' + encodeURIComponent(zap) ;

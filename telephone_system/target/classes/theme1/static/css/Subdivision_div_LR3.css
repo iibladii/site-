@@ -1,0 +1,47 @@
+.block5_splitter{
+	background: #ccc;
+	height: 5px;
+}
+.block4{
+	border: solid 1px black;
+	background: #ccc;
+    bottom: 4px; /* Расстояние снизу  */
+    padding: 4px;
+    text-align: center;
+}
+.block3{
+	/*overflow-y: scroll;*/
+	width: 200px;
+	height: 820px;
+	background: #ccc;
+	/*border-right: 1px solid black;*/
+    top: 82px; /* Расстояние от верхнего края */ 
+    bottom: 0; /* Расстояние снизу  */
+}
+.block1 { 
+   	/*overflow-y: scroll;  прокрутка по вертикали */
+   	margin: 2px; /* Отступы вокруг элемента */
+    width: 300px; 
+    background: #ccc;
+    height: 856px;
+    padding: 5px;
+    border: solid 1px black; 
+    float: left;
+}
+.block2 { 
+   	margin: 2px; /* Отступы вокруг элемента */
+    width: 400px; 
+    background: #ccc;
+    height: 856px;
+    padding: 5px; 
+    border: solid 1px black; 
+    float: left; 
+}
+.informationR { 
+   	float: right;
+   	width: 200px;
+}
+.informationL { 
+   	float: left;
+   	width: 200px;
+}

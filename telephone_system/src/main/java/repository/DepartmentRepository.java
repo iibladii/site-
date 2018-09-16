@@ -22,6 +22,6 @@ public interface DepartmentRepository extends CrudRepository<Department, Long> {
 	@Query(value = "select count(a) from Department a WHERE a.name like :name")
     Integer findAllcount(@Param("name") String name);
 	
-	@Query(value = "select a from Department a WHERE a.name like :name and a.code like :code")
-    List<Department> findAll_(@Param("name") String name, @Param("code") String code);
+	@Query(value = "select a from Department a WHERE a.name like :name")
+    List<Department> findAll_(@Param("name") String name);
 }

@@ -315,7 +315,7 @@ public class GreetingController {
 		 * @return
 		 */
 		public subdivision get_department_info(@RequestParam(value = "name") String name,
-				@RequestParam(value = "elem") Integer elem, @RequestParam(value= "code") String code) {
+				@RequestParam(value = "elem",defaultValue="1") Integer elem, @RequestParam(value= "code") String code) {
 			// Узнаем число записей и выберем записи с по
 			List<Subdivision> adsl = subdivisionRepository.findAll_('%' + name + '%', '%' + code + '%');
 			// Сортируем полученные значения
@@ -329,7 +329,8 @@ public class GreetingController {
 			while (iter2.hasNext()) {
 				ch1++;
 				if (ch1 <= elem * 20 && ch1 > (elem - 1) * 20) {
-					adsl_view.add(((Subdivision) iter2.next()).getName());
+					Object obj = iter2.next();
+					adsl_view.add(((Subdivision) obj).getName(),((Subdivision) obj).getCode());
 				} else
 					iter2.next();
 			}
