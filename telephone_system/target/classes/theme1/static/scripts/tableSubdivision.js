@@ -33,7 +33,7 @@ function loadADSLTable(elem){
 				}
 				else{
 					adslList+='<tbody>'+
-					'<tr><td class="info" style="background: #cc0;">'+data.codeList[i]+'</td><td class="info" style="background: #cc0;">'+data.roleList[i]+'</td></tr>'+
+					'<tr><td id="currentCode" class="info" style="background: #cc0;">'+data.codeList[i]+'</td><td id="currentRole" class="info" style="background: #cc0;">'+data.roleList[i]+'</td></tr>'+
 					'</tbody>';
 				}
 			}
@@ -108,7 +108,7 @@ function loadADSLTableDel(elem){
 }
 
 //Загрузка данных
-function loadInfo(str){
+function loadInfo(str,code){
 	var elem6 = document.getElementById("UserInfo");//Таблица
 	elem6.innerHTML=''+
 	'<div>Данные подразделение:</div>'+
@@ -121,7 +121,7 @@ function loadInfo(str){
 		'&nbsp;'+
 		'<div>'+
 			'<div class="informationL">Код подразделения:</div>'+
-			'<div class="informationR" id="cname"><input type="text" id="c_Name" size="28" value="'+str+'"></input></div>'+
+			'<div class="informationR" id="cname"><input type="text" id="c_Name" size="28" value="'+code+'"></input></div>'+
 		'</div>'+
 		'&nbsp;'+
 		'<div>'+
@@ -133,7 +133,7 @@ function loadInfo(str){
 
 //При загрузке документа заполним таблицу
 $(document).ready(function() {
-	loadInfo("");
+	loadInfo("","");
 	blockInput();
 	loadADSLTable(1);
 });
@@ -189,7 +189,7 @@ $(document).on('click','#btn',function(){
 		    		  //обработать ошибку
 		    		  alert( status + ': ' + statusText ); // пример вывода: 404: Not Found
 		    		  //Оповестим об ошибке коммуникации
-		    		  loadInfo(document.getElementById("adsl_Name").value);
+		    		  loadInfo(document.getElementById("adsl_Name").value,document.getElementById("c_Name").value);
 					  var elem6 = document.getElementById("save_div");
 					  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#550000">Ошибка: ' + status + '</p>';
 		    		}
@@ -198,13 +198,13 @@ $(document).on('click','#btn',function(){
 		    		  var rsp = data;
 		    		  if(rsp.toString() == "Delete success"){
 		    			  //Оповестим об успехе сохранения
-		    			  loadInfo(document.getElementById("adsl_Name").value);
+		    			  loadInfo(document.getElementById("adsl_Name").value,document.getElementById("c_Name").value);
 		    			  var elem6 = document.getElementById("save_div");
 		    			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#005500">Удаление успешно</p>';
 		    		  }
 		    		  else{
 		    			  //Оповестим об ошибке сохранения
-		    			  loadInfo(document.getElementById("adsl_Name").value);
+		    			  loadInfo(document.getElementById("adsl_Name").value,document.getElementById("с_Name").value);
 		    			  var elem6 = document.getElementById("save_div");
 		    			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#550000">Процесс удаления завершился ошибкой</p>';
 		    		  }
@@ -245,7 +245,7 @@ $(document).on("click", ".page-с", function (){
     
     //Обработка нажатия кнопки поиск
     $(document).on("click", "#poisk", function() {
-    	loadInfo("");
+    	loadInfo("","");
     	blockInput();
     	zap=""; code="";
     	if(flag==0)
@@ -266,7 +266,7 @@ $(document).on("click", ".page-с", function (){
     		  // обработать ошибку
     		  alert( xhr.status + ': ' + xhr.statusText ); // пример вывода: 404: Not Found
     		  //Оповестим об ошибке коммуникации
-    		  loadInfo(document.getElementById("adsl_Name").value);
+    		  loadInfo(document.getElementById("adsl_Name").value,document.getElementById("c_Name").value);
 			  var elem6 = document.getElementById("save_div");
 			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#550000">Сервер не отвечает</p>';
     		}
@@ -275,13 +275,13 @@ $(document).on("click", ".page-с", function (){
     		  var rsp = xhr.responseText;
     		  if(rsp.toString() == "Save success"){
     			  //Оповестим об успехе сохранения
-    			  loadInfo(document.getElementById("adsl_Name").value);
+    			  loadInfo(document.getElementById("adsl_Name").value,document.getElementById("c_Name").value);
     			  var elem6 = document.getElementById("save_div");
     			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#005500">Сохранение успешно</p>';
     		  }
     		  else{
     			  //Оповестим об ошибке сохранения
-    			  loadInfo(document.getElementById("adsl_Name").value);
+    			  loadInfo(document.getElementById("adsl_Name").value,document.getElementById("c_Name").value);
     			  var elem6 = document.getElementById("save_div");
     			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#550000">Запись уже существует</p>';
     		  }
@@ -307,8 +307,19 @@ $(document).on("click", ".page-с", function (){
     	if(flag==0){    		
     		zap=$(this).text();
     		loadADSLTable(page);
-    		loadInfo($(this).text());
+    		//alert(document.getElementById("currentCode").value);
+    		
+    		//loadInfo(document.getElementById('currentCode').value,document.getElementById('currentRole').value);
+    		
     		UNblockInput();
+    		
+    		
+    		var articles = document.getElementsByTagName('td');
+    		alert(articles.length);
+    		alert(articles[1].value);
+    		
+    		//var elem1 = document.getElementById('currentCode');
+    		//elem1.style.color = 'red';
     	}
     });
     
