@@ -294,6 +294,15 @@ $(document).on("click", ".page-с", function (){
     });
     
   //Обработка кликов по таблице->колонка пользователя
+    /*
+    $(document).on("click", "#usersTable tbody tr td.info", function() {
+    	if(flag==0){    		
+    		zap=$(this).text();
+    		loadADSLTable(page);
+    		loadInfo($(this).text());
+    		UNblockInput();
+    	}
+    });*/
     $(document).on("click", "#usersTable tbody tr td.info", function() {
     	if(flag==0){    		
     		zap=$(this).text();
@@ -302,6 +311,7 @@ $(document).on("click", ".page-с", function (){
     		UNblockInput();
     	}
     });
+    
     
   //Обработка нажатия кнопки создать
     $(document).on("click", "#create", function() {
