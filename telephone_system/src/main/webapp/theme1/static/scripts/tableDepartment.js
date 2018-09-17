@@ -115,15 +115,15 @@ function loadInfo(str,code){
 	'<div>'+
 		'&nbsp;'+
 		'<div>'+
-			'<div class="informationL">Код подразделения:</div>'+
-			'<div class="informationR" id="cname"><input type="text" id="c_Name" size="28" value="'+code+'"></input></div>'+
-		'</div>'+
-		'&nbsp;'+
-		'<div>'+
-			'<div class="informationL">Наименование подразделения:</div>'+
+			'<div class="informationL">Наименование отдела:</div>'+
 			'<div class="informationR" id="fname"><input type="text" id="adsl_Name" size="28" value="'+str+'"></input></div>'+
 		'</div>'+
 		'&nbsp;'+
+		'<div>'+
+			'Выберите подразделение:<br/>'+
+			'<div id="selectSubdivision"><select class="js-example-responsive" style="width: 50%"></select></div>'+
+			'<br/>'+
+		'</div>'+
 		'<div>'+
 			'<div class="informationL"></div>'+
 			'<div class="informationR" id="save_div"><button id="save" style="cursor:pointer">Сохранить</button></div>'+
@@ -330,4 +330,8 @@ $(document).on("click", ".page-с", function (){
     		var resp_vvod = document.getElementById("response_vvod");
     		resp_vvod.innerHTML='<p style="color:#550000">Заполните все поля</p>';
     	}
+    });
+    
+    $(".js-example-responsive").select2({
+        width: 'resolve' // need to override the changed default
     });

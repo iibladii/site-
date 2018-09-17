@@ -88,9 +88,6 @@ $(document).ready(function() {
 		 });
 	});
 	
-	
-	
-	
 	$("body").on("click", ".page-с", function (){//Обрабатывает нажатие кнопки с классом page-p кнопки с номерами страниц
 		//$(".page-с").css('color', '#000');//Покрасим все кнопки в один цвет
 		//$(this).css('color', '#F00');//Установим нажатой кнопке нужный цвет
@@ -119,8 +116,6 @@ $(document).ready(function() {
 			  // только одно присваивание innerHTML
 			  elem.innerHTML = table;
 			  
-			  
-			  
 			var button_p = '<button class="page-l" style="cursor:pointer">&lt;</button>&nbsp;';
 			if(data.page_no-2>0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page_no-2)+'">'+(data.page_no-2)+'</button>&nbsp;';
 			if(data.page_no-1>0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page_no-1)+'">'+(data.page_no-1)+'</button>&nbsp;';
@@ -132,7 +127,6 @@ $(document).ready(function() {
 			button_p +='<button class="page-r" style="cursor:pointer">&gt;</button>&nbsp;';
 			elem2.innerHTML = button_p;  
 			  
-			  
 			  //Формируем надпись о номере текущей страницы и числе страниц
 			  var countElem;
 				  countElem='<a>&nbsp;Страница '+data.page_no+' из '+Math.ceil(parseInt(data.page_count)/20)+'</a>';
@@ -143,8 +137,7 @@ $(document).ready(function() {
 			createCalendar("content","count_elem","button_page")
 		 });
 	});
-	
-	
+		
 	$("body").on("click", ".page-p", function (){//Обрабатывает нажатие кнопки с классом page-p кнопка поиск
 		$.get("/ajaxtest?number="+document.getElementById("number").value+"&att1="+document.getElementById("att1").value+"&att2="+document.getElementById("att2").value+"&room="+document.getElementById("room").value+"&department="+document.getElementById("department").value+"&adsl="+document.getElementById("adsl").value+"&subdivision="+document.getElementById("subdivision").value+"&subdivision_code="+document.getElementById("subdivision_code").value+"&page="+1+"",function(data,status){
 			 function createCalendar(id,id1,id2) {
@@ -192,9 +185,6 @@ $(document).ready(function() {
 		 });
 	});
 	
-	
-	
-	
 	$.get("/ajaxtest?number=&att1=&att2=&room=&department=&adsl=&subdivision=&subdivision_code=&page=1",function(data,status){
 		 function createCalendar1(id,id1,id2) {
 		  var elem = document.getElementById(id);
@@ -217,8 +207,6 @@ $(document).ready(function() {
 		    // закрыть таблицу
 		  table += '</tr></tbody></table>';
 		  
-		  
-		  
 		  var button_p = '<button  class="page-l" style="cursor:pointer">&lt;</button>&nbsp;';
 			if(data.page_no-2>0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page_no-2)+'">'+(data.page_no-2)+'</button>&nbsp;';
 			if(data.page_no-1>0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page_no-1)+'">'+(data.page_no-1)+'</button>&nbsp;';
@@ -236,9 +224,6 @@ $(document).ready(function() {
 		} 
 		createCalendar1("content","count_elem","button_page")
 	 });
-	
-	
-	
 });
 
 //Обработка нажатия кнопки создать

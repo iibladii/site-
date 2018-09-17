@@ -1,5 +1,5 @@
 var flag=0;//Если 0-Режим просмотра 1-режим удаления
-var zap="";var code=""//Выделенная запись в таблице ADSL
+var zap="";//Выделенная запись в таблице ADSL
 var page=1;//Текущая страница
 
 function UNblockInput(){
@@ -32,6 +32,7 @@ function loadADSLTable(elem){
 					'</tbody>';
 				}
 				else{
+					loadInfo(data.roleList[i],data.codeList[i]);//Запоним данными поля ввода
 					adslList+='<tbody>'+
 					'<tr><td id="currentCode" class="info" style="background: #cc0;">'+data.codeList[i]+'</td><td id="currentRole" class="info" style="background: #cc0;">'+data.roleList[i]+'</td></tr>'+
 					'</tbody>';
@@ -39,7 +40,6 @@ function loadADSLTable(elem){
 			}
 			adslList+='</table>';
 			elem2.innerHTML = adslList;
-			
 			var button_p = document.getElementById("buttonList");
 			var button='';
 			if((data.page - 3) > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 3)+'>&lt;</button>&nbsp';
@@ -115,13 +115,13 @@ function loadInfo(str,code){
 	'<div>'+
 		'&nbsp;'+
 		'<div>'+
-			'<div class="informationL">Наименование подразделения:</div>'+
-			'<div class="informationR" id="fname"><input type="text" id="adsl_Name" size="28" value="'+str+'"></input></div>'+
+			'<div class="informationL">Код подразделения:</div>'+
+			'<div class="informationR" id="cname"><input type="text" id="c_Name" size="28" value="'+code+'"></input></div>'+
 		'</div>'+
 		'&nbsp;'+
 		'<div>'+
-			'<div class="informationL">Код подразделения:</div>'+
-			'<div class="informationR" id="cname"><input type="text" id="c_Name" size="28" value="'+code+'"></input></div>'+
+			'<div class="informationL">Наименование подразделения:</div>'+
+			'<div class="informationR" id="fname"><input type="text" id="adsl_Name" size="28" value="'+str+'"></input></div>'+
 		'</div>'+
 		'&nbsp;'+
 		'<div>'+
@@ -247,7 +247,7 @@ $(document).on("click", ".page-с", function (){
     $(document).on("click", "#poisk", function() {
     	loadInfo("","");
     	blockInput();
-    	zap=""; code="";
+    	zap="";
     	if(flag==0)
     		loadADSLTable(1);
     	else
@@ -293,37 +293,16 @@ $(document).on("click", ".page-с", function (){
     		loadADSLTableDel(page);
     });
     
-  //Обработка кликов по таблице->колонка пользователя
-    /*
     $(document).on("click", "#usersTable tbody tr td.info", function() {
     	if(flag==0){    		
     		zap=$(this).text();
     		loadADSLTable(page);
-    		loadInfo($(this).text());
-    		UNblockInput();
-    	}
-    });*/
-    $(document).on("click", "#usersTable tbody tr td.info", function() {
-    	if(flag==0){    		
-    		zap=$(this).text();
-    		loadADSLTable(page);
-    		//alert(document.getElementById("currentCode").value);
-    		
-    		//loadInfo(document.getElementById('currentCode').value,document.getElementById('currentRole').value);
-    		
-    		UNblockInput();
-    		
-    		
-    		var articles = document.getElementsByTagName('td');
-    		alert(articles.length);
-    		alert(articles[1].value);
-    		
-    		//var elem1 = document.getElementById('currentCode');
-    		//elem1.style.color = 'red';
+    		//alert(document.getElementById("currentCode").innerHTML,document.getElementById("currentRole").innerHTML);  		
+    		//loadInfo(code,sd);//Вызов перенесён в loadADSLTable 
+    		UNblockInput();    		
     	}
     });
-    
-    
+      
   //Обработка нажатия кнопки создать
     $(document).on("click", "#create", function() {
     	if(!($("#dialog").dialog("isOpen")))

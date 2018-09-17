@@ -544,10 +544,10 @@ public class GreetingController {
 	 * @param subdivision Подразделение
 	 * @param subdivisionCode Код подразделения
 	 * @param d1 Параметр 1
-	 * @param d2 Параметр 1
-	 * @param d3 Параметр 1
-	 * @param d4 Параметр 1
-	 * @param d5 Параметр 1
+	 * @param d2 Параметр 2
+	 * @param d3 Параметр 3
+	 * @param d4 Параметр 4
+	 * @param d5 Параметр 5
 	 * @param note Заметки
 	 * @return сообщение об успехе/ошибке
 	 */
