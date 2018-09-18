@@ -6,7 +6,6 @@ var headr = ''+
 	'<ul>'+
        '<li><a href="/kartoteka">Картотека</a></li>'+
        '<li><a href="/errorCable">Неисправные пары</a></li>'+
-       //'<li><a href="/adsl">ADSL</a></li>'+
        '<li><a href="/subdivision">Подразделение</a></li>'+
        '<li><a href="/department">Отдел</a></li>'+
     '</ul>'+
@@ -18,7 +17,7 @@ for (i = 0; i < data.size; i++) {
 		headr += 	'<li><a href="">Управление персоналом</a>'+
 						'<ul>'+
 							'<li><a href="/cooperators">Сотрудники</a></li>'+
-							'<li><a href="">Активность</a></li>'+
+							//'<li><a href="">Активность</a></li>'+
 						'</ul>'+
 					'</li>';
 	}
