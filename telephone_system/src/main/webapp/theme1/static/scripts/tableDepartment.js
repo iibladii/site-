@@ -332,6 +332,11 @@ $(document).on("click", ".page-с", function (){
     	}
     });
     
-    $(".js-example-responsive").select2({
-        width: 'resolve' // need to override the changed default
+    //$(".js-example-responsive").select2({
+    //    width: 'resolve' // need to override the changed default
+    //});
+    $(".js-example-theme-single").select2({
+    	  theme: "classic"
     });
+    
+    
