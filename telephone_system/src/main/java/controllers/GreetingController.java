@@ -30,6 +30,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -797,7 +798,7 @@ public class GreetingController {
 	 * @return Список подразделений в фоормате json(Cформатирован для загрузки в выпадающий список/select2)
 	 * @throws JsonProcessingException
 	 */
-	public ResponseEntity<String> get_dataList(@RequestParam(value = "search") String search, @RequestParam(value = "type") String code) throws JsonProcessingException {
+	public ResponseEntity<String> get_dataList(@RequestParam(value = "search", defaultValue = "") String search, @RequestParam(value = "type", defaultValue = "") String code) throws JsonProcessingException {
 		ArrayList<String> sd = new ArrayList<String>();
 		sd = (ArrayList<String>) subdivisionRepository.findAll_();
 		String cs2 = "{"+
@@ -835,4 +836,23 @@ public class GreetingController {
 	    responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
 	    return new ResponseEntity<String>(cs2,responseHeaders, HttpStatus.OK);
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/cooperators/update")
+	/**
+	 * Получение списка подразделений
+	 * @return Список подразделений
+	 * @throws JsonProcessingException
+	 */
+	public String updateCooperators(@RequestParam(value="code1") String code) {
+		//Если поле заполнено применим изменения в базу
+		/*
+		String str = userRepository
+		user_roleRepository
+		roleRepository
+		*/
+		System.out.println("dd");
+		return "Create successful";
+	}
+	
 }

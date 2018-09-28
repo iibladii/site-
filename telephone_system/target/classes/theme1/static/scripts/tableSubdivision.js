@@ -22,7 +22,7 @@ function loadADSLTable(elem){
 			'<thead>'+
 				'<tr>'+
 					'<th>Код&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
-					'<th>Подразделение&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
+					'<th>Подразделение&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
 				'</tr>'+
 			'</thead>';
 			for(var i=0;i < parseInt(data.roleList.length); i++){

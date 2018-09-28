@@ -79,7 +79,7 @@ $(document).ready(function() {//При загрузке документа за�
 			'&nbsp;'+
 			'<div>'+
 				'<div class="informationL">Роли:</div>'+
-				'<div class="informationR" id="RoleList"><select class="js-example-basic-multiple" name="states[]" multiple="multiple" style="width: 200px;"></select></div>'+
+				'<div class="informationR" id="RoleList"><select class="js-example-basic-multiple" id="coopUpdate" name="states[]" multiple="multiple" style="width: 200px;"></select></div>'+
 			'</div>'+
 			'&nbsp;'+
 			
@@ -93,12 +93,36 @@ $(document).ready(function() {//При загрузке документа за�
 			'</div>'+
 		'</div>';
 	blockInput();
+
 	
+/*	
+	var data = [
+	    {
+	        id: 0,
+	        text: 'enhancement'
+	    },
+	    {
+	        id: 1,
+	        text: 'bug'
+	    },
+	    {
+	        id: 2,
+	        text: 'duplicate'
+	    },
+	    {
+	        id: 3,
+	        text: 'invalid'
+	    },
+	    {
+	        id: 4,
+	        text: 'wontfix'
+	    }
+	];
 	
 $('.js-example-basic-multiple').select2({
 	data: data
 });
-
+*/
 });
 /*
 	if(!str.localeCompare("Удалит1")){
@@ -210,4 +234,57 @@ $(document).on('click','#btn',function(){
     		UNblockInput();
     	});
     }
-    }); 
+    });
+    
+    //Обработка нажатия кнопки создать
+    $(document).on("click", "#create", function() {
+    	if(!($("#dialog").dialog("isOpen")))
+    		$("#dialog").dialog('open');
+    	else
+    		$("#dialog").dialog('close');
+    });
+
+    //Обработка нажатия кнопки ввод на всплывающей панели
+    $(document).on("click", "#save", function() {
+    	var xhr = new XMLHttpRequest();
+    	var params =
+    	'fname=' + encodeURIComponent(document.getElementById("fname_in").value) +
+    	'&sname=' + encodeURIComponent(document.getElementById("sname_in").value) +
+    	'&tname=' + encodeURIComponent(document.getElementById("tname_in").value) +
+    	'&login=' + encodeURIComponent(document.getElementById("login_in").value) +
+    	'&pass1=' + encodeURIComponent(document.getElementById("pass1_in").value);
+    	
+    	
+    	
+    	/*
+    	//alert(document.getElementById("RoleList").value);
+    	alert(document.getElementById("coopUpdate").value);
+    	getSelection(document.getElementById("coopUpdate"));
+    	for (var i = 0; i < document.getElementById("coopUpdate").options.length; i++)
+    		if (document.getElementById("coopUpdate").options[i].selected)
+    			//selectedOptions.push(o.options[i].value);
+    			params += '&select2=' + encodeURIComponent(document.getElementById("coopUpdate").value);
+    	alert(params);
+    	*/
+    	alert(document.getElementById("coopUpdate"));
+    	for ( var i = 0; i < document.getElementById("coopUpdate").selectedOptions.length; i++) {
+    		  alert( document.getElementById("coopUpdate").selectedOptions[i].value);
+    		}
+    	
+    	
+    	
+    	xhr.open("GET", '/cooperators/update?' + params, true);
+    	xhr.send();    	
+    	if (xhr.status != 200) {
+    		alert( xhr.status + ': ' + xhr.statusText );
+    	}
+    	else {
+    		 // вывести результат
+  		  var rsp = xhr.responseText;
+  		  if(rsp.toString() == "Save success"){
+  			  //Оповестим об успехе сохранения
+  			  var elem6 = document.getElementById("save_div");
+  			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#005500">Изменение данных успешно</p>';
+    		}
+    	}
+    });
