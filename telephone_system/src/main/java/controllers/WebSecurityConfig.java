@@ -52,6 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			 .exceptionHandling().accessDeniedPage("/error")
 			.and()
 			  .csrf();
+		  http.csrf().disable().authorizeRequests().anyRequest().authenticated().and().httpBasic();//Включим возможность выполнения post запросов
 		}
 
 		@Override

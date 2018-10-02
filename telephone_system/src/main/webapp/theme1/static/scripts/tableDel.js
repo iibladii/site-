@@ -288,3 +288,26 @@ $(document).on('click','#btn',function(){
     		}
     	}
     });
+    
+    var RestPost1 = function() {
+    	var xhr = new XMLHttpRequest();
+
+    	var body = '';
+    	xhr.open("POST", '/dd', true, 'priya', 'priya');
+    	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    	xhr.send(body);
+    	/*
+        $.ajax({
+            type: 'POST',
+            url:  '/dd',
+            dataType: 'json',
+            async: true,
+            success: function(result) {
+                alert(result);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.status + ' ' + jqXHR.responseText);
+            }
+            
+        });*/
+    }

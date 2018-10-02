@@ -25,6 +25,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -854,5 +855,12 @@ public class GreetingController {
 		System.out.println("dd");
 		return "Create successful";
 	}
+	
+	 // этот метод будет методом POST отдавать объект MyDataObject
+    @RequestMapping(value = "/dd", method = RequestMethod.POST)
+    @ResponseBody
+    public String postMyData() {
+        return "true";
+    }
 	
 }
