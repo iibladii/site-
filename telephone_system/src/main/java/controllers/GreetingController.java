@@ -46,6 +46,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import controllers.Department;
+import object.CooperatorsDataObject;
 import repository.AdslRepository;
 import repository.SecurityRepository;
 import repository.SubdivisionRepository;
@@ -660,16 +661,6 @@ public class GreetingController {
 		return "department";
 	}
 
-	@RequestMapping(value = "/cooperators", method = RequestMethod.GET)
-	/**
-	 * Страница сотрудники
-	 * @param model
-	 * @return
-	 */
-	public String kooperators(Model model) {
-		return "cooperators";
-	}
-	
 	@RequestMapping(value = "/getUserNameRole", method = RequestMethod.GET)
 	@ResponseBody
 	/**
@@ -855,6 +846,72 @@ public class GreetingController {
 		System.out.println("dd");
 		return "Create successful";
 	}
+
+	//Удалить!! restful manual https://devcolibri.com/rest-%D0%BD%D0%B0-%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B5-spring-mvc/
+	@RequestMapping(value = "/cooperators", method = RequestMethod.GET)
+	/**
+	 * Страница сотрудники
+	 * @param model
+	 * @return
+	 */
+	public String cooperatorsGet(Model model) {
+		return "cooperators";
+	}
+	
+	@RequestMapping(value = "/cooperators", method = RequestMethod.POST)
+    @ResponseBody
+    /**
+     * Обновление данных
+     * @return
+     */
+    public String cooperatorsPOST() {
+        return "true";
+    }
+	
+	@RequestMapping(value = "/cooperators", method = RequestMethod.PUT)
+    @ResponseBody
+    /**
+     * Вставка данных
+     * @return
+     */
+    public String cooperatorsPUT(@RequestBody CooperatorsDataObject cdo) {
+		System.out.println(cdo.getFName());
+		System.out.println(cdo.getRoles()[0]);
+		
+		//Создадим пользователя
+		User user = new User();
+		user.setFirstname(cdo.getFName());
+		user.setSecondname(cdo.getSName());
+		user.setThirdname(cdo.getTName());
+		user.setUsername(cdo.getLogin());
+		user.setPassword(cdo.getPass());
+		
+		//Получим список ролей
+		Role role = new Role();
+		List<Role> roleList = new ArrayList<Role>();//Список ролей пользователей
+		for(int i = 0; i < cdo.getRoles().length; i++) {
+			roleList.add(roleRepository.findRole(role))
+		}
+		
+		//Сопоставим пользователей и роли
+		User_Role us = new User_Role();
+		
+		
+		//roleRepository
+		//userRepository
+		//user_roleRepository
+        return "true";
+    }
+	
+	@RequestMapping(value = "/cooperators", method = RequestMethod.DELETE)
+    @ResponseBody
+    /**
+     * Удаление данных
+     * @return
+     */
+    public String cooperatorsDELETE() {
+        return "true";
+    }
 	
 	 // этот метод будет методом POST отдавать объект MyDataObject
     @RequestMapping(value = "/dd", method = RequestMethod.POST)

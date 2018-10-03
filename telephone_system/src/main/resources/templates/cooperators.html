@@ -1,11 +1,10 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Getting Started: Serving Web Content</title>
+    <title>Cooperators</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script src="styles/static/scripts/jquery.min.js" type="text/javascript" ></script>
-	
-	
+		
 	<script type="text/javascript" src="styles/static/scripts/tableDel.js"></script>
 	<link rel="stylesheet" type="text/css" href="styles/kartoteka/style_menu.css"/>
 	<link rel="stylesheet" type="text/css" href="styles/kartoteka/style_table.css"/>
@@ -32,30 +31,32 @@
 <body>
 	<div id="dialog" title="Создание нового пользователя">
 		Имя:<br/>
-		<input id="adsl_" name="adsl" type="text" size="40" placeholder="Имя"></input>
+		<input id="fname_" name="fname_new" type="text" size="40" placeholder="Имя"></input>
 		<br/>
 		<br/>
 		Фамилия:<br/>
-		<input id="adsl_" name="adsl" type="text" size="40" placeholder="Фамилия"></input>
+		<input id="sname_" name="sname_new" type="text" size="40" placeholder="Фамилия"></input>
 		<br/>
 		<br/>
 		Отчество:<br/>
-		<input id="adsl_" name="adsl" type="text" size="40" placeholder="Отчество"></input>
+		<input id="tname_" name="tname_new" type="text" size="40" placeholder="Отчество"></input>
 		<br/>
 		<br/>
 		Логин:<br/>
-		<input id="adsl_" name="adsl" type="text" size="40" placeholder="Логин"></input>
+		<input id="login_" name="login_new" type="text" size="40" placeholder="Логин"></input>
 		<br/>
 		<br/>
 		Пароль:<br/>
-		<input id="adsl_" name="adsl" type="text" size="40" placeholder="Пароль"></input>
+		<input id="pass1_" name="pass1_new" type="text" size="40" placeholder="Пароль"></input>
+		<br/>
+		<br/>
+		Подтверждение пароля:<br/>
+		<input id="pass2_" name="pass2_new" type="text" size="40" placeholder="Подтверждение пароля"></input>
 		<br/>
 		<br/>
 		Роли<br/>
-		<select class="js-example-basic-multiple" name="states[]" multiple="multiple" style="width: 330px;"></select><br/>
+		<select id="roles_" class="js-example-basic-multiple_" name="states[]" multiple="multiple" style="width: 330px;"></select><br/>
 		<br/>
-		
-		
 		
 	<select class="js-e"></select>
 	<script>
@@ -87,9 +88,10 @@
 	</script>
 	<br/>	
 	<button type="button" onclick="RestPost1()">Метод POST</button>	
+	<button type="button" onclick="RestPut()">Метод PUT</button>		
 		
-		
-    	<button class="page-p" id="vvod" style="cursor:pointer">Ввод</button>
+    	<!--<button class="page-p" id="vvod" style="cursor:pointer">Ввод</button>-->
+    	<button class="page-p" id="vvod" style="cursor:pointer" onclick="RestPut()">Ввод</button>
     	<div id="response_vvod"></div>
 	</div>
 

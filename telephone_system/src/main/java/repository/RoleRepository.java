@@ -14,6 +14,10 @@ import controllers.User_Role;
 
 public interface RoleRepository extends CrudRepository<Role, Long> {
 
+	//Поиск конкретной роли
+	@Query("SELECT Distinct r FROM Role r WHERE r.role=:role")
+	public Role findRole(@Param("role") String role);
+	
 	//Получим все роли связаные с user=:name
 	@Query("SELECT Distinct r FROM Role r, in(r.role) ur, in(ur.user) u WHERE ur.user=u.id and ur.role=r.id and u.username=:name")
     public List<Role> find(@Param("name") String name);

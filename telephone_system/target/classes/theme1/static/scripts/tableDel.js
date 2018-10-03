@@ -95,7 +95,7 @@ $(document).ready(function() {//При загрузке документа за�
 	blockInput();
 
 	
-/*	
+	
 	var data = [
 	    {
 	        id: 0,
@@ -119,10 +119,10 @@ $(document).ready(function() {//При загрузке документа за�
 	    }
 	];
 	
-$('.js-example-basic-multiple').select2({
+$('.js-example-basic-multiple_').select2({
 	data: data
 });
-*/
+
 });
 /*
 	if(!str.localeCompare("Удалит1")){
@@ -310,4 +310,39 @@ $(document).on('click','#btn',function(){
             }
             
         });*/
+    }
+    
+    var RestPut = function() {
+    	var arr = [];//Массив содержащий список ролей данного пользователя
+    	var values = $('#roles_').val();//Вернём все значения списком
+    	//Получим позиции всех значений
+        $('#roles_ option:selected').each(function() {
+            //alert($(this).val() + '  ' + $(this).text());
+        	arr.push($(this).text());
+        });
+    	
+        var CooperatorsDataObject= {
+            'fname': document.getElementById("fname_").value,
+            'sname': document.getElementById("sname_").value,
+            'tname': document.getElementById("tname_").value,
+            'login': document.getElementById("login_").value,
+            'pass': document.getElementById("pass1_").value,
+            'roles': arr
+        };
+        
+        alert(JSON.stringify(CooperatorsDataObject));
+        $.ajax({
+            type: 'PUT',
+            url:  '/cooperators',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(CooperatorsDataObject),
+            dataType: 'json',
+            async: true,
+            success: function(result) {
+                alert('Статус: ' + result);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.status + ' ' + jqXHR.responseText);
+            }
+        });
     }
