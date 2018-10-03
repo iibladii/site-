@@ -14,25 +14,41 @@ import controllers.User_Role;
 
 public interface RoleRepository extends CrudRepository<Role, Long> {
 
-	//Поиск конкретной роли
+	/**
+	 * Поиск конкретной роли
+	 * @param role наименование роли
+	 * @return объект роли
+	 */
 	@Query("SELECT Distinct r FROM Role r WHERE r.role_name=:role")
 	public Role findRole(@Param("role") String role);
-	//@Query("SELECT r FROM Role r WHERE ")
-	//public Role findRole(@Param("name") String name);
 	
-	//Получим все роли связаные с user=:name
+	/**
+	 * Получим все роли пользователя с логином name
+	 * @param name логин пользователя
+	 * @return список ролей пользователей
+	 */
 	@Query("SELECT Distinct r FROM Role r, in(r.role) ur, in(ur.user) u WHERE ur.user=u.id and ur.role=r.id and u.username=:name")
     public List<Role> find(@Param("name") String name);
 	
-	//Получим все роли не связаные с user=:name но связанные хотябы с одним пользователем
+	/**
+	 * Получим все роли не связаные с user=:name но связанные хотябы с одним пользователем
+	 * @param name имя пользователя
+	 * @return все роли не связанные с выбранным пользователем
+	 */
 	@Query("SELECT Distinct r FROM Role r, in(r.role) ur WHERE ur.role=r.id and ur.user!=(SELECT DISTINCT ur.user FROM User u, in(u.user) ur, in(ur.role) r WHERE ur.user=u.id and ur.role=r.id and u.username=:name)")
     public List<Role> find5(@Param("name") String name);
 	
-	//Получим все роли не связаные с пользователями
+	/**
+	 * Получим все роли не связаные с пользователями
+	 * @return список ролей
+	 */
 	@Query("SELECT Distinct r FROM Role r WHERE r.role IS EMPTY")
     public List<Role> find6();
 	
-	//Получим наименования всех ролей
+	/**
+	 * Получим наименования всех ролей меющихся в базе
+	 * @return список ролей
+	 */
 	@Query("SELECT r.role_name FROM Role r")
 	public List<String> findAllRole();
 }

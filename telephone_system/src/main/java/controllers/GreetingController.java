@@ -186,14 +186,14 @@ public class GreetingController {
 		// Получим пользователей
 		List<User> results = userRepository.find(name);
 		if (!results.isEmpty()) {// Если у данного пользователя есть роли
-			Iterator iterator = results.iterator();
+			Iterator<User> iterator = results.iterator();
 			User us = (User) iterator.next();
 			// Сохраним Основные данные о пользователе
 			UserInfoV2 ui = new UserInfoV2(us.getFirstname(), us.getSecondname(), us.getThirdname(), us.getUsername());
 			// Приступим к поиску ролей
 			// Получим таблицу с ролями
 			List<User_Role> ur = us.getRole();
-			Iterator iterator1 = ur.iterator();
+			Iterator<User_Role> iterator1 = ur.iterator();
 			// Сохраним наименование ролей
 			int chr = 0;
 			while (iterator1.hasNext()) {
@@ -203,7 +203,7 @@ public class GreetingController {
 			}
 			// Получим роли не связаные с user=:name но связанные хотябы с одним пользователем
 			List<Role> res = roleRepository.find5(name);
-			Iterator iterator3 = res.iterator();
+			Iterator<Role> iterator3 = res.iterator();
 			// Сохраним наименование ролей
 			while (iterator3.hasNext()) {
 				String str = ((Role) iterator3.next()).getRoleName();
@@ -220,7 +220,7 @@ public class GreetingController {
 			}
 			// Получим таблицу с ролями не относящимися не к какому пользователю
 			List<Role> resu = roleRepository.find6();
-			Iterator iterator2 = resu.iterator();
+			Iterator<Role> iterator2 = resu.iterator();
 			// Сохраним наименование ролей
 			while (iterator2.hasNext()) {
 				String str = ((Role) iterator2.next()).getRoleName();
@@ -252,7 +252,7 @@ public class GreetingController {
 			// Инициализация число элементов номер страницы
 			errorCableInfo adsl_view = new errorCableInfo(ch, elem);
 			// Сделаем набор
-			Iterator iter2 = adsl.iterator();
+			Iterator<ErrorCable> iter2 = adsl.iterator();
 			Integer ch1 = 0;
 			while (iter2.hasNext()) {
 				ch1++;
@@ -275,7 +275,7 @@ public class GreetingController {
 			//Обновим данные
 			for(int i = 0; i < name.size(); i++) {
 				List<ErrorCable> adsl = errorCableRepository.findAll(name.get(i));
-				Iterator iter2 = adsl.iterator();
+				Iterator<ErrorCable> iter2 = adsl.iterator();
 				while (iter2.hasNext()) {
 					ErrorCable ad = ((ErrorCable) iter2.next());
 					errorCableRepository.delete(ad);
@@ -291,7 +291,7 @@ public class GreetingController {
 			//Обновим данные
 			if(errorCableRepository.findAllcount(name)<1) {
 				List<ErrorCable> adsl = errorCableRepository.findAll(oldName);
-				Iterator iter2 = adsl.iterator();
+				Iterator<ErrorCable> iter2 = adsl.iterator();
 				while (iter2.hasNext()) {
 					ErrorCable ad = ((ErrorCable) iter2.next());
 					ad.setName(name);
@@ -337,7 +337,7 @@ public class GreetingController {
 			// Инициализация число элементов номер страницы
 			subdivision adsl_view = new subdivision(ch, elem);
 			// Сделаем набор
-			Iterator iter2 = adsl.iterator();
+			Iterator<Subdivision> iter2 = adsl.iterator();
 			Integer ch1 = 0;
 			while (iter2.hasNext()) {
 				ch1++;
@@ -361,7 +361,7 @@ public class GreetingController {
 			//Обновим данные
 			for(int i = 0; i < name.size(); i++) {
 				List<Subdivision> adsl = subdivisionRepository.findAll(name.get(i));
-				Iterator iter2 = adsl.iterator();
+				Iterator<Subdivision> iter2 = adsl.iterator();
 				while (iter2.hasNext()) {
 					Subdivision ad = ((Subdivision) iter2.next());
 					subdivisionRepository.delete(ad);
@@ -377,7 +377,7 @@ public class GreetingController {
 			//Обновим данные
 			if(departmentRepository.findAllcount(name)<1) {
 				List<Department> adsl = departmentRepository.findAll(oldName);
-				Iterator iter2 = adsl.iterator();
+				Iterator<Department> iter2 = adsl.iterator();
 				while (iter2.hasNext()) {
 					Department ad = ((Department) iter2.next());
 					ad.setName(name);
@@ -401,7 +401,7 @@ public class GreetingController {
 			//Обновим данные
 			for(int i = 0; i < name.size(); i++) {
 				List<Subdivision> adsl = subdivisionRepository.findAll(name.get(i));
-				Iterator iter2 = adsl.iterator();
+				Iterator<Subdivision> iter2 = adsl.iterator();
 				while (iter2.hasNext()) {
 					Subdivision ad = ((Subdivision) iter2.next());
 					subdivisionRepository.delete(ad);
@@ -425,7 +425,7 @@ public class GreetingController {
 			//Обновим данные
 			if(subdivisionRepository.findAllcount(name)<1) {
 				List<Subdivision> adsl = subdivisionRepository.findAll(oldName);
-				Iterator iter2 = adsl.iterator();
+				Iterator<Subdivision> iter2 = adsl.iterator();
 				while (iter2.hasNext()) {
 					Subdivision ad = ((Subdivision) iter2.next());
 					ad.setName(name);
@@ -473,7 +473,7 @@ public class GreetingController {
 		// Инициализация число элементов номер страницы
 		adslInfo adsl_view = new adslInfo(ch, elem);
 		// Сделаем набор
-		Iterator iter2 = adsl.iterator();
+		Iterator<Adsl> iter2 = adsl.iterator();
 		Integer ch1 = 0;
 		while (iter2.hasNext()) {
 			ch1++;
@@ -498,7 +498,7 @@ public class GreetingController {
 		//Обновим данные
 		if(adslRepository.findAllcount(name)<1) {
 			List<Adsl> adsl = adslRepository.findAll(oldName);
-			Iterator iter2 = adsl.iterator();
+			Iterator<Adsl> iter2 = adsl.iterator();
 			while (iter2.hasNext()) {
 				Adsl ad = ((Adsl) iter2.next());
 				ad.setName(name);
@@ -537,7 +537,7 @@ public class GreetingController {
 		//Обновим данные
 		for(int i = 0; i < name.size(); i++) {
 			List<Adsl> adsl = adslRepository.findAll(name.get(i));
-			Iterator iter2 = adsl.iterator();
+			Iterator<Adsl> iter2 = adsl.iterator();
 			while (iter2.hasNext()) {
 				Adsl ad = ((Adsl) iter2.next());
 				adslRepository.delete(ad);
@@ -695,7 +695,7 @@ public class GreetingController {
 	public UserNameId getUsers() {
 		UserNameId unr = new UserNameId();
 		List<User> results = userRepository.findName();
-		Iterator iter = results.iterator();
+		Iterator<User> iter = results.iterator();
 		while (iter.hasNext()) {
 			User user = (User) iter.next();
 			unr.add(user.getUsername(), user.getId());
@@ -741,7 +741,7 @@ public class GreetingController {
 		List<Telephone> results = telephoneRepository.find("%" + number + "%", "%" + att1 + "%", "%" + att2 + "%",
 				"%" + room + "%", "%" + department + "%", "%" + adsl + "%", "%" + subdivision + "%",
 				"%" + subdivision_code + "%");
-		Iterator iterator = results.iterator();
+		Iterator<Telephone> iterator = results.iterator();
 		int ch_page = 1;// Номер строки
 		while (iterator.hasNext()) {
 			iterator.next();
@@ -749,7 +749,7 @@ public class GreetingController {
 		}
 		table1 tb = new table1(page, ch_page);
 		// Вставляем через итератор (Модифицированный метод)
-		Iterator iterator2 = results.iterator();
+		Iterator<Telephone> iterator2 = results.iterator();
 		int ch = 1;// Номер строки
 		while (iterator2.hasNext()) {
 			Telephone tl = (Telephone) iterator2.next();
@@ -872,21 +872,86 @@ public class GreetingController {
     @ResponseBody
     /**
      * Обновление данных
-     * @return
+     * @return статус операции
      */
-    public String cooperatorsPOST() {
-        return "true";
+    public String cooperatorsPOST(@RequestBody CooperatorsDataObject cdo) {
+		User user = userRepository.getUserInfo(cdo.getLogin());//Добавить старый логин в параметры запроса //Обновить список пользователей после создания пользователей
+		user.setFirstname(cdo.getFName());
+		user.setSecondname(cdo.getSName());
+		user.setThirdname(cdo.getTName());
+		user.setUsername(cdo.getLogin());
+		user.setPassword(cdo.getPass());
+		user.setEnabled(1);
+		
+		//Получим список ролей пользователя
+		List<Role> role = roleRepository.find(cdo.getLogin());
+		//Сравним с переданным списком
+		
+		//Сформируем списки ролей
+		List<String> save = new ArrayList<String>();//1.На сохранение в бд
+		List<Role> del = new ArrayList<Role>();//2.На удаление из бд
+		
+		//Формируем список на сохранение в бд
+		for(int i = 0; i < cdo.getRoles().length; i++) {
+			int ch = 0;
+			for(int j = 0; j < role.size(); j++) {//Поиск попереданному списку ролей
+				if(cdo.getRoles()[i].equals(role.get(j).getRoleName())) {//Если в обоих списках нашлась роль
+					ch++;
+					break;
+				}
+			}
+			if(ch == 0)//Если роль не нашлась
+				save.add(cdo.getRoles()[i]);
+		}
+		
+		//Формируем список на удаление из бд
+		for(int i = 0; i < role.size(); i++) {
+			int ch = 0;
+			for(int j = 0; j < cdo.getRoles().length; j++) {//Поиск по списку ролей из бд
+				if(cdo.getRoles()[j].equals(role.get(i).getRoleName())) {//Если в обоих списках нашлась роль
+					ch++;
+					break;
+				}
+			}
+			if(ch == 0)//Если роль не нашлась
+				del.add(role.get(i));
+		}
+		
+		//Скорректируем список ролей в бд
+		//1.Добавим новые роли
+		if(save.size()>0) {
+			//Сопоставим пользователя с его ролями
+			String msg = "";
+			//Выберем искомые объекты с ролями пользователей
+			List<Role> roleList = new ArrayList<Role>();//Список ролей которые необходжимо добавить в бд
+			for(int i = 0; i < save.size(); i++) {
+				Role r = roleRepository.findRole(save.get(i));
+				roleList.add(r);
+			}
+			//Сохраним список ролей в бд
+			for(int i = 0; i <save.size(); i++) {
+				User_Role us = new User_Role();
+				us.setUser(user);
+				us.setRole(roleList.get(i));
+				user_roleRepository.save(us);
+			}
+		}
+		//2.Удалим ненужные сопоставления пользователя с ролями
+		for(int i = 0; i < del.size(); i++) {
+			User_Role ur = user_roleRepository.findObject(user, role.get(i));//Найдём сопоставление
+			user_roleRepository.delete(ur);//Удалим
+		}
+		
+        return "Data change completed successfully.";
     }
 	
 	@RequestMapping(value = "/cooperators", method = RequestMethod.PUT)
     @ResponseBody
     /**
      * Вставка данных
-     * @return
+     * @return статус операции
      */
     public String cooperatorsPUT(@RequestBody CooperatorsDataObject cdo) {
-		//System.out.println(cdo.getFName());
-		//System.out.println(cdo.getRoles()[0]);
 		//Проверим есть ли пользователь с таким логином
 		if(userRepository.findCountLogin(cdo.getLogin())==0) {
 			//Создадим пользователя
@@ -923,19 +988,22 @@ public class GreetingController {
     @ResponseBody
     /**
      * Удаление данных
-     * @return
+     * @return статус операции
      */
-    public String cooperatorsDELETE() {
-        return "true";
-    }
-	
-	// этот метод будет методом POST отдавать объект MyDataObject
-    @RequestMapping(value = "/dd", method = RequestMethod.POST)
-    @ResponseBody
-    public String postMyData(@RequestBody CooperatorsDataObject cdo) {
-    	//Найдём пользователя по логину
-    	User user = userRepository.getUserInfo(старый логин);//Добавить старый логин в параметры запроса
-        return "Изменение данных успешно завершено";
+    public String cooperatorsDELETE(@RequestBody String[] userName) {
+		System.out.println(userName.length);
+		for(int i = 0; i < userName.length; i++) {
+			//Найдём пользователя
+			User user = userRepository.getUserInfo(userName[i]);
+			//Удалим все записи в промежуточной таблице связанные с пользователем
+			List<User_Role> ur = user_roleRepository.findListObject(user);
+			ur.stream().forEach(x->{
+				user_roleRepository.delete(x);
+			});
+			//Удалим пользователя
+			userRepository.delete(user);
+		}
+        return "Delete successfull";
     }
     
     @RequestMapping(value = "/roleList", method = RequestMethod.GET)

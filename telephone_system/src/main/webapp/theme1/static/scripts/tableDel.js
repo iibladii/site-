@@ -48,7 +48,7 @@ $(document).ready(function() {//При загрузке документа за�
 		'<div>'+
 			'&nbsp;'+
 			'<div>'+
-				'<div class="informationL">*Имя:</div>'+
+				'<div class="informationL">Имя:</div>'+
 				'<div class="informationR" id="fname"><input type="text" id="fname_in" size="28"></input></div>'+
 			'</div>'+
 			'&nbsp;'+
@@ -63,17 +63,17 @@ $(document).ready(function() {//При загрузке документа за�
 			'</div>'+
 			'&nbsp;'+
 			'<div>'+
-				'<div class="informationL">*Логин:</div>'+
-				'<div class="informationR" id="login"><input type="text" id="login_in" size="28"></input></div>'+
+				'<div class="informationL">Логин:</div>'+
+				'<div class="informationR" id="login"><input type="text" id="login_in" size="28" readonly="readonly"></input></div>'+
 			'</div>'+
 			'&nbsp;'+
 			'<div>'+
-				'<div class="informationL">*Новый пароль:</div>'+
+				'<div class="informationL">Новый пароль:</div>'+
 				'<div class="informationR" id="pass1"><input type="text" id="pass1_in" size="28"></input></div>'+
 			'</div>'+
 			'&nbsp;'+
 			'<div>'+
-				'<div class="informationL">*Подтверждение пароля:</div>'+
+				'<div class="informationL">Подтверждение пароля:</div>'+
 				'<div class="informationR"  id="pass2"><input type="text" id="pass2_in" size="28"></input></div>'+
 			'</div>'+
 			'&nbsp;'+
@@ -82,42 +82,13 @@ $(document).ready(function() {//При загрузке документа за�
 				'<div class="informationR" id="RoleList"><select class="js-example-basic-multiple" id="coopUpdate" name="states[]" multiple="multiple" style="width: 200px;"></select></div>'+
 			'</div>'+
 			'&nbsp;'+
-			
-			//'<div>'+
-			//	'<div><select name="select" size="12" multiple style="visibility:hidden;"></select></div>'+
-			//'</div>'+
-			
 			'<div>'+
 				'<div class="informationL"></div>'+
 				'<div class="informationR" id="save_div"><button id="save">Сохранить</button></div>'+
 			'</div>'+
 		'</div>';
 	blockInput();
-
 	
-	/*
-	var data = [
-	    {
-	        id: 0,
-	        text: 'enhancement'
-	    },
-	    {
-	        id: 1,
-	        text: 'bug'
-	    },
-	    {
-	        id: 2,
-	        text: 'duplicate'
-	    },
-	    {
-	        id: 3,
-	        text: 'invalid'
-	    },
-	    {
-	        id: 4,
-	        text: 'wontfix'
-	    }
-	];*/
 	var data_ = [];
 	
 	$.ajax({
@@ -126,27 +97,18 @@ $(document).ready(function() {//При загрузке документа за�
         dataType: 'json',
         async: true,
         success: function(result) {
-        	//alert(result);
         	for (var i = 0; i < result.length; i++){
         		data_.push(result[i]);
         	}
         	$('.js-example-basic-multiple_').select2({
         		data: data_
         	});
-            //alert('Время: ' + result.time
-            //        + ', сообщение: ' + result.message);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert(jqXHR.status + ' ' + jqXHR.responseText);
         }
     });
-
-
 });
-/*
-	if(!str.localeCompare("Удалит1")){
-*/
-
 
 $(document).on('click','#btn',function(){
 	var elem = document.getElementById("menu_knopki");//Кнопка
@@ -185,25 +147,39 @@ $(document).on('click','#btn',function(){
 			'<button id="create" style="cursor:pointer"><img src="styles/kartoteka/img/plus.png" style="vertical-align: middle"></img>Создать</button>'+
 			'&nbsp;'+
 			'<button id="btn" style="cursor:pointer"><img src="styles/kartoteka/img/plus.png" style="vertical-align: middle"></img>Удалить</button>';
-			load_table();
-			/*
-			$.get("/getUsers",function(data,status){
-				var elem2 = document.getElementById("UserList");//Таблица
-				var userList='<table border="1" id="usersTable">'+
-					'<thead>'+
-						'<tr>'+
-							'<th>Пользователь</th>'+
-						'</tr>'+
-					'</thead>';
-					for(var i=0;i < parseInt(data.size); i++){
-						userList+='<tbody>'+
-							'<tr><td class="info">'+data.name[i]+'</td>'+
-						'</tbody>';
-					}
-					userList+='</table>';
-					elem2.innerHTML=userList;
-			});*/
-			
+			//Сформируем массив логинов пользователей для удаления и выполним удаление
+			var event = {
+					// Получаем текст из всех указанных элементов в виде массива выборкой
+					zp : [].map.call(document.getElementsByClassName("info"), function(el){
+					    return el.textContent;
+					}),
+					sv : [].map.call(document.getElementsByClassName("del"), function(el){
+					    return el.textContent;
+					})
+			};
+			//Сформируем массив с логинами пользователей для удаления
+			var param = [];
+			for(var i=0; i<event.zp.length; i++)
+				if(event.sv[i] == "x")
+					param.push(event.zp[i]);
+			//Отправим запрос на удаление
+			$.ajax({
+    			type: 'DELETE',
+    			url:  '/cooperators',
+    			contentType: 'application/json; charset=utf-8',
+    			data: JSON.stringify(param),
+    			dataType: 'json',
+    			async: true,
+    			success: function(result) {
+    				alert('Статус: ' + result);//Статус операции удаления
+    				load_table();//Перезагрузка списка пользователей
+    			},
+    			error: function(jqXHR, textStatus, errorThrown) {
+    				alert('Статус: ' + jqXHR.responseText);
+    				load_table();//Перезагрузка списка пользователей
+    			}
+    		});
+			//Удаление завершено
 	}
 });
 
@@ -211,7 +187,6 @@ $(document).on('click','#btn',function(){
     $(document).on("click", "#usersTable tbody tr td.del", function() {
     	//Если кликнули в режиме удаления
     	if(flag==1){
-    		//alert( $(this).text() );
     		if($(this).text()=='') 
     			$(this).text(function(index, text){
     				text = 'x';
@@ -241,11 +216,11 @@ $(document).on('click','#btn',function(){
     		elem1.innerHTML='<input type="text" id="fname_in" size="28" value="'+data.firstName+'"></input>';
     		elem2.innerHTML='<input type="text" id="sname_in" size="28" value="'+data.secondName+'"></input>';
     		elem3.innerHTML='<input type="text" id="tname_in" size="28" value="'+data.thirdName+'"></input>';
-    		elem4.innerHTML='<input type="text" id="login_in" size="28" value="'+data.login+'"></input>';
+    		elem4.innerHTML='<input type="text" id="login_in" size="28" value="'+data.login+'" readonly="readonly"></input>';
     		elem5.innerHTML='<input type="password" id="pass1_in" size="28" value=""></input>';
     		elem6.innerHTML='<input type="password" id="pass2_in" size="28" value=""></input>';
     		var elem9 = document.getElementById("RoleList");
-    		elem9.innerHTML='<select class="js-example-basic-multiple" name="states[]" multiple="multiple" style="width: 200px;"></select>';
+    		elem9.innerHTML='<select class="js-example-basic-multiple" id="coopUpdate" name="states[]" multiple="multiple" style="width: 200px;"></select>';
     		$('.js-example-basic-multiple').select2({
     			data: data.role_List
     		});
@@ -262,77 +237,69 @@ $(document).on('click','#btn',function(){
     		$("#dialog").dialog('close');
     });
 
-    //Обработка нажатия кнопки ввод на всплывающей панели
+    //Обработка нажатия кнопки ввод на панели сбоку
     $(document).on("click", "#save", function() {
-    	var xhr = new XMLHttpRequest();
-    	var params =
-    	'fname=' + encodeURIComponent(document.getElementById("fname_in").value) +
-    	'&sname=' + encodeURIComponent(document.getElementById("sname_in").value) +
-    	'&tname=' + encodeURIComponent(document.getElementById("tname_in").value) +
-    	'&login=' + encodeURIComponent(document.getElementById("login_in").value) +
-    	'&pass1=' + encodeURIComponent(document.getElementById("pass1_in").value);
-    	
-    	
-    	
-    	/*
-    	//alert(document.getElementById("RoleList").value);
-    	alert(document.getElementById("coopUpdate").value);
-    	getSelection(document.getElementById("coopUpdate"));
-    	for (var i = 0; i < document.getElementById("coopUpdate").options.length; i++)
-    		if (document.getElementById("coopUpdate").options[i].selected)
-    			//selectedOptions.push(o.options[i].value);
-    			params += '&select2=' + encodeURIComponent(document.getElementById("coopUpdate").value);
-    	alert(params);
-    	*/
-    	alert(document.getElementById("coopUpdate"));
-    	for ( var i = 0; i < document.getElementById("coopUpdate").selectedOptions.length; i++) {
-    		  alert( document.getElementById("coopUpdate").selectedOptions[i].value);
-    		}
-    	
-    	
-    	
-    	xhr.open("GET", '/cooperators/update?' + params, true);
-    	xhr.send();    	
-    	if (xhr.status != 200) {
-    		alert( xhr.status + ': ' + xhr.statusText );
-    	}
-    	else {
-    		 // вывести результат
-  		  var rsp = xhr.responseText;
-  		  if(rsp.toString() == "Save success"){
-  			  //Оповестим об успехе сохранения
-  			  var elem6 = document.getElementById("save_div");
-  			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#005500">Изменение данных успешно</p>';
-    		}
-    	}
-    });
-    
-    var RestPost1 = function() {
-    	var xhr = new XMLHttpRequest();
-
-    	var body = '';
-    	xhr.open("POST", '/dd', true, 'priya', 'priya');
-    	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    	xhr.send(body);
-    	/*
-        $.ajax({
-            type: 'POST',
-            url:  '/dd',
-            dataType: 'json',
-            async: true,
-            success: function(result) {
-                alert(result);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert(jqXHR.status + ' ' + jqXHR.responseText);
-            }
-            
-        });*/
-    }
-    
-    var RestPut = function() {
     	//Проверим заполнение обязательных полей и сформируем сообщение с требованием заполнить поля
     	var msg =[];
+    	if(document.getElementById("sname_in").value == '')
+    		document.getElementById("sname_in").value = ' '
+    	if(document.getElementById("tname_in").value == '')
+    		document.getElementById("tname_in").value = ' '
+    	if(document.getElementById("fname_in").value == '')
+    		msg.push("\r\nВведите имя пльзователя")
+    	if(document.getElementById("login_in").value == '')
+    		msg.push("\r\nВведите логин пльзователя")
+    	if(document.getElementById("pass1_in").value == '')
+    		msg.push("\r\nВведите пароль")
+    	if(document.getElementById("pass2_in").value == '')
+    		msg.push("\r\nВведите подтверждение пароля")
+    	if(document.getElementById("pass1_in").value != document.getElementById("pass2_in").value)
+    		msg.push("\r\nПароли не совпадают");
+    	if(msg.length == 0) {
+    		var arr = [];//Массив содержащий список ролей данного пользователя
+    		var values = $('#coopUpdate').val();//Вернём все значения списком
+    		//Получим позиции всех выбранных значений в списке
+    		$('#coopUpdate option:selected').each(function() {
+    			arr.push($(this).text());
+    		});
+    	
+    		var CooperatorsDataObject= {
+    				'fname': document.getElementById("fname_in").value,
+    				'sname': document.getElementById("sname_in").value,
+    				'tname': document.getElementById("tname_in").value,
+    				'login': document.getElementById("login_in").value,
+    				'pass': document.getElementById("pass1_in").value,
+    				'roles': arr
+    		};
+
+    		$.ajax({
+    			type: 'POST',
+    			url:  '/cooperators',
+    			contentType: 'application/json; charset=utf-8',
+    			data: JSON.stringify(CooperatorsDataObject),
+    			dataType: 'json',
+    			async: true,
+    			success: function(result) {
+    				alert('Статус: ' + result);
+    			},
+    			error: function(jqXHR, textStatus, errorThrown) {
+    				alert('Статус: ' + jqXHR.responseText);
+    			}
+    		});
+    	}
+    	else{
+    		alert(msg);
+    	}
+    });
+
+    //Обработка нажатия кнопки ввод во всплывающем окне
+    $(document).on("click", "#vvod", function() {
+    	//Проверим заполнение обязательных полей и сформируем сообщение с требованием заполнить поля
+    	var msg =[];
+    	if(document.getElementById("sname_").value == '')
+    		document.getElementById("sname_").value = ' '
+    	if(document.getElementById("tname_").value == '')
+    		document.getElementById("tname_").value = ' '
     	if(document.getElementById("fname_").value == '')
     		msg.push("\r\nВведите имя пльзователя")
     	if(document.getElementById("login_").value == '')
@@ -369,14 +336,17 @@ $(document).on('click','#btn',function(){
     			async: true,
     			success: function(result) {
     				alert('Статус: ' + result);
+    				load_table();//Перезагрузка списка пользователей
     			},
     			error: function(jqXHR, textStatus, errorThrown) {
     				alert('Статус: ' + jqXHR.responseText);
+    				load_table();//Перезагрузка списка пользователей
     			}
     		});
     	}
     	else{
     		alert(msg);
     	}
-    }
+    });
+
     
