@@ -57,40 +57,6 @@
 		Роли<br/>
 		<select id="roles_" class="js-example-basic-multiple_" name="states[]" multiple="multiple" style="width: 330px;"></select><br/>
 		<br/>
-		
-	<select class="js-e"></select>
-	<script>
-	var data1 = [
-    {
-        id: 0,
-        text: 'enhancement'
-    },
-    {
-        id: 1,
-        text: 'bug'
-    },
-    {
-        id: 2,
-        text: 'duplicate'
-    },
-    {
-        id: 3,
-        text: 'invalid'
-    },
-    {
-        id: 4,
-        text: 'wontfix'
-    }
-	];
-	$(".js-e").select2({
-  		data: data1
-	})
-	</script>
-	<br/>	
-	<button type="button" onclick="RestPost1()">Метод POST</button>	
-	<button type="button" onclick="RestPut()">Метод PUT</button>		
-		
-    	<!--<button class="page-p" id="vvod" style="cursor:pointer">Ввод</button>-->
     	<button class="page-p" id="vvod" style="cursor:pointer" onclick="RestPut()">Ввод</button>
     	<div id="response_vvod"></div>
 	</div>

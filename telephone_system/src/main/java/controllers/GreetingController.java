@@ -52,6 +52,7 @@ import repository.SecurityRepository;
 import repository.SubdivisionRepository;
 import repository.TelephoneRepository;
 import repository.UserRepository;
+import repository.User_roleRepository;
 import repository.DepartmentRepository;
 import repository.DotsRepository;
 import repository.ErrorCableRepository;
@@ -86,7 +87,7 @@ public class GreetingController {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
-	private UserRepository user_roleRepository;
+	private User_roleRepository user_roleRepository;
 	@Autowired
 	private DotsRepository dotsRepository;
 
@@ -206,7 +207,16 @@ public class GreetingController {
 			// Сохраним наименование ролей
 			while (iterator3.hasNext()) {
 				String str = ((Role) iterator3.next()).getRoleName();
-				ui.add_(chr, str, "");
+				
+				//Переписать проверку в запрос
+				//Проверим есть ли в списке повторяющиеся значения
+				int ch = 0;
+				for(int i = 0; i < ui.getRole_List().size(); i++) {
+					if(ui.getRole_List().get(i).getText().equals(str)) ch++;
+				}
+				if(ch==0) ui.add_(chr, str, "");
+				
+				//ui.add_(chr, str, "");
 			}
 			// Получим таблицу с ролями не относящимися не к какому пользователю
 			List<Role> resu = roleRepository.find6();
@@ -875,32 +885,38 @@ public class GreetingController {
      * @return
      */
     public String cooperatorsPUT(@RequestBody CooperatorsDataObject cdo) {
-		System.out.println(cdo.getFName());
-		System.out.println(cdo.getRoles()[0]);
+		//System.out.println(cdo.getFName());
+		//System.out.println(cdo.getRoles()[0]);
+		//Проверим есть ли пользователь с таким логином
+		if(userRepository.findCountLogin(cdo.getLogin())==0) {
+			//Создадим пользователя
+			User user = new User();
+			user.setFirstname(cdo.getFName());
+			user.setSecondname(cdo.getSName());
+			user.setThirdname(cdo.getTName());
+			user.setUsername(cdo.getLogin());
+			user.setPassword(cdo.getPass());
+			user.setEnabled(1);
+			userRepository.save(user);
 		
-		//Создадим пользователя
-		User user = new User();
-		user.setFirstname(cdo.getFName());
-		user.setSecondname(cdo.getSName());
-		user.setThirdname(cdo.getTName());
-		user.setUsername(cdo.getLogin());
-		user.setPassword(cdo.getPass());
+			//Получим список ролей
+			Role role = new Role();
+			List<Role> roleList = new ArrayList<Role>();//Список ролей пользователей
+			for(int i = 0; i < cdo.getRoles().length; i++) {
+				Role r = roleRepository.findRole(cdo.getRoles()[i].toString());
+				roleList.add(r);
+			}
 		
-		//Получим список ролей
-		Role role = new Role();
-		List<Role> roleList = new ArrayList<Role>();//Список ролей пользователей
-		for(int i = 0; i < cdo.getRoles().length; i++) {
-			roleList.add(roleRepository.findRole(role))
+			//Сопоставим пользователя с его ролями
+			for(int i = 0; i <roleList.size(); i++) {
+				User_Role us = new User_Role();
+				us.setUser(user);
+				us.setRole(roleList.get(i));
+				user_roleRepository.save(us);
+			}
+			return "User created successfully";
 		}
-		
-		//Сопоставим пользователей и роли
-		User_Role us = new User_Role();
-		
-		
-		//roleRepository
-		//userRepository
-		//user_roleRepository
-        return "true";
+		return "User with this login already exists";
     }
 	
 	@RequestMapping(value = "/cooperators", method = RequestMethod.DELETE)
@@ -913,11 +929,25 @@ public class GreetingController {
         return "true";
     }
 	
-	 // этот метод будет методом POST отдавать объект MyDataObject
+	// этот метод будет методом POST отдавать объект MyDataObject
     @RequestMapping(value = "/dd", method = RequestMethod.POST)
     @ResponseBody
-    public String postMyData() {
-        return "true";
+    public String postMyData(@RequestBody CooperatorsDataObject cdo) {
+    	//Найдём пользователя по логину
+    	User user = userRepository.getUserInfo(старый логин);//Добавить старый логин в параметры запроса
+        return "Изменение данных успешно завершено";
     }
-	
+    
+    @RequestMapping(value = "/roleList", method = RequestMethod.GET)
+    @ResponseBody
+	/**
+	 * Получим список ролей
+	 * @return список ролей
+	 */
+	public List<String> getRoleList() {
+    	List<String> role = new ArrayList<String>();
+    	role = roleRepository.findAllRole();
+		return role;
+	}
+    
 }

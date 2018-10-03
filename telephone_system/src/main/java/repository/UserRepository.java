@@ -10,12 +10,21 @@ import org.springframework.data.repository.query.Param;
 import controllers.Adsl;
 import controllers.Telephone;
 import controllers.User;
+import controllers.User_Role;
 
 public interface UserRepository extends CrudRepository<User, Long> {
 	
 	@Query("SELECT u FROM User u")
     public List<User> findName();
 	
+	@Query("SELECT Count(u) FROM User u WHERE u.username = :username")
+    public Integer findCountLogin(@Param("username") String username);
+	
+	/**
+	 * Получение списка пользователей имеющих указанный логин
+	 * @param name логин пользователя
+	 * @return пользователь
+	 */
 	@Query("SELECT u FROM User u WHERE u.username=:name")
     public User getUserInfo(@Param("name") String name);
 	

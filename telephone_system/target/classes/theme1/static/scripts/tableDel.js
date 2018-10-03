@@ -95,7 +95,7 @@ $(document).ready(function() {//При загрузке документа за�
 	blockInput();
 
 	
-	
+	/*
 	var data = [
 	    {
 	        id: 0,
@@ -117,11 +117,30 @@ $(document).ready(function() {//При загрузке документа за�
 	        id: 4,
 	        text: 'wontfix'
 	    }
-	];
+	];*/
+	var data_ = [];
 	
-$('.js-example-basic-multiple_').select2({
-	data: data
-});
+	$.ajax({
+        type: 'GET',
+        url:   "/roleList" ,
+        dataType: 'json',
+        async: true,
+        success: function(result) {
+        	//alert(result);
+        	for (var i = 0; i < result.length; i++){
+        		data_.push(result[i]);
+        	}
+        	$('.js-example-basic-multiple_').select2({
+        		data: data_
+        	});
+            //alert('Время: ' + result.time
+            //        + ', сообщение: ' + result.message);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.status + ' ' + jqXHR.responseText);
+        }
+    });
+
 
 });
 /*
@@ -225,7 +244,6 @@ $(document).on('click','#btn',function(){
     		elem4.innerHTML='<input type="text" id="login_in" size="28" value="'+data.login+'"></input>';
     		elem5.innerHTML='<input type="password" id="pass1_in" size="28" value=""></input>';
     		elem6.innerHTML='<input type="password" id="pass2_in" size="28" value=""></input>';
-    
     		var elem9 = document.getElementById("RoleList");
     		elem9.innerHTML='<select class="js-example-basic-multiple" name="states[]" multiple="multiple" style="width: 200px;"></select>';
     		$('.js-example-basic-multiple').select2({
@@ -313,36 +331,52 @@ $(document).on('click','#btn',function(){
     }
     
     var RestPut = function() {
-    	var arr = [];//Массив содержащий список ролей данного пользователя
-    	var values = $('#roles_').val();//Вернём все значения списком
-    	//Получим позиции всех значений
-        $('#roles_ option:selected').each(function() {
-            //alert($(this).val() + '  ' + $(this).text());
-        	arr.push($(this).text());
-        });
+    	//Проверим заполнение обязательных полей и сформируем сообщение с требованием заполнить поля
+    	var msg =[];
+    	if(document.getElementById("fname_").value == '')
+    		msg.push("\r\nВведите имя пльзователя")
+    	if(document.getElementById("login_").value == '')
+    		msg.push("\r\nВведите логин пльзователя")
+    	if(document.getElementById("pass1_").value == '')
+    		msg.push("\r\nВведите пароль")
+    	if(document.getElementById("pass2_").value == '')
+    		msg.push("\r\nВведите подтверждение пароля")
+    	if(document.getElementById("pass1_").value != document.getElementById("pass2_").value)
+    		msg.push("\r\nПароли не совпадают");
+    	if(msg.length == 0) {
+    		var arr = [];//Массив содержащий список ролей данного пользователя
+    		var values = $('#roles_').val();//Вернём все значения списком
+    		//Получим позиции всех выбранных значений в списке
+    		$('#roles_ option:selected').each(function() {
+    			arr.push($(this).text());
+    		});
     	
-        var CooperatorsDataObject= {
-            'fname': document.getElementById("fname_").value,
-            'sname': document.getElementById("sname_").value,
-            'tname': document.getElementById("tname_").value,
-            'login': document.getElementById("login_").value,
-            'pass': document.getElementById("pass1_").value,
-            'roles': arr
-        };
-        
-        alert(JSON.stringify(CooperatorsDataObject));
-        $.ajax({
-            type: 'PUT',
-            url:  '/cooperators',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(CooperatorsDataObject),
-            dataType: 'json',
-            async: true,
-            success: function(result) {
-                alert('Статус: ' + result);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert(jqXHR.status + ' ' + jqXHR.responseText);
-            }
-        });
+    		var CooperatorsDataObject= {
+    				'fname': document.getElementById("fname_").value,
+    				'sname': document.getElementById("sname_").value,
+    				'tname': document.getElementById("tname_").value,
+    				'login': document.getElementById("login_").value,
+    				'pass': document.getElementById("pass1_").value,
+    				'roles': arr
+    		};
+
+    		$.ajax({
+    			type: 'PUT',
+    			url:  '/cooperators',
+    			contentType: 'application/json; charset=utf-8',
+    			data: JSON.stringify(CooperatorsDataObject),
+    			dataType: 'json',
+    			async: true,
+    			success: function(result) {
+    				alert('Статус: ' + result);
+    			},
+    			error: function(jqXHR, textStatus, errorThrown) {
+    				alert('Статус: ' + jqXHR.responseText);
+    			}
+    		});
+    	}
+    	else{
+    		alert(msg);
+    	}
     }
+    
