@@ -47,6 +47,7 @@ import com.google.gson.JsonParser;
 
 import controllers.Department;
 import object.CooperatorsDataObject;
+import object.DepartmentDataObject;
 import repository.AdslRepository;
 import repository.SecurityRepository;
 import repository.SubdivisionRepository;
@@ -662,15 +663,6 @@ public class GreetingController {
 		return "success";
 	}
 	
-	@RequestMapping(value = "/department", method = RequestMethod.GET)
-	/**
-	 * Страница отдел
-	 * @return
-	 */
-	public String department(Model model) {
-		return "department";
-	}
-
 	@RequestMapping(value = "/getUserNameRole", method = RequestMethod.GET)
 	@ResponseBody
 	/**
@@ -991,7 +983,7 @@ public class GreetingController {
      * @return статус операции
      */
     public String cooperatorsDELETE(@RequestBody String[] userName) {
-		System.out.println(userName.length);
+		//System.out.println(userName.length);
 		for(int i = 0; i < userName.length; i++) {
 			//Найдём пользователя
 			User user = userRepository.getUserInfo(userName[i]);
@@ -1018,4 +1010,44 @@ public class GreetingController {
 		return role;
 	}
     
+    
+    
+    @RequestMapping(value = "/department", method = RequestMethod.GET)
+	/**
+	 * Страница отдел
+	 * @return html страница с информацией об отделах
+	 */
+	public String department(Model model) {
+		return "department";
+	}
+    
+    @RequestMapping(value = "/departmentList", method = RequestMethod.GET)
+    @ResponseBody
+	/**
+	 * Формирует и отправляет список отделов
+	 * @return список отделов
+	 */
+	public String department() {
+		return "department";
+	}
+    
+    @RequestMapping(value = "/departmentList", method = RequestMethod.PUT)
+    @ResponseBody
+    /**
+     * Вставка данных
+     * @return статус операции
+     */
+    public String departmentPUT(@RequestBody DepartmentDataObject cdo) {
+    	//Проверим есть ли отдел с таким наименованием
+    	//Создадим новый отдел
+    	Department department = new Department();
+    	department.setName(cdo.getDepartmentName());
+    	//Сопоставим отдел с подразделениями
+    	for(int i = 0; i < cdo.getSName().length; i++) {
+    		Subdivision sd = subdivisionRepository.findObjectByName(cdo.getSName()[i]);
+    		department.setSubdivision(sd);
+    	}
+    	departmentRepository.save(department);
+    	return "Department created successfully";
+    }
 }
