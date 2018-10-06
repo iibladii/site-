@@ -49,7 +49,7 @@ public interface SubdivisionRepository extends CrudRepository<Subdivision, Long>
     List<Subdivision> findAll(@Param("name") String name);
 	
 	/**
-	 * Поиск количества подразделений с заданным yfbvtyjdfybtv
+	 * Поиск количества подразделений с заданным наименованием
 	 * @param name наименование подразделения
 	 * @return число подразделений
 	 */

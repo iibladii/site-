@@ -13,15 +13,34 @@ import controllers.Subdivision;
 
 public interface DepartmentRepository extends CrudRepository<Department, Long> {
 
+	/**
+	 * Поиск конкретного подразделения согласно условию
+	 * @param name шаблон наименования подразделения
+	 * @returnнайденное подразделение
+	 */
 	@Query(value = "select a from Department a WHERE a.name like :name")
     Department findOne(@Param("name") String name);
 	
+	/**
+	 * Поиск подазделений согласно фильтру
+	 * @param name шаблон наименования подразделения
+	 * @return список подразделений
+	 */
 	@Query(value = "select a from Department a WHERE a.name like :name")
     List<Department> findAll(@Param("name") String name);
 	
+	/**
+	 * Поиск числа различных подразделений согласно фильтру
+	 * @param name шаблон наименования подразделения
+	 * @return число различных подразделений
+	 */
 	@Query(value = "select count(a) from Department a WHERE a.name like :name")
     Integer findAllcount(@Param("name") String name);
 	
+	/**
+	 * Поиск количества подразделений в бд
+	 * @return количество подразделений
+	 */
 	@Query(value = "select a from Department a WHERE a.name like :name")
-    List<Department> findAll_(@Param("name") String name);
+    Department findAllCount();
 }

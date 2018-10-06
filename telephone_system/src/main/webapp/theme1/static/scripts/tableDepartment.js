@@ -16,102 +16,99 @@ function blockInput(){
 
 //Отправка запроса на получение данных-> получение результата запровс -> отображение полученных данных
 function loadADSLTable(elem){
-	$.get("/subdivision/subdivision_info?name="+encodeURIComponent(document.getElementById("ads_name_").value)+'&elem='+encodeURIComponent(elem)+"&code="+encodeURIComponent(document.getElementById("subdiv_code_").value),function(data,status){
-		var elem2 = document.getElementById("ADSLList");//Таблица
-		var adslList='<table border="1" id="usersTable">'+
-			'<thead>'+
-				'<tr>'+
-					'<th>Код&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
-					'<th>Подразделение&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
-				'</tr>'+
-			'</thead>';
-			for(var i=0;i < parseInt(data.roleList.length); i++){
-				if(data.roleList[i]!=zap.toString() && data.codeList[i]!=zap.toString()){
-					adslList+='<tbody>'+
-					'<tr><td class="info">'+data.codeList[i]+'</td><td class="info">'+data.roleList[i]+'</td></tr>'+
-					'</tbody>';
-				}
-				else{
-					loadInfo(data.roleList[i],data.codeList[i]);//Запоним данными поля ввода
-					adslList+='<tbody>'+
-					'<tr><td id="currentCode" class="info" style="background: #cc0;">'+data.codeList[i]+'</td><td id="currentRole" class="info" style="background: #cc0;">'+data.roleList[i]+'</td></tr>'+
-					'</tbody>';
-				}
-			}
-			adslList+='</table>';
-			elem2.innerHTML = adslList;
-			var button_p = document.getElementById("buttonList");
-			var button='';
-			if((data.page - 3) > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 3)+'>&lt;</button>&nbsp';
-			else
-				if((data.page - 2) > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 2)+'>&lt;</button>&nbsp';
-				else
-					if((data.page - 1) > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 1)+'>&lt;</button>&nbsp';
-					else button += '<button class="page-с" style="cursor:pointer" value='+(data.page)+'>&lt;</button>&nbsp';
-			if(data.page - 2 > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 2)+'>'+(data.page - 2)+'</button>&nbsp';
-			if(data.page - 1 > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 1)+'>'+(data.page - 1)+'</button>&nbsp';
-			if(data.page > 0) button += '<button class="page-с" style="cursor:pointer; background: #0c0;" value='+(data.page)+'>'+(data.page)+'</button>&nbsp';
-			if(data.page + 1 <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 1)+'>'+(data.page + 1)+'</button>&nbsp';
-			if(data.page + 2 <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 2)+'>'+(data.page + 2)+'</button>&nbsp';
-			if((data.page + 3) <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 3)+'>&gt;</button>&nbsp';
-			else
-				if((data.page + 2) <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 2)+'>&gt;</button>&nbsp';
-				else
-					if((data.page + 1) <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 1)+'>&gt;</button>&nbsp';
-					else button += '<button class="page-с" style="cursor:pointer" value='+(data.page)+'>&gt;</button>&nbsp';	
-			page=data.page;
-			button_p.innerHTML = button;
-	});
+        $.ajax({
+            type: 'GET',
+            url:  '/departmentList?page=' + elem + '&sizePage=20&name=' + encodeURIComponent(document.getElementById("ads_name_").value),
+            dataType: 'json',
+            async: true,
+            success: function(data) {
+                var elem2 = document.getElementById("ADSLList");//Таблица
+        		var adslList='<table border="1" id="usersTable">'+
+        			'<thead>'+
+        				'<tr>'+
+        					'<th>Отдел&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
+        				'</tr>'+
+        			'</thead>';
+        			for(var i=0;i < parseInt(data.name.length); i++){
+        				if(data.name[i]!=zap.toString()){
+        					
+        					adslList+='<tbody>'+
+        					'<tr><td class="info">'+data.name[i]+'</td></tr>'+
+        					'</tbody>';
+        				}
+        				else{
+        					loadInfo(data.name[i]);//Запоним данными поля ввода
+        					adslList+='<tbody>'+
+        					'<tr><td id="currentCode" class="info" style="background: #cc0;">'+data.name[i]+'</td></tr>'+
+        					'</tbody>';
+        				}
+        			}
+        			adslList+='</table>';
+        			elem2.innerHTML = adslList;
+        			//Создадим кнопки
+        			var button = document.getElementById("buttonList");
+        			var button_p = '<button class="page-l" style="cursor:pointer">&lt;</button>&nbsp;';
+        			if(data.page-2 > 0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page-2)+'">'+(data.page-2)+'</button>&nbsp;';
+        			if(data.page-1 > 0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page-1)+'">'+(data.page-1)+'</button>&nbsp;';
+        			if(data.page>0) button_p +='<button class="page-с" style="cursor:pointer; background:green"  value="'+data.page+'">'+data.page+'</button>&nbsp;';
+        			if(data.page+1 <= Math.ceil(parseInt(data.countPage)/20)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page+1)+'">'+(data.page+1)+'</button>&nbsp;';
+        			if(data.page+2 <= Math.ceil(parseInt(data.countPage)/20)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page+2)+'">'+data.page+2+'</button>&nbsp;';
+        			button_p +='<button class="page-r" style="cursor:pointer">&gt;</button>&nbsp;';
+        			button.innerHTML = button_p;   
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error' + jqXHR.status + ' ' + jqXHR.responseText);
+            }
+        });
 }
 
+//Формирование таблицы для удаления подразделений
 function loadADSLTableDel(elem){
-	$.get("/subdivision/subdivision_info?name="+encodeURIComponent(document.getElementById("ads_name_").value)+'&elem='+encodeURIComponent(elem)+"&code="+encodeURIComponent(document.getElementById("subdiv_code_").value),function(data,status){
-		var elem2 = document.getElementById("ADSLList");//Таблица
-		var adslList='<table border="1" id="usersTable">'+
-			'<thead>'+	
-				'<tr>'+
-					'<th>Код&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
-					'<th>Подразделение&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
-					'<th>&nbsp&nbsp</th>'+
-				'</tr>'+
-			'</thead>';
-			for(var i=0;i < parseInt(data.roleList.length); i++){
-				adslList+='<tbody>'+
-					'<tr><td class="info">'+data.codeList[i]+'</td><td class="info">'+data.roleList[i]+'</td><td class="del"></td></tr>'+
-				'</tbody>';
-			}
-			adslList+='</table>';
-			elem2.innerHTML=adslList;
-			
-			var button_p = document.getElementById("buttonList");
-			var button='';
-			if((data.page - 3) > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 3)+'>&lt;</button>&nbsp';
-			else
-				if((data.page - 2) > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 2)+'>&lt;</button>&nbsp';
-				else
-					if((data.page - 1) > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 1)+'>&lt;</button>&nbsp';
-					else button += '<button class="page-с" style="cursor:pointer" value='+(data.page)+'>&lt;</button>&nbsp';
-			if(data.page - 2 > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 2)+'>'+(data.page - 2)+'</button>&nbsp';
-			if(data.page - 1 > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 1)+'>'+(data.page - 1)+'</button>&nbsp';
-			if(data.page > 0) button += '<button class="page-с" style="cursor:pointer; background: #0c0;" value='+(data.page)+'>'+(data.page)+'</button>&nbsp';
-			if(data.page + 1 <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 1)+'>'+(data.page + 1)+'</button>&nbsp';
-			if(data.page + 2 <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 2)+'>'+(data.page + 2)+'</button>&nbsp';
-			if((data.page + 3) <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 3)+'>&gt;</button>&nbsp';
-			else
-				if((data.page + 2) <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 2)+'>&gt;</button>&nbsp';
-				else
-					if((data.page + 1) <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 1)+'>&gt;</button>&nbsp';
-					else button += '<button class="page-с" style="cursor:pointer" value='+(data.page)+'>&gt;</button>&nbsp';	
-			page=data.page;
-			button_p.innerHTML = button;
-	});
+	$.ajax({
+        type: 'GET',
+        url:  '/departmentList?page=' + elem + '&sizePage=20&name=' + encodeURIComponent(document.getElementById("ads_name_").value),
+        dataType: 'json',
+        async: true,
+        success: function(data) {
+            var elem2 = document.getElementById("ADSLList");//Таблица
+    		var adslList='<table border="1" id="usersTable">'+
+    			'<thead>'+
+    				'<tr>'+
+    					'<th>Отдел&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
+    				'</tr>'+
+    			'</thead>';
+    			for(var i=0;i < parseInt(data.name.length); i++){
+    				if(data.name[i]!=zap.toString()){
+    					adslList += '<tbody>'+
+    									'<tr><td class="info">'+data.name[i]+'</td><td class="del"></td></tr>'+
+    								'</tbody>';
+    				}
+    			}
+    			adslList+='</table>';
+    			elem2.innerHTML = adslList;
+    			//Создадим кнопки
+    			var button = document.getElementById("buttonList");
+    			var button_p = '<button class="page-l" style="cursor:pointer">&lt;</button>&nbsp;';
+    			if(data.page-2 > 0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page-2)+'">'+(data.page-2)+'</button>&nbsp;';
+    			if(data.page-1 > 0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page-1)+'">'+(data.page-1)+'</button>&nbsp;';
+    			if(data.page>0) button_p +='<button class="page-с" style="cursor:pointer; background:green"  value="'+data.page+'">'+data.page+'</button>&nbsp;';
+    			if(data.page+1 <= Math.ceil(parseInt(data.countPage)/20)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page+1)+'">'+(data.page+1)+'</button>&nbsp;';
+    			if(data.page+2 <= Math.ceil(parseInt(data.countPage)/20)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page+2)+'">'+data.page+2+'</button>&nbsp;';
+    			button_p +='<button class="page-r" style="cursor:pointer">&gt;</button>&nbsp;';
+    			button.innerHTML = button_p;   
+              
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('Error' + jqXHR.status + ' ' + jqXHR.responseText);
+        }
+    });
 }
 
 //Загрузка данных
-function loadInfo(str,code){
+function loadInfo(str){
 	var elem6 = document.getElementById("UserInfo");//Таблица
 	elem6.innerHTML=''+
-	'<div>Данные подразделение:</div>'+
+	'<div>Данные отдел:</div>'+
 	'<div>'+
 		'&nbsp;'+
 		'<div>'+
@@ -120,8 +117,8 @@ function loadInfo(str,code){
 		'</div>'+
 		'&nbsp;'+
 		'<div>'+
-			'Выберите подразделение:<br/>'+
-			'<div id="selectSubdivision"><select class="js-example-responsive" style="width: 50%"></select></div>'+
+			'<div class="informationL">Сопоставленные подразделения:</div>'+
+			'<div id="selectSubdivision"><select id="subdivisionList_" class="js-example-basic-multiple_" name="states[]" multiple="multiple" style="width: 330px;"></select></select></div>'+
 			'<br/>'+
 		'</div>'+
 		'<div>'+
@@ -129,13 +126,56 @@ function loadInfo(str,code){
 			'<div class="informationR" id="save_div"><button id="save" style="cursor:pointer">Сохранить</button></div>'+
 		'</div>'+
 	'</div>';
+	//Загрузка списка отделов в формате наименование/код
+	$.ajax({
+        type: 'GET',
+        url:   "http://127.0.0.1:8080/subdivision/get_dataList" ,
+        dataType: 'json',
+        async: true,
+        success: function(data) {
+        	var elem = document.getElementById("selectSubdivision");
+        	var dat = '<select class="js-example-basic-single" name="state" style="width: 250px;">';
+        	for(var i=0;i<data.results.length-1;i++)
+        		dat += '<option value="AL">'+data.results[i].text+'</option>';
+        	dat += '<option value="WY">Wyoming</option>';
+        	dat += '</select>';
+        	elem.innerHTML = dat;
+        	
+        	$('.js-example-basic-single').select2();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.status + ' ' + jqXHR.responseText);
+        }
+    });
+	
 }
 
 //При загрузке документа заполним таблицу
 $(document).ready(function() {
-	loadInfo("","");
+	loadInfo("");
 	blockInput();
 	loadADSLTable(1);
+	
+	//Заполним выподающий список
+	var data_ = [];
+	$.ajax({
+        type: 'GET',
+        url:   "/roleList" ,
+        dataType: 'json',
+        async: true,
+        success: function(result) {
+        	for (var i = 0; i < result.length; i++){
+        		data_.push(result[i]);
+        	}
+        	$('.js-example-basic-multiple_').select2({
+        		data: data_
+        	});
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.status + ' ' + jqXHR.responseText);
+        }
+    });
+	
 });
 
 //Обработка нажатия на кнопку удалить
@@ -189,7 +229,7 @@ $(document).on('click','#btn',function(){
 		    		  //обработать ошибку
 		    		  alert( status + ': ' + statusText ); // пример вывода: 404: Not Found
 		    		  //Оповестим об ошибке коммуникации
-		    		  loadInfo(document.getElementById("adsl_Name").value,document.getElementById("c_Name").value);
+		    		  loadInfo(document.getElementById("adsl_Name").value);
 					  var elem6 = document.getElementById("save_div");
 					  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#550000">Ошибка: ' + status + '</p>';
 		    		}
@@ -198,13 +238,13 @@ $(document).on('click','#btn',function(){
 		    		  var rsp = data;
 		    		  if(rsp.toString() == "Delete success"){
 		    			  //Оповестим об успехе сохранения
-		    			  loadInfo(document.getElementById("adsl_Name").value,document.getElementById("c_Name").value);
+		    			  loadInfo(document.getElementById("adsl_Name").value);
 		    			  var elem6 = document.getElementById("save_div");
 		    			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#005500">Удаление успешно</p>';
 		    		  }
 		    		  else{
 		    			  //Оповестим об ошибке сохранения
-		    			  loadInfo(document.getElementById("adsl_Name").value,document.getElementById("с_Name").value);
+		    			  loadInfo(document.getElementById("adsl_Name").value);
 		    			  var elem6 = document.getElementById("save_div");
 		    			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#550000">Процесс удаления завершился ошибкой</p>';
 		    		  }
@@ -245,7 +285,7 @@ $(document).on("click", ".page-с", function (){
     
     //Обработка нажатия кнопки поиск
     $(document).on("click", "#poisk", function() {
-    	loadInfo("","");
+    	loadInfo("");
     	blockInput();
     	zap="";
     	if(flag==0)
@@ -266,7 +306,7 @@ $(document).on("click", ".page-с", function (){
     		  // обработать ошибку
     		  alert( xhr.status + ': ' + xhr.statusText ); // пример вывода: 404: Not Found
     		  //Оповестим об ошибке коммуникации
-    		  loadInfo(document.getElementById("adsl_Name").value,document.getElementById("c_Name").value);
+    		  loadInfo(document.getElementById("adsl_Name").value);
 			  var elem6 = document.getElementById("save_div");
 			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#550000">Сервер не отвечает</p>';
     		}
@@ -275,13 +315,13 @@ $(document).on("click", ".page-с", function (){
     		  var rsp = xhr.responseText;
     		  if(rsp.toString() == "Save success"){
     			  //Оповестим об успехе сохранения
-    			  loadInfo(document.getElementById("adsl_Name").value,document.getElementById("c_Name").value);
+    			  loadInfo(document.getElementById("adsl_Name").value);
     			  var elem6 = document.getElementById("save_div");
     			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#005500">Сохранение успешно</p>';
     		  }
     		  else{
     			  //Оповестим об ошибке сохранения
-    			  loadInfo(document.getElementById("adsl_Name").value,document.getElementById("c_Name").value);
+    			  loadInfo(document.getElementById("adsl_Name").value);
     			  var elem6 = document.getElementById("save_div");
     			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#550000">Запись уже существует</p>';
     		  }
@@ -297,8 +337,6 @@ $(document).on("click", ".page-с", function (){
     	if(flag==0){    		
     		zap=$(this).text();
     		loadADSLTable(page);
-    		//alert(document.getElementById("currentCode").innerHTML,document.getElementById("currentRole").innerHTML);  		
-    		//loadInfo(code,sd);//Вызов перенесён в loadADSLTable 
     		UNblockInput();    		
     	}
     });
@@ -331,12 +369,4 @@ $(document).on("click", ".page-с", function (){
     		resp_vvod.innerHTML='<p style="color:#550000">Заполните все поля</p>';
     	}
     });
-    
-    //$(".js-example-responsive").select2({
-    //    width: 'resolve' // need to override the changed default
-    //});
-    $(".js-example-theme-single").select2({
-    	  theme: "classic"
-    });
-    
     

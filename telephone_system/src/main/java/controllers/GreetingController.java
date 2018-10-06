@@ -64,6 +64,7 @@ import tables.UserInfoV2;
 import tables.UserNameId;
 import tables.adslInfo;
 import tables.companateSelect2;
+import tables.departmentInfo;
 import tables.subdivision;
 import tables.subdivisionSelect2;
 import tables.errorCableInfo;
@@ -1025,10 +1026,28 @@ public class GreetingController {
     @ResponseBody
 	/**
 	 * Формирует и отправляет список отделов
+	 * @param page номер страницы
+	 * @param sizePage число строк в стаблице
+	 * @param name название отдела (если указано в фильтре)
 	 * @return список отделов
 	 */
-	public String department() {
-		return "department";
+	public departmentInfo department(@RequestParam Integer page, @RequestParam Integer sizePage, @RequestParam(required = false, defaultValue = "") String name) {
+    	name = "%" + name + "%";
+    	departmentInfo di = new departmentInfo(page);
+    	//Сохраним размер страницы
+    	di.setSizePage(sizePage);
+    	//Сохраним число страниц полученное на основе шаблона
+    	Double countPage = Math.ceil((double)departmentRepository.findAllcount(name)/(double)sizePage);
+    	di.setCountPAge(countPage.intValue());
+    	//Составим список наименований подразделений
+    	Iterable<Department> dList = departmentRepository.findAll(name);//Найдём все подразделения
+    	int ch = 0;
+    	for(Department department:dList) {//Сформируем список наименований всех подразделений
+    		if(ch <= sizePage) di.addName(department.getName());
+    		ch++;
+    		if(ch == sizePage) return di;
+    	}
+		return di;
 	}
     
     @RequestMapping(value = "/departmentList", method = RequestMethod.PUT)
@@ -1039,6 +1058,7 @@ public class GreetingController {
      */
     public String departmentPUT(@RequestBody DepartmentDataObject cdo) {
     	//Проверим есть ли отдел с таким наименованием
+    	if(departmentRepository.findAllcount(cdo.getDepartmentName())>0) return "Department with that name already exists";
     	//Создадим новый отдел
     	Department department = new Department();
     	department.setName(cdo.getDepartmentName());
