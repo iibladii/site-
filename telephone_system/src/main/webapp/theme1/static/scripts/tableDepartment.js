@@ -126,27 +126,31 @@ function loadInfo(str){
 			'<div class="informationR" id="save_div"><button id="save" style="cursor:pointer">Сохранить</button></div>'+
 		'</div>'+
 	'</div>';
+	var elem = document.getElementById("selectSubdivision");
+	var dat = '<select class="js-example-basic-single" name="state" style="width: 200px;" multiple="multiple"></select>';
+	elem.innerHTML = dat;
+	
 	//Загрузка списка отделов в формате наименование/код
-	$.ajax({
-        type: 'GET',
-        url:   "http://127.0.0.1:8080/subdivision/get_dataList" ,
-        dataType: 'json',
-        async: true,
-        success: function(data) {
-        	var elem = document.getElementById("selectSubdivision");
-        	var dat = '<select class="js-example-basic-single" name="state" style="width: 250px;">';
-        	for(var i=0;i<data.results.length-1;i++)
-        		dat += '<option value="AL">'+data.results[i].text+'</option>';
-        	dat += '<option value="WY">Wyoming</option>';
-        	dat += '</select>';
-        	elem.innerHTML = dat;
-        	
-        	$('.js-example-basic-single').select2();
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert(jqXHR.status + ' ' + jqXHR.responseText);
-        }
-    });
+	if(str!='')
+		$.ajax({
+			type: 'GET',
+			url:   '/getSubdivisionList?name='+encodeURIComponent(str),
+			dataType: 'json',
+			async: true,
+			success: function(data) {
+				//alert(data[0].selected);
+				$('.js-example-basic-single').select2({
+					data: data
+				});
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				alert(jqXHR.status + ' ' + jqXHR.responseText);
+			}
+		});
+	else
+		$('.js-example-basic-single').select2({
+			data: ''
+		});
 	
 }
 
@@ -154,22 +158,20 @@ function loadInfo(str){
 $(document).ready(function() {
 	loadInfo("");
 	blockInput();
-	loadADSLTable(1);
+	loadADSLTable(1);	
 	
 	//Заполним выподающий список
 	var data_ = [];
 	$.ajax({
         type: 'GET',
-        url:   "/roleList" ,
+        url:   '/getSubdivisionList' ,
         dataType: 'json',
         async: true,
         success: function(result) {
-        	for (var i = 0; i < result.length; i++){
-        		data_.push(result[i]);
-        	}
-        	$('.js-example-basic-multiple_').select2({
-        		data: data_
+        	$('.js-example-basic-single_').select2({
+        		data: result
         	});
+        	//$('.js-example-basic-single_').val([' ']).trigger("change"); 
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert(jqXHR.status + ' ' + jqXHR.responseText);

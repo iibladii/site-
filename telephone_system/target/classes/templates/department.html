@@ -23,7 +23,13 @@
 	<link rel="stylesheet" type="text/css" href="styles/multyList/select2.min.css"/>
 	<script>
   		$(function() {
-    		$( "#dialog" ).dialog({ autoOpen: false });
+    		$( "#dialog" ).dialog({
+    			maxWidth:450,
+    	        maxHeight: 500,
+    	        width: 450,
+    	        height: 250,
+    	        autoOpen: false
+    	        });
   		});
   	</script>
 </head>
@@ -31,6 +37,10 @@
 	<div id="dialog" title="Добавление элементов">
 		Введите наименование отдела:<br/>
 		<input id="department_" name="department" type="text" size="30" placeholder="Отдел"></input>
+		<br/>
+		<br/>
+		Выберите наименование подразделений:<br/>
+		<select class="js-example-basic-single_" name="state" style="width: 400px;" multiple="multiple"></select>
 		<br/>
 		<br/>
     	<button class="page-p" id="vvod" style="cursor:pointer">Ввод</button>
@@ -42,8 +52,8 @@
 		<script src="styles/static/scripts/menu_headr_icon.js"></script> <!-- Грузим шапку меню -->
 		<div style="width:350px;height:20px;float:right;">
 			<div align="right">
-					<div style="width:64px;height:5px;float:right;"><form th:action="@{/logout}" method="post"><input type="submit" value="Выход"/></form></div>
-				 	<div style="width:150px;height:10px;float:right;margin-top: +0.25em;" th:inline="text">Вы вошли как:&nbsp;[[${#httpServletRequest.remoteUser}]]&nbsp;</div>
+					<div style="width:64px;height:10px;float:right;"><form th:action="@{/logout}" method="post"><input type="submit" value="Выход"/></form></div>
+				 	<div style="width:150px;height:15px;float:right;margin-top: +0.25em;" th:inline="text">Вы вошли как:&nbsp;[[${#httpServletRequest.remoteUser}]]&nbsp;</div>
 			</div>
 		</div>
 	</div>

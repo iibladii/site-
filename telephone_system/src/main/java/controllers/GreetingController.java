@@ -54,6 +54,9 @@ import repository.SubdivisionRepository;
 import repository.TelephoneRepository;
 import repository.UserRepository;
 import repository.User_roleRepository;
+import select2Data.Children;
+import select2Data.DataListSelect2;
+import select2Data.DataListSelect2Groups;
 import repository.DepartmentRepository;
 import repository.DotsRepository;
 import repository.ErrorCableRepository;
@@ -1070,4 +1073,56 @@ public class GreetingController {
     	departmentRepository.save(department);
     	return "Department created successfully";
     }
+    
+    @RequestMapping(value = "/getSubdivisionList", method = RequestMethod.GET)
+    @ResponseBody
+	/**
+	 * Наполнение поля выбора подразделения
+	 * @param name наименования отделов
+	 * @return данны в виде ('подразделение(код)')
+	 */
+	public List<DataListSelect2Groups> getSubdivisionList(@RequestParam(required = false, defaultValue = "") String name) {
+    	String[][] arr = subdivisionRepository.findAllCodeName(name);//Выберем все наименования и коды подразделений
+    	String[][] arrN = subdivisionRepository.findAllCodeNameNot(name);//Выберем все оставшиеся наименования и коды подразделений
+    	String[][] arrND = subdivisionRepository.findAllCodeNameNotDepartment();//Выберем все оставшиеся наименования и коды подразделений не связанные с отделом
+    	//Структура данных содержащая информацию из выпадающего списка
+    	List<DataListSelect2Groups> list = new ArrayList<DataListSelect2Groups>();
+    	//Заполним данными список
+    	DataListSelect2Groups dsg = new DataListSelect2Groups();
+    	DataListSelect2Groups dsg1 = new DataListSelect2Groups();
+    	DataListSelect2Groups dsg2 = new DataListSelect2Groups();
+    	
+    	int chId = 0;
+    	for(int i = 0; i< arr.length; i++) {
+    		Children dl = new Children();
+    		dl.setId(chId); chId++;
+    		dl.setText(arr[i][0] + "\r\n" + "(" + arr[i][1] + ")");
+    		dl.setSelected(true);
+    		dsg.setChildren(dl);
+    		dsg.setText("Сопоставленные подразделения");	
+    	}
+    	
+    	for(int i = 0; i< arrN.length; i++) {
+    		Children dl = new Children();
+    		dl.setId(chId); chId++;
+    		dl.setText(arrN[i][0] + "\r\n" + "(" + arrN[i][1] + ")");
+    		dl.setSelected(false);
+    		dsg1.setChildren(dl);
+    		dsg1.setText("Подразделения других отделов");
+    	}
+    	
+    	for(int i = 0; i< arrND.length; i++) {
+    		Children dl = new Children();
+    		dl.setId(chId); chId++;
+    		dl.setText(arrND[i][0] + "\r\n" + "(" + arrND[i][1] + ")");
+    		dl.setSelected(false);
+    		dsg2.setChildren(dl);
+    		dsg2.setText("Подразделения без отделов");
+    	}
+    	
+    	list.add(dsg);
+    	list.add(dsg1);
+    	list.add(dsg2);
+		return list;
+	}
 }
