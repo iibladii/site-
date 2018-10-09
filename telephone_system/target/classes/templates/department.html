@@ -24,9 +24,9 @@
 	<script>
   		$(function() {
     		$( "#dialog" ).dialog({
-    			maxWidth:450,
+    			maxWidth:650,
     	        maxHeight: 500,
-    	        width: 450,
+    	        width: 650,
     	        height: 250,
     	        autoOpen: false
     	        });
@@ -36,11 +36,11 @@
 <body>
 	<div id="dialog" title="Добавление элементов">
 		Введите наименование отдела:<br/>
-		<input id="department_" name="department" type="text" size="30" placeholder="Отдел"></input>
+		<input id="department_" name="department" type="text" size="30" style="width: 600px;" placeholder="Отдел"></input>
 		<br/>
 		<br/>
 		Выберите наименование подразделений:<br/>
-		<select class="js-example-basic-single_" name="state" style="width: 400px;" multiple="multiple"></select>
+		<select id="subdivisions_" class="js-example-basic-single_" name="state" style="width: 600px;" multiple="multiple"></select>
 		<br/>
 		<br/>
     	<button class="page-p" id="vvod" style="cursor:pointer">Ввод</button>

@@ -32,8 +32,15 @@ function loadADSLTable(elem){
         			for(var i=0;i < parseInt(data.name.length); i++){
         				if(data.name[i]!=zap.toString()){
         					
+        					//Если в ячейку таблицы не влезают символы делаем перенос
+        					var longelem;
+        					//if(data.name[i].length>20){longelem = data.name[i].substring(0,20)+'\r\n'+data.name[i].substring(20,data.name[i].length);}
+        					//else
+        						longelem = data.name[i];
+        					
+        					//Вставка с учётом переноса
         					adslList+='<tbody>'+
-        					'<tr><td class="info">'+data.name[i]+'</td></tr>'+
+        					'<tr><td class="info">'+longelem+'</td></tr>'+
         					'</tbody>';
         				}
         				else{
@@ -351,6 +358,7 @@ $(document).on("click", ".page-с", function (){
     		$("#dialog").dialog('close');
     });
     
+    /*
     //Обработка кнопки ввод
     $(document).on("click", "#vvod", function() {
     	if(document.getElementById("adsl_").value!=""){
@@ -370,5 +378,45 @@ $(document).on("click", ".page-с", function (){
     		var resp_vvod = document.getElementById("response_vvod");
     		resp_vvod.innerHTML='<p style="color:#550000">Заполните все поля</p>';
     	}
-    });
+    });*/
     
+  //Обработка нажатия кнопки ввод во всплывающем окне
+    $(document).on("click", "#vvod", function() {
+    	//Проверим заполнение обязательных полей и сформируем сообщение с требованием заполнить поля
+    	var msg =[];
+    	if(document.getElementById("department_").value == '')
+    		msg.push("\r\nВведите имя пльзователя")
+    	if(msg.length == 0) {
+    		var arr = [];//Массив содержащий список ролей данного пользователя
+    		var values = $('#subdivisions_').val();//Вернём все значения списком
+    		//Получим позиции всех выбранных значений в списке
+    		$('#subdivisions_ option:selected').each(function() {
+    			arr.push($(this).text());
+    		});
+    	
+    		var DepartmentDataObject= {
+    				'departmentName': document.getElementById("department_").value,
+    				'subdivisionName': arr
+    		};
+
+    		$.ajax({
+    			type: 'PUT',
+    			url:  '/departmentList',
+    			contentType: 'application/json; charset=utf-8',
+    			data: JSON.stringify(CooperatorsDataObject),
+    			dataType: 'json',
+    			async: true,
+    			success: function(result) {
+    				alert('Статус: ' + result);
+    				loadADSLTable(1);
+    			},
+    			error: function(jqXHR, textStatus, errorThrown) {
+    				alert('Статус: ' + jqXHR.responseText);
+    				loadADSLTable(1);
+    			}
+    		});
+    	}
+    	else{
+    		alert(msg);
+    	}
+    });

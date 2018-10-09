@@ -38,6 +38,13 @@ public interface DepartmentRepository extends CrudRepository<Department, Long> {
     Integer findAllcount(@Param("name") String name);
 	
 	/**
+	 * Подразделения связанные с конкретным отделом
+	 * @return список подразделений
+	 */
+	@Query(value = "select s.name, s.code from Department a, in(a.subdivision) s WHERE a.name like :name")
+    String[][] findAllrole(@Param("name") String name);
+	
+	/**
 	 * Поиск количества подразделений в бд
 	 * @return количество подразделений
 	 */

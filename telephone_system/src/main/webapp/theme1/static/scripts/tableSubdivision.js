@@ -21,8 +21,8 @@ function loadADSLTable(elem){
 		var adslList='<table border="1" id="usersTable">'+
 			'<thead>'+
 				'<tr>'+
-					'<th>Код&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
-					'<th>Подразделение&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
+					'<th id="column-header-1">Код&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
+					'<th id="column-header-2">Подразделение&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
 				'</tr>'+
 			'</thead>';
 			for(var i=0;i < parseInt(data.roleList.length); i++){
@@ -61,6 +61,22 @@ function loadADSLTable(elem){
 					else button += '<button class="page-с" style="cursor:pointer" value='+(data.page)+'>&gt;</button>&nbsp';	
 			page=data.page;
 			button_p.innerHTML = button;
+			
+			
+			//Изменение ширины колонок таблицы(Переделать)
+			$(function() {
+		    	  var thHeight = $("table#usersTable th:first").height();
+		    	  $("table#usersTable th").resizable({
+		    	      handles: "e",
+		    	      minHeight: thHeight,
+		    	      maxHeight: thHeight,
+		    	      minWidth: 40,
+		    	      resize: function (event, ui) {
+		    	        var sizerID = "#" + $(event.target).attr("id") + "-sizer";
+		    	        $(sizerID).width(ui.size.width);
+		    	      }
+		    	  });
+		    	});
 	});
 }
 

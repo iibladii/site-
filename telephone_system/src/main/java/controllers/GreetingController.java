@@ -1125,4 +1125,46 @@ public class GreetingController {
     	list.add(dsg2);
 		return list;
 	}
+    
+    
+    @RequestMapping(value = "/departmentList", method = RequestMethod.POST)
+    @ResponseBody
+    /**
+     * Обновление данных
+     * @return статус операции
+     */
+    public String departmentPOST(@RequestBody DepartmentDataObject cdo) {
+    	//Получим список отделов
+    	String arr[][] = departmentRepository.findAllrole(cdo.getDepartmentName());
+    	//Сформируем списки на обновление и удаление из бд
+    	List<String> listAdd = new ArrayList();
+    	List<String> listDel = new ArrayList();
+    	
+    	//Найдём подразделения которые необходимо добавить в бд
+    	for(int i = 0; i < cdo.getSName().length; i++) {
+    		int ch = 0;
+    		for(int j = 0; j < arr.length; j++) {
+    			//Проверим наименования подразделений на совпадение
+    			if(cdo.getSName()[i].equals(arr[i][0]+"("+arr[i][1]+")")) {//Если нашлось совпадение
+    				ch++;
+    				arr[i][0] = "-1000";
+    				break;
+    			}
+    		}
+    		if( ch == 0 ) listAdd.add(arr[i][1]);
+    	}
+    	
+    	//Найдём подразделения с которыми необходимо разорвать связь
+    	for(int i = 0; i < arr.length; i++) {
+    		if(!arr[i][0].equals("-1000"))
+    			listDel.add(arr[i][0]);
+    	}
+
+    	//Выполним добавление и удаление
+    	...
+    	
+    	
+        return "Data change completed successfully.";
+    }
+    
 }

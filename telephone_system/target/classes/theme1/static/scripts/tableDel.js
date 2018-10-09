@@ -348,5 +348,3 @@ $(document).on('click','#btn',function(){
     		alert(msg);
     	}
     });
-
-    
