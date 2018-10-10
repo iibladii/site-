@@ -1,5 +1,10 @@
 package select2Data;
 
+/**
+ * Структура данных для передачи во фронтенд
+ * @author megroup9gmail.com
+ *
+ */
 public class DataListSelect2 {
 	private Integer id;
 	private String text;

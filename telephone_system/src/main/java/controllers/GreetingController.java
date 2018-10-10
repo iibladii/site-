@@ -1061,13 +1061,14 @@ public class GreetingController {
      */
     public String departmentPUT(@RequestBody DepartmentDataObject cdo) {
     	//Проверим есть ли отдел с таким наименованием
-    	if(departmentRepository.findAllcount(cdo.getDepartmentName())>0) return "Department with that name already exists";
+    	if(departmentRepository.findAllcount(cdo.getDepartmentName())>0)
+    		return "Department with that name already exists";
     	//Создадим новый отдел
     	Department department = new Department();
     	department.setName(cdo.getDepartmentName());
     	//Сопоставим отдел с подразделениями
-    	for(int i = 0; i < cdo.getSName().length; i++) {
-    		Subdivision sd = subdivisionRepository.findObjectByName(cdo.getSName()[i]);
+    	for(int i = 0; i < cdo.getSubdivisionName().length; i++) {
+    		Subdivision sd = subdivisionRepository.findObjectByName(cdo.getSubdivisionName()[i]);
     		department.setSubdivision(sd);
     	}
     	departmentRepository.save(department);
@@ -1096,7 +1097,7 @@ public class GreetingController {
     	for(int i = 0; i< arr.length; i++) {
     		Children dl = new Children();
     		dl.setId(chId); chId++;
-    		dl.setText(arr[i][0] + "\r\n" + "(" + arr[i][1] + ")");
+    		dl.setText(arr[i][0]  + "(" + arr[i][1] + ")");
     		dl.setSelected(true);
     		dsg.setChildren(dl);
     		dsg.setText("Сопоставленные подразделения");	
@@ -1105,7 +1106,7 @@ public class GreetingController {
     	for(int i = 0; i< arrN.length; i++) {
     		Children dl = new Children();
     		dl.setId(chId); chId++;
-    		dl.setText(arrN[i][0] + "\r\n" + "(" + arrN[i][1] + ")");
+    		dl.setText(arrN[i][0]  + "(" + arrN[i][1] + ")");
     		dl.setSelected(false);
     		dsg1.setChildren(dl);
     		dsg1.setText("Подразделения других отделов");
@@ -1114,7 +1115,7 @@ public class GreetingController {
     	for(int i = 0; i< arrND.length; i++) {
     		Children dl = new Children();
     		dl.setId(chId); chId++;
-    		dl.setText(arrND[i][0] + "\r\n" + "(" + arrND[i][1] + ")");
+    		dl.setText(arrND[i][0]  + "(" + arrND[i][1] + ")");
     		dl.setSelected(false);
     		dsg2.setChildren(dl);
     		dsg2.setText("Подразделения без отделов");
@@ -1140,31 +1141,67 @@ public class GreetingController {
     	List<String> listAdd = new ArrayList();
     	List<String> listDel = new ArrayList();
     	
+    	
     	//Найдём подразделения которые необходимо добавить в бд
-    	for(int i = 0; i < cdo.getSName().length; i++) {
+    	for(int i = 0; i < cdo.getSubdivisionName().length; i++) {
     		int ch = 0;
     		for(int j = 0; j < arr.length; j++) {
     			//Проверим наименования подразделений на совпадение
-    			if(cdo.getSName()[i].equals(arr[i][0]+"("+arr[i][1]+")")) {//Если нашлось совпадение
+    			if(cdo.getSubdivisionName()[i].equals(arr[j][0]+"("+arr[j][1]+")")) {//Если нашлось совпадение
     				ch++;
-    				arr[i][0] = "-1000";
     				break;
     			}
     		}
-    		if( ch == 0 ) listAdd.add(arr[i][1]);
+    		if( ch == 0 )//Получим код подразделения
+    			listAdd.add(cdo.getSubdivisionName()[i].substring(cdo.getSubdivisionName()[i].indexOf("(") + 1, cdo.getSubdivisionName()[i].lastIndexOf(")")));
     	}
     	
     	//Найдём подразделения с которыми необходимо разорвать связь
-    	for(int i = 0; i < arr.length; i++) {
-    		if(!arr[i][0].equals("-1000"))
-    			listDel.add(arr[i][0]);
+    	for(int j = 0; j < arr.length; j++) {
+    		int ch = 0;
+    		for(int i = 0; i < cdo.getSubdivisionName().length; i++) {
+    			//Проверим наименования подразделений на совпадение
+    			if(cdo.getSubdivisionName()[i].equals(arr[j][0]+"("+arr[j][1]+")")) {//Если нашлось совпадение
+    				ch++;
+    				break;
+    			}
+    		}
+    		if( ch == 0 )//Получим код подразделения
+    			listDel.add(arr[j][1]);
     	}
 
-    	//Выполним добавление и удаление
-    	...
-    	
+    	Department dep = departmentRepository.findOne(cdo.getDepartmentName());
+    	//Выполним добавление связей
+    	for(int i = 0; i < listAdd.size(); i++) {
+    		//Получим объект подразделения
+    		Subdivision sub = subdivisionRepository.findObjectByCode(listAdd.get(i));
+    		sub.setDepartment(dep);//Сохраним связь
+    	}
+    	//Выполним удаление связей
+    	for(int i = 0; i < listDel.size(); i++) {
+    		//Получим объект подразделения
+    		Subdivision sub = subdivisionRepository.findObjectByCode(listDel.get(i));
+    		sub.setDepartment(null);
+    		//dep.delInSubdivision(listDel.get(i));
+    	}
+    	departmentRepository.save(dep);
     	
         return "Data change completed successfully.";
+    }
+    
+    @RequestMapping(value = "/departmentList", method = RequestMethod.DELETE)
+    @ResponseBody
+    /**
+     * Удаление данных
+     * @return статус операции
+     */
+    public String departmentsDELETE(@RequestBody String[] Name) {
+		for(int i = 0; i < Name.length; i++) {
+			//Найдём подразделение
+			Department department = departmentRepository.findOne(Name[i]);
+			departmentRepository.delete(department);
+		}
+        return "Delete successfull";
     }
     
 }

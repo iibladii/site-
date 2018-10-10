@@ -25,11 +25,11 @@ public class DepartmentDataObject {
         this.departmentName = departmentName;
     }
 
-    public String[] getSName() {
+    public String[] getSubdivisionName() {
         return subdivisionName;
     }
 
-    public void setSName(String[] subdivisionName) {
+    public void setSubdivisionName(String[] subdivisionName) {
         this.subdivisionName = subdivisionName;
     }
 }

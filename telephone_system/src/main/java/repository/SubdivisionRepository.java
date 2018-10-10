@@ -64,6 +64,13 @@ public interface SubdivisionRepository extends CrudRepository<Subdivision, Long>
 	ArrayList<String> findAll_();
 	
 	/**
+	 * Поиск подразделения по его коду
+	 * @return объект подразделения
+	 */
+	@Query(value = "select a from Subdivision a WHERE a.code like :code")
+	Subdivision findObjectByCode(@Param("code") String code);
+	
+	/**
 	 * Поиск подразделения по его названию
 	 * @return объект подразделения
 	 */

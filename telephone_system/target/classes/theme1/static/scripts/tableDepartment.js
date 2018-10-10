@@ -23,10 +23,10 @@ function loadADSLTable(elem){
             async: true,
             success: function(data) {
                 var elem2 = document.getElementById("ADSLList");//Таблица
-        		var adslList='<table border="1" id="usersTable">'+
+        		var adslList='<table border="1" id="usersTable" width="600px">'+
         			'<thead>'+
         				'<tr>'+
-        					'<th>Отдел&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
+        					'<th>Отдел</th>'+
         				'</tr>'+
         			'</thead>';
         			for(var i=0;i < parseInt(data.name.length); i++){
@@ -81,7 +81,8 @@ function loadADSLTableDel(elem){
     		var adslList='<table border="1" id="usersTable">'+
     			'<thead>'+
     				'<tr>'+
-    					'<th>Отдел&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
+    					'<th>Отдел</th>'+
+    					'<th>&nbsp&nbsp</th>'+
     				'</tr>'+
     			'</thead>';
     			for(var i=0;i < parseInt(data.name.length); i++){
@@ -111,33 +112,8 @@ function loadADSLTableDel(elem){
     });
 }
 
-//Загрузка данных
-function loadInfo(str){
-	var elem6 = document.getElementById("UserInfo");//Таблица
-	elem6.innerHTML=''+
-	'<div>Данные отдел:</div>'+
-	'<div>'+
-		'&nbsp;'+
-		'<div>'+
-			'<div class="informationL">Наименование отдела:</div>'+
-			'<div class="informationR" id="fname"><input type="text" id="adsl_Name" size="28" value="'+str+'"></input></div>'+
-		'</div>'+
-		'&nbsp;'+
-		'<div>'+
-			'<div class="informationL">Сопоставленные подразделения:</div>'+
-			'<div id="selectSubdivision"><select id="subdivisionList_" class="js-example-basic-multiple_" name="states[]" multiple="multiple" style="width: 330px;"></select></select></div>'+
-			'<br/>'+
-		'</div>'+
-		'<div>'+
-			'<div class="informationL"></div>'+
-			'<div class="informationR" id="save_div"><button id="save" style="cursor:pointer">Сохранить</button></div>'+
-		'</div>'+
-	'</div>';
-	var elem = document.getElementById("selectSubdivision");
-	var dat = '<select class="js-example-basic-single" name="state" style="width: 200px;" multiple="multiple"></select>';
-	elem.innerHTML = dat;
-	
-	//Загрузка списка отделов в формате наименование/код
+//Загрузка списка отделов в формате наименование/код в select2 в всплывающем окне
+function reloadSelect2(str){
 	if(str!='')
 		$.ajax({
 			type: 'GET',
@@ -145,7 +121,6 @@ function loadInfo(str){
 			dataType: 'json',
 			async: true,
 			success: function(data) {
-				//alert(data[0].selected);
 				$('.js-example-basic-single').select2({
 					data: data
 				});
@@ -158,17 +133,14 @@ function loadInfo(str){
 		$('.js-example-basic-single').select2({
 			data: ''
 		});
-	
 }
 
-//При загрузке документа заполним таблицу
-$(document).ready(function() {
-	loadInfo("");
-	blockInput();
-	loadADSLTable(1);	
-	
-	//Заполним выподающий список
-	var data_ = [];
+//Заполним выподающий список списком подразделений
+function initSelect2Set(){
+	var elem = document.getElementById("selectSubdivision");
+	var dat = '<select id="subdivisionList_" class="js-example-basic-single" name="state" style="width: 200px;" multiple="multiple"></select>';
+	elem.innerHTML = dat;
+
 	$.ajax({
         type: 'GET',
         url:   '/getSubdivisionList' ,
@@ -178,13 +150,71 @@ $(document).ready(function() {
         	$('.js-example-basic-single_').select2({
         		data: result
         	});
-        	//$('.js-example-basic-single_').val([' ']).trigger("change"); 
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert(jqXHR.status + ' ' + jqXHR.responseText);
         }
     });
+}
+
+
+//Загрузка данных
+function loadInfo(str){
+	var elem6 = document.getElementById("UserInfo");//Таблица
+	elem6.innerHTML=''+
+	'<div>Данные отдел:</div>'+
+	'<div>'+
+		'&nbsp;'+
+		'<div>'+
+			'<div>Наименование отдела:</div><br/>'+
+			'<div><input style=" width:400px" type="text" id="adsl_Name" value="'+str+'" readonly="readonly"></input></div>'+
+		'</div>'+
+		'&nbsp;'+
+		'<div>'+
+			'<div">Сопоставленные подразделения:</div><br/>'+
+			'<div style=" width:100%" id="selectSubdivision"></div>'+
+			'<br/>'+
+		'</div>'+
+		'<div>'+
+			'<div id="save_div"><button id="save" style="cursor:pointer">Сохранить</button></div>'+
+		'</div>'+
+	'</div>';
 	
+	/*
+	elem6.innerHTML=''+
+	'<div>Данные отдел:</div>'+
+	'<div>'+
+		'&nbsp;'+
+		'<div>'+
+			'<div class="informationL">Наименование отдела:</div>'+
+			'<div class="informationR" id="fname"><input type="text" id="adsl_Name" size="28" value="'+str+'" readonly="readonly"></input></div>'+
+		'</div>'+
+		'&nbsp;'+
+		'<div>'+
+			'<div class="informationL">Сопоставленные подразделения:</div>'+
+			'<div id="selectSubdivision"></select></div>'+//<select id="subdivisionList_" class="js-example-basic-multiple_" name="states[]" multiple="multiple" style="width: 330px;"></select>
+			'<br/>'+
+		'</div>'+
+		'<div>'+
+			'<div class="informationL"></div>'+
+			'<div class="informationR" id="save_div"><button id="save" style="cursor:pointer">Сохранить</button></div>'+
+		'</div>'+
+	'</div>';*/
+	var elem = document.getElementById("selectSubdivision");
+	var dat = '<select id="subdivisionList_" class="js-example-basic-single" name="state" style="width: 100%;" multiple="multiple"></select>';
+	elem.innerHTML = dat;
+	
+	reloadSelect2(str);
+}
+
+
+
+
+//При загрузке документа заполним таблицу
+$(document).ready(function() {
+	loadInfo("");
+	blockInput();
+	loadADSLTable(1);	
 });
 
 //Обработка нажатия на кнопку удалить
@@ -232,6 +262,11 @@ $(document).on('click','#btn',function(){
 						param+=event.zp[i]
 			}
 			if(param!=''){
+				
+				
+				
+				
+			/*	
 			//Отправим запрос на удаление
 			$.get("/subdivision/subdivision_del?name=" + encodeURIComponent(param) ,function(data,status){
 				if (!(status == "success")) {
@@ -261,6 +296,27 @@ $(document).on('click','#btn',function(){
 				blockInput();
 				loadADSLTable(page);
 			});
+			*/
+				$.ajax({
+	    			type: 'DELETE',
+	    			url:  '/departmentList',
+	    			contentType: 'application/json; charset=utf-8',
+	    			data: JSON.stringify(DepartmentDataObject),
+	    			dataType: 'json',
+	    			async: true,
+	    			success: function(result) {
+	    				alert('Статус: ' + result);
+	    				loadADSLTable(1);
+	    			},
+	    			error: function(jqXHR, textStatus, errorThrown) {
+	    				alert('Статус: ' + jqXHR.responseText);
+	    				loadADSLTable(1);
+	    			}
+	    		});
+				blockInput();
+				loadADSLTable(page);
+				
+			
 		}
 		else
 			loadADSLTable(page);
@@ -302,45 +358,6 @@ $(document).on("click", ".page-с", function (){
     	else
     		loadADSLTableDel(1);
     });
-
-  //Обработка нажатия кнопки сохранить
-    $(document).on("click", "#save", function() {
-    	//Инициализируем сохранение
-    	var xhr = new XMLHttpRequest();
-    	var params = 'name=' + encodeURIComponent(document.getElementById("adsl_Name").value) +
-    	  '&oldName=' + encodeURIComponent(zap) ;
-    	xhr.open("GET", '/subdivision/subdivision_update?' + params, false);
-    	xhr.send();
-    	if (xhr.status != 200) {
-    		  // обработать ошибку
-    		  alert( xhr.status + ': ' + xhr.statusText ); // пример вывода: 404: Not Found
-    		  //Оповестим об ошибке коммуникации
-    		  loadInfo(document.getElementById("adsl_Name").value);
-			  var elem6 = document.getElementById("save_div");
-			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#550000">Сервер не отвечает</p>';
-    		}
-    	else {
-    		  // вывести результат
-    		  var rsp = xhr.responseText;
-    		  if(rsp.toString() == "Save success"){
-    			  //Оповестим об успехе сохранения
-    			  loadInfo(document.getElementById("adsl_Name").value);
-    			  var elem6 = document.getElementById("save_div");
-    			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#005500">Сохранение успешно</p>';
-    		  }
-    		  else{
-    			  //Оповестим об ошибке сохранения
-    			  loadInfo(document.getElementById("adsl_Name").value);
-    			  var elem6 = document.getElementById("save_div");
-    			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#550000">Запись уже существует</p>';
-    		  }
-    		}
-    	zap=document.getElementById("adsl_Name").value;
-    	if(flag==0)
-    		loadADSLTable(page);
-    	else
-    		loadADSLTableDel(page);
-    });
     
     $(document).on("click", "#usersTable tbody tr td.info", function() {
     	if(flag==0){    		
@@ -353,32 +370,13 @@ $(document).on("click", ".page-с", function (){
   //Обработка нажатия кнопки создать
     $(document).on("click", "#create", function() {
     	if(!($("#dialog").dialog("isOpen")))
-    		$("#dialog").dialog('open');
+    		{
+    			$("#dialog").dialog('open');
+    			initSelect2Set();
+    		}
     	else
     		$("#dialog").dialog('close');
     });
-    
-    /*
-    //Обработка кнопки ввод
-    $(document).on("click", "#vvod", function() {
-    	if(document.getElementById("adsl_").value!=""){
-    		$.get("/subdivision/subdivision_create?name=" + encodeURIComponent(document.getElementById("adsl_").value)+"&code=" + encodeURIComponent(document.getElementById("code_").value),function(data,status){
-    			var resp_vvod = document.getElementById("response_vvod");
-    			if(data == "success")
-    				resp_vvod.innerHTML='<p style="color:#005500">Вставка нового подразделения успешно завершена</p>';
-    			else
-    				if(data == "entry more then zero")
-    					resp_vvod.innerHTML='<p style="color:#550000">Такой подразделение уже есть в базе</p>';
-    				else
-    					resp_vvod.innerHTML='<p style="color:#550000">Ошибка коммуникации</p>';
-    		loadADSLTable(page);
-        });
-    	}
-    	else{
-    		var resp_vvod = document.getElementById("response_vvod");
-    		resp_vvod.innerHTML='<p style="color:#550000">Заполните все поля</p>';
-    	}
-    });*/
     
   //Обработка нажатия кнопки ввод во всплывающем окне
     $(document).on("click", "#vvod", function() {
@@ -397,13 +395,12 @@ $(document).on("click", ".page-с", function (){
     		var DepartmentDataObject= {
     				'departmentName': document.getElementById("department_").value,
     				'subdivisionName': arr
-    		};
-
+    		};    		
     		$.ajax({
     			type: 'PUT',
     			url:  '/departmentList',
     			contentType: 'application/json; charset=utf-8',
-    			data: JSON.stringify(CooperatorsDataObject),
+    			data: JSON.stringify(DepartmentDataObject),
     			dataType: 'json',
     			async: true,
     			success: function(result) {
@@ -419,4 +416,45 @@ $(document).on("click", ".page-с", function (){
     	else{
     		alert(msg);
     	}
+    });
+    
+  //Обработка нажатия кнопки сохранить
+    $(document).on("click", "#save", function() {
+    	var msg =[];
+    	if(document.getElementById("adsl_Name").value == '')
+    		msg.push("\r\nВведите наименование отдела")
+    	if(msg.length == 0) {
+    		var arr = [];//Массив содержащий список ролей данного пользователя
+    		var values = $('#subdivisionList_').val();//Вернём все значения списком
+    		
+    		//Получим позиции всех выбранных значений в списке
+    		$('#subdivisionList_ option:selected').each(function() {
+    			arr.push($(this).text());
+    		});
+
+    		var DepartmentDataObject= {
+    				'departmentName': document.getElementById("adsl_Name").value,
+    				'subdivisionName': arr
+    		};
+    		
+    		//alert(DepartmentDataObject.subdivisionName);
+    		
+    		$.ajax({
+    			type: 'POST',
+    			url:  '/departmentList',
+    			contentType: 'application/json; charset=utf-8',
+    			data: JSON.stringify(DepartmentDataObject),
+    			dataType: 'json',
+    			async: true,
+    			success: function(result) {
+    				alert('Статус: ' + result);
+    				loadADSLTable(1);
+    			},
+    			error: function(jqXHR, textStatus, errorThrown) {
+    				alert('Статус: ' + jqXHR.responseText);
+    				loadADSLTable(1);
+    			}
+    		});
+    	}
+    	else alert(msg);
     });

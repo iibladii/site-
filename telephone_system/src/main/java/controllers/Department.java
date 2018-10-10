@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -27,6 +28,10 @@ public class Department {
     @ManyToOne
     private Telephone telephone;
 
+    public Department() {
+    	subdivision = new ArrayList<Subdivision>();
+    }
+    
 	public Integer getId() {
 		return id;
 	}
@@ -46,12 +51,27 @@ public class Department {
 	public List<Subdivision> getSubdivision() {
 		return subdivision;
 	}
+	
 	public Telephone getTelephone() {
 		return telephone;
 	}
 	
 	public void setSubdivision(Subdivision subdivision) {
 		this.subdivision.add(subdivision);
-	} 
+	}
+	
+	/**
+	 * Удаление связи между отделом и подразделением
+	 * @param subdivisionCode код подразделения
+	 */
+	public void delInSubdivision(String subdivisionCode) {
+		//Проверим все элементы подразделений
+		for(int i = 0; i < this.subdivision.size(); i++) {
+			if(subdivisionCode.equals(this.subdivision.get(i).getCode())) {
+				this.subdivision.remove(this.subdivision.get(i));
+				break;//Выход из цикла
+			}
+		}
+	}
 }
 

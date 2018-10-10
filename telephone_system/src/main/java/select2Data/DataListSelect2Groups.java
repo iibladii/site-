@@ -3,6 +3,12 @@ package select2Data;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Группированый выпадающий список
+ * (Данные в списке разбиты на группы)
+ * @author megroup9gmail.com
+ *
+ */
 public class DataListSelect2Groups {
 	private String text;
 	private List<Children> children;

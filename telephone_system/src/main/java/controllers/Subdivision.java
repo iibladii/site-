@@ -58,4 +58,12 @@ public class Subdivision {
 	public void setCode(String code) {
 		this.code = code;
 	}
+	
+	public Department getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
 }
