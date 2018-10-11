@@ -162,7 +162,7 @@ function initSelect2Set(){
 function loadInfo(str){
 	var elem6 = document.getElementById("UserInfo");//Таблица
 	elem6.innerHTML=''+
-	'<div>Данные отдел:</div>'+
+	'<div>Выбранный отдел:</div>'+
 	'<div>'+
 		'&nbsp;'+
 		'<div>'+
@@ -179,36 +179,13 @@ function loadInfo(str){
 			'<div id="save_div"><button id="save" style="cursor:pointer">Сохранить</button></div>'+
 		'</div>'+
 	'</div>';
-	
-	/*
-	elem6.innerHTML=''+
-	'<div>Данные отдел:</div>'+
-	'<div>'+
-		'&nbsp;'+
-		'<div>'+
-			'<div class="informationL">Наименование отдела:</div>'+
-			'<div class="informationR" id="fname"><input type="text" id="adsl_Name" size="28" value="'+str+'" readonly="readonly"></input></div>'+
-		'</div>'+
-		'&nbsp;'+
-		'<div>'+
-			'<div class="informationL">Сопоставленные подразделения:</div>'+
-			'<div id="selectSubdivision"></select></div>'+//<select id="subdivisionList_" class="js-example-basic-multiple_" name="states[]" multiple="multiple" style="width: 330px;"></select>
-			'<br/>'+
-		'</div>'+
-		'<div>'+
-			'<div class="informationL"></div>'+
-			'<div class="informationR" id="save_div"><button id="save" style="cursor:pointer">Сохранить</button></div>'+
-		'</div>'+
-	'</div>';*/
+
 	var elem = document.getElementById("selectSubdivision");
 	var dat = '<select id="subdivisionList_" class="js-example-basic-single" name="state" style="width: 100%;" multiple="multiple"></select>';
 	elem.innerHTML = dat;
 	
 	reloadSelect2(str);
 }
-
-
-
 
 //При загрузке документа заполним таблицу
 $(document).ready(function() {
@@ -262,41 +239,6 @@ $(document).on('click','#btn',function(){
 						param+=event.zp[i]
 			}
 			if(param!=''){
-				
-				
-				
-				
-			/*	
-			//Отправим запрос на удаление
-			$.get("/subdivision/subdivision_del?name=" + encodeURIComponent(param) ,function(data,status){
-				if (!(status == "success")) {
-		    		  //обработать ошибку
-		    		  alert( status + ': ' + statusText ); // пример вывода: 404: Not Found
-		    		  //Оповестим об ошибке коммуникации
-		    		  loadInfo(document.getElementById("adsl_Name").value);
-					  var elem6 = document.getElementById("save_div");
-					  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#550000">Ошибка: ' + status + '</p>';
-		    		}
-		    	else {
-		    		  //Вывести результат
-		    		  var rsp = data;
-		    		  if(rsp.toString() == "Delete success"){
-		    			  //Оповестим об успехе сохранения
-		    			  loadInfo(document.getElementById("adsl_Name").value);
-		    			  var elem6 = document.getElementById("save_div");
-		    			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#005500">Удаление успешно</p>';
-		    		  }
-		    		  else{
-		    			  //Оповестим об ошибке сохранения
-		    			  loadInfo(document.getElementById("adsl_Name").value);
-		    			  var elem6 = document.getElementById("save_div");
-		    			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#550000">Процесс удаления завершился ошибкой</p>';
-		    		  }
-		    		}
-				blockInput();
-				loadADSLTable(page);
-			});
-			*/
 				$.ajax({
 	    			type: 'DELETE',
 	    			url:  '/departmentList',
@@ -436,9 +378,6 @@ $(document).on("click", ".page-с", function (){
     				'departmentName': document.getElementById("adsl_Name").value,
     				'subdivisionName': arr
     		};
-    		
-    		//alert(DepartmentDataObject.subdivisionName);
-    		
     		$.ajax({
     			type: 'POST',
     			url:  '/departmentList',

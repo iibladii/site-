@@ -37,7 +37,7 @@ function loadADSLTable(elem){
 			}
 			adslList+='</table>';
 			elem2.innerHTML = adslList;
-			
+			/*
 			var button_p = document.getElementById("buttonList");
 			var button='';
 			if((data.page - 3) > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 3)+'>&lt;</button>&nbsp';
@@ -59,6 +59,20 @@ function loadADSLTable(elem){
 					else button += '<button class="page-с" style="cursor:pointer" value='+(data.page)+'>&gt;</button>&nbsp';	
 			page=data.page;
 			button_p.innerHTML = button;
+			*/
+			
+			//Создадим кнопки
+			var button = document.getElementById("buttonList");
+			var button_p = '<button class="page-l" style="cursor:pointer">&lt;</button>&nbsp;';
+			if(data.page-2 > 0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page-2)+'">'+(data.page-2)+'</button>&nbsp;';
+			if(data.page-1 > 0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page-1)+'">'+(data.page-1)+'</button>&nbsp;';
+			if(data.page>0) button_p +='<button class="page-с" style="cursor:pointer; background:green"  value="'+data.page+'">'+data.page+'</button>&nbsp;';
+			if(data.page+1 <= Math.ceil(parseInt(data.countPage)/20)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page+1)+'">'+(data.page+1)+'</button>&nbsp;';
+			if(data.page+2 <= Math.ceil(parseInt(data.countPage)/20)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page+2)+'">'+data.page+2+'</button>&nbsp;';
+			button_p +='<button class="page-r" style="cursor:pointer">&gt;</button>&nbsp;';
+			button.innerHTML = button_p;
+			
+			
 	});
 }
 
@@ -80,6 +94,7 @@ function loadADSLTableDel(elem){
 			adslList+='</table>';
 			elem2.innerHTML=adslList;
 			
+			/*
 			var button_p = document.getElementById("buttonList");
 			var button='';
 			if((data.page - 3) > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 3)+'>&lt;</button>&nbsp';
@@ -100,13 +115,26 @@ function loadADSLTableDel(elem){
 					if((data.page + 1) <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 1)+'>&gt;</button>&nbsp';
 					else button += '<button class="page-с" style="cursor:pointer" value='+(data.page)+'>&gt;</button>&nbsp';	
 			page=data.page;
-			button_p.innerHTML = button;
+			button_p.innerHTML = button;*/
+			
+			//Создадим кнопки
+			var button = document.getElementById("buttonList");
+			var button_p = '<button class="page-l" style="cursor:pointer">&lt;</button>&nbsp;';
+			if(data.page-2 > 0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page-2)+'">'+(data.page-2)+'</button>&nbsp;';
+			if(data.page-1 > 0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page-1)+'">'+(data.page-1)+'</button>&nbsp;';
+			if(data.page>0) button_p +='<button class="page-с" style="cursor:pointer; background:green"  value="'+data.page+'">'+data.page+'</button>&nbsp;';
+			if(data.page+1 <= Math.ceil(parseInt(data.countPage)/20)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page+1)+'">'+(data.page+1)+'</button>&nbsp;';
+			if(data.page+2 <= Math.ceil(parseInt(data.countPage)/20)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page+2)+'">'+data.page+2+'</button>&nbsp;';
+			button_p +='<button class="page-r" style="cursor:pointer">&gt;</button>&nbsp;';
+			button.innerHTML = button_p;
 	});
 }
 
 //Загрузка инфы
 function loadInfo(str){
 	var elem6 = document.getElementById("UserInfo");//Таблица
+	
+	/*
 	elem6.innerHTML=''+
 	'<div>Данные кабель:</div>'+
 	'<div>'+
@@ -120,7 +148,23 @@ function loadInfo(str){
 			'<div class="informationL"></div>'+
 			'<div class="informationR" id="save_div"><button id="save" style="cursor:pointer">Сохранить</button></div>'+
 		'</div>'+
+	'</div>';*/
+	
+	elem6.innerHTML=''+
+	'<div>Неисправные пары:</div>'+
+	'<div>'+
+		'&nbsp;'+
+		'<div>'+
+			'<div>Наименование:</div><br/>'+
+			'<div><input style=" width:400px" type="text" id="adsl_Name" value="'+str+'"></input></div>'+
+		'</div>'+
+		'&nbsp;'+
+		'<div>'+
+			'<div id="save_div"><button id="save" style="cursor:pointer">Сохранить</button></div>'+
+		'</div>'+
 	'</div>';
+	
+	
 }
 
 $(document).ready(function() {//При загрузке документа заполним таблицу

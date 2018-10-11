@@ -49,32 +49,32 @@ $(document).ready(function() {//При загрузке документа за�
 			'&nbsp;'+
 			'<div>'+
 				'<div class="informationL">Имя:</div>'+
-				'<div class="informationR" id="fname"><input type="text" id="fname_in" size="28"></input></div>'+
+				'<div class="informationR" id="fname"><input type="text" id="fname_in" size="20"></input></div>'+
 			'</div>'+
 			'&nbsp;'+
 			'<div>'+
 				'<div class="informationL">Фамилия:</div>'+
-				'<div class="informationR" id="sname"><input type="text" id="sname_in" size="28"></input></div>'+
+				'<div class="informationR" id="sname"><input type="text" id="sname_in" size="20"></input></div>'+
 			'</div>'+
 			'&nbsp;'+
 			'<div>'+
 				'<div class="informationL">Отчество:</div>'+
-				'<div class="informationR" id="tname"><input type="text" id="tname_in" size="28"></input></div>'+
+				'<div class="informationR" id="tname"><input type="text" id="tname_in" size="20"></input></div>'+
 			'</div>'+
 			'&nbsp;'+
 			'<div>'+
 				'<div class="informationL">Логин:</div>'+
-				'<div class="informationR" id="login"><input type="text" id="login_in" size="28" readonly="readonly"></input></div>'+
+				'<div class="informationR" id="login"><input type="text" id="login_in" size="20" readonly="readonly"></input></div>'+
 			'</div>'+
 			'&nbsp;'+
 			'<div>'+
 				'<div class="informationL">Новый пароль:</div>'+
-				'<div class="informationR" id="pass1"><input type="text" id="pass1_in" size="28"></input></div>'+
+				'<div class="informationR" id="pass1"><input type="text" id="pass1_in" size="20"></input></div>'+
 			'</div>'+
 			'&nbsp;'+
 			'<div>'+
 				'<div class="informationL">Подтверждение пароля:</div>'+
-				'<div class="informationR"  id="pass2"><input type="text" id="pass2_in" size="28"></input></div>'+
+				'<div class="informationR"  id="pass2"><input type="text" id="pass2_in" size="20"></input></div>'+
 			'</div>'+
 			'&nbsp;'+
 			'<div>'+
@@ -87,10 +87,13 @@ $(document).ready(function() {//При загрузке документа за�
 				'<div class="informationR" id="save_div"><button id="save">Сохранить</button></div>'+
 			'</div>'+
 		'</div>';
-	blockInput();
+	
 	
 	var data_ = [];
-	
+	$('.js-example-basic-multiple').select2({
+		data: data_
+	});
+	/*
 	$.ajax({
         type: 'GET',
         url:   "/roleList" ,
@@ -100,14 +103,15 @@ $(document).ready(function() {//При загрузке документа за�
         	for (var i = 0; i < result.length; i++){
         		data_.push(result[i]);
         	}
-        	$('.js-example-basic-multiple_').select2({
+        	$('.js-example-basic-multiple').select2({
         		data: data_
         	});
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert(jqXHR.status + ' ' + jqXHR.responseText);
         }
-    });
+    });*/
+	blockInput();
 });
 
 $(document).on('click','#btn',function(){

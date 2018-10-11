@@ -220,8 +220,6 @@ public class GreetingController {
 					if(ui.getRole_List().get(i).getText().equals(str)) ch++;
 				}
 				if(ch==0) ui.add_(chr, str, "");
-				
-				//ui.add_(chr, str, "");
 			}
 			// Получим таблицу с ролями не относящимися не к какому пользователю
 			List<Role> resu = roleRepository.find6();

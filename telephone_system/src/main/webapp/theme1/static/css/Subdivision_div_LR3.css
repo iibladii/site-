@@ -19,29 +19,29 @@
     bottom: 0; /* Расстояние снизу  */
 }
 .block1 { 
-   	/*overflow-y: scroll;  прокрутка по вертикали */
-   	margin: 2px; /* Отступы вокруг элемента */
-    width: 300px; 
-    background: #ccc;
-    height: 856px;
-    padding: 5px;
-    border: solid 1px black; 
-    float: left;
-}
-.block2 { 
-   	margin: 2px; /* Отступы вокруг элемента */
-    width: 400px; 
-    background: #ccc;
-    height: 856px;
-    padding: 5px; 
-    border: solid 1px black; 
-    float: left; 
-}
-.informationR { 
-   	float: right;
-   	width: 200px;
-}
-.informationL { 
-   	float: left;
-   	width: 200px;
-}
+   		/*overflow-y: scroll;  прокрутка по вертикали */
+   		margin: 2px; /* Отступы вокруг элемента */
+    	width: 600px; 
+    	background: #ccc;
+    	height: 856px;
+    	padding: 5px;
+    	border: solid 1px black; 
+    	float: left;
+   }
+   .block2 { 
+   		margin: 2px; /* Отступы вокруг элемента */
+    	width: 400px; 
+    	background: #ccc;
+    	height: 856px;
+    	padding: 5px; 
+    	border: solid 1px black; 
+    	float: left; 
+   }
+   .informationR { 
+   		float: right;
+   		width: 200px;
+   }
+   .informationL { 
+   		float: left;
+   		width: 200px;
+   }
