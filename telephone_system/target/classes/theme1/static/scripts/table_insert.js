@@ -1,7 +1,108 @@
 //<!--Генерация таблицы-->$("#poisk").click(function(){//Обработка нажатия кнопки с id = poisk             $('button').click(function(){//Обработка нажатий всех кнопок
 var current_number_button=1;
 var max_number_button=5;
+
+function getDataInitial(number, att1, att2, room, department, adsl, subdivision, subdivision_code, page){
+	$.ajax({
+        type: 'GET',
+        url: '/ajaxtest?number='+number+"&att1="+att1+"&att2="+att2+"&room="+room+"&department="+department+"&adsl="+adsl+"&subdivision="+subdivision+"&subdivision_code="+subdivision_code+"&page="+page,
+        dataType: 'json',
+        async: true,
+        success: function(result) {
+  			createCalendar("content","count_elem","button_page", result);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.status + ' ' + jqXHR.responseText);
+        }
+    });
+}
+
+function createCalendar(id,id1,id2, data) {
+	  var elem = document.getElementById(id);//Таблица
+	  var elem1 = document.getElementById(id1);//Надпись о числе страниц
+	  var elem2 = document.getElementById(id2);//Кнопки с выбором страницы
+	  var table = '<table><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Подразделение</th><th>Местоположение</th><th>Отдел</th><th>Код подразделения</th></tr></thead><tbody><tr>';
+	  for(var i=0;i < parseInt(data.size); i++){
+		  table += '<td>'+(i+1)+'</td>';
+		  table += '<td>'+data.number[i]+'</td>';
+		  table += '<td>'+data.att1[i]+'</td>';
+		  table += '<td>'+data.att2[i]+'</td>';
+		  table += '<td>'+data.department[i]+'</td>';
+		  table += '<td>'+data.room[i]+'</td>';
+		  table += '<td>'+data.subdivision[i]+'</td>';
+		  table += '<td>'+data.code[i]+'</td>';
+		  table += '</tr><tr>';
+	  }
+	  //закрыть таблицу
+	  table += '</tr></tbody></table>';
+	  //только одно присваивание innerHTML
+	  elem.innerHTML = table;		  
+	  var button_p = '<button class="page-l" style="cursor:pointer">&lt;</button>&nbsp;';
+	  if(data.page_no-2>0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page_no-2)+'">'+(data.page_no-2)+'</button>&nbsp;';
+	  if(data.page_no-1>0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page_no-1)+'">'+(data.page_no-1)+'</button>&nbsp;';
+	  if(data.page_no>0) button_p +='<button class="page-с" style="cursor:pointer; background:green"  value="'+data.page_no+'">'+data.page_no+'</button>&nbsp;';
+	  if(data.page_no+1<=Math.ceil(parseInt(data.page_count)/20)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page_no+1)+'">'+(data.page_no+1)+'</button>&nbsp;';
+	  if(data.page_no+2<=Math.ceil(parseInt(data.page_count)/20)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page_no+2)+'">'+data.page_no+2+'</button>&nbsp;';
+	  button_p +='<button class="page-r" style="cursor:pointer">&gt;</button>&nbsp;';
+	  elem2.innerHTML = button_p;    
+	  //Формируем надпись о номере текущей страницы и числе страниц
+	  var countElem;
+	  countElem='<a>&nbsp;Страница '+data.page_no+' из '+Math.ceil(parseInt(data.page_count)/20)+'</a>';
+	  elem1.innerHTML = countElem;
+}
+
+
+
 $(document).ready(function() {
+	//Инициализация таблицы при открытии страницы
+	getDataInitial('','','','','','','','','');
+
+	//Обрабатывает нажатие кнопки с классом page-p кнопки с номерами страниц
+	$("body").on("click", ".page-l", function () {
+		getDataInitial((current_number_button-1) >= 1 ? current_number_button-- : current_number_button);
+	});
+	
+	//Обрабатывает нажатие кнопки с классом page-p кнопки с номерами страниц
+	$("body").on("click", ".page-r", function (){
+		getDataInitial((current_number_button) < max_number_button ? current_number_button++ : current_number_button);
+	});
+	
+	//Обрабатывает нажатие кнопки с классом page-p кнопки с номерами страниц
+	$("body").on("click", ".page-с", function (){
+		getDataInitial($(this).attr("value"));
+	});
+	
+	//Обрабатывает нажатие кнопки с классом page-p кнопка поиск
+	$("body").on("click", ".page-p", function (){
+		/*
+		alert('number:  '+document.getElementById("number").value);
+		alert('att1:  '+document.getElementById("att1").value);
+		alert('att2:  '+document.getElementById("att2").value);
+		alert('room:  '+document.getElementById("room").value);
+		alert('department:  '+document.getElementById("department").value);
+		//alert('adsl:  '+document.getElementById("adsl").value);
+		alert('subdivision:  '+document.getElementById("subdivision").value);
+		alert('subdivision_code:  '+document.getElementById("subdivision_code").value);
+		alert('page:  '+'1');
+		*/
+		getDataInitial(
+				document.getElementById("number").value,
+				document.getElementById("att1").value,
+				document.getElementById("att2").value,
+				document.getElementById("room").value,
+				document.getElementById("department").value,
+				//document.getElementById("adsl").value,
+				'',
+				document.getElementById("subdivision").value,
+				document.getElementById("subdivision_code").value,
+				'1'
+				);
+	});
+	
+	
+	
+	
+	/*
 	$("body").on("click", ".page-l", function (){//Обрабатывает нажатие кнопки с классом page-p кнопки с номерами страниц
 		(current_number_button-1) >= 1 ? current_number_button-- : current_number_button;//Проверка на выход за левую границу и изменение значения переменной(Сдвиг на одну страницу влево)
 		$.get("/ajaxtest?number="+document.getElementById("number").value+"&att1="+document.getElementById("att1").value+"&att2="+document.getElementById("att2").value+"&room="+document.getElementById("room").value+"&department="+document.getElementById("department").value+"&adsl="+document.getElementById("adsl").value+"&subdivision="+document.getElementById("subdivision").value+"&subdivision_code="+document.getElementById("subdivision_code").value+"&page="+current_number_button+"",function(data,status){
@@ -139,6 +240,7 @@ $(document).ready(function() {
 	});
 		
 	$("body").on("click", ".page-p", function (){//Обрабатывает нажатие кнопки с классом page-p кнопка поиск
+		//alert('poisk');
 		$.get("/ajaxtest?number="+document.getElementById("number").value+"&att1="+document.getElementById("att1").value+"&att2="+document.getElementById("att2").value+"&room="+document.getElementById("room").value+"&department="+document.getElementById("department").value+"&adsl="+document.getElementById("adsl").value+"&subdivision="+document.getElementById("subdivision").value+"&subdivision_code="+document.getElementById("subdivision_code").value+"&page="+1+"",function(data,status){
 			 function createCalendar(id,id1,id2) {
 			  var elem = document.getElementById(id);
@@ -226,6 +328,7 @@ $(document).ready(function() {
 		 }
 			 createCalendar1("content","count_elem","button_page")
 		 });
+		 */
 	});
 
 //Обработка нажатия кнопки создать

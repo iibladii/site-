@@ -722,15 +722,16 @@ public class GreetingController {
 	 * @param count число строк в возвращаемом наборе
 	 * @return набор строк
 	 */
-	public table1 ajaxTest(@RequestParam String number,
-			@RequestParam String att1,
-			@RequestParam String att2,
-			@RequestParam String room,
-			@RequestParam String department,
-			@RequestParam String adsl,
-			@RequestParam String subdivision,
-			@RequestParam String subdivision_code,
-			@RequestParam Integer page,
+	public table1 ajaxTest(
+			@RequestParam(required = false, defaultValue = "") String number,
+			@RequestParam(required = false, defaultValue = "") String att1,
+			@RequestParam(required = false, defaultValue = "") String att2,
+			@RequestParam(required = false, defaultValue = "") String room,
+			@RequestParam(required = false, defaultValue = "") String department,
+			@RequestParam(required = false, defaultValue = "") String adsl,
+			@RequestParam(required = false, defaultValue = "") String subdivision,
+			@RequestParam(required = false, defaultValue = "") String subdivision_code,
+			@RequestParam(required = false, defaultValue = "1") Integer page,
 			@RequestParam(value="count", defaultValue = "20") Integer count) {
 		List<Telephone> results = telephoneRepository.find("%" + number + "%", "%" + att1 + "%", "%" + att2 + "%",
 				"%" + room + "%", "%" + department + "%", "%" + adsl + "%", "%" + subdivision + "%",
@@ -752,7 +753,7 @@ public class GreetingController {
 					for(Department dddd:tl.getDepartment())
 						for(Subdivision sddd:dddd.getSubdivision())
 							tb.add(ch, tl.getNumber(), tl.getAtt1(), tl.getAtt2(), tl.getRoom(),
-									dddd.getName(), dddd.getName(),
+									dddd.getName(), sddd.getName(),
 									sddd.getCode(), tl.getAdsl().getName());
 				} else
 					break;

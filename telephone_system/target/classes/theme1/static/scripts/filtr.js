@@ -12,8 +12,8 @@ head.innerHTML = ''+
 '&nbsp;'+
 '<input id="room" type="text" size="17" placeholder="Местоположение"></input>'+
 '&nbsp;'+
-//'<input id="department" type="text" size="15" placeholder="Отдел"></input>'+
-//'&nbsp;'+
+'<input id="department" type="text" size="15" placeholder="Отдел"></input>'+
+'&nbsp;'+
 '<input id="subdivision_code" type="text" size="17" placeholder="Код подразделения"></input>'+
 '&nbsp;'+
 //'<input id="adsl" type="text" size="15" placeholder="ADSL"></input>'+

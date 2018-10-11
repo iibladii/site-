@@ -28,6 +28,18 @@ public class table1 {
     	this.page_count=page_count;
     }
 
+    /**
+     * Конструктор
+     * @param id id
+     * @param number номер телефона
+     * @param att1 связанные номера
+     * @param att2 охрана
+     * @param room местоположение
+     * @param subdivision подразделение
+     * @param department отдел
+     * @param code код подразделения
+     * @param adsl адсл
+     */
     public void add(Integer id,String number,String att1,String att2,String room,String subdivision,String department,String code,String adsl) {
     	this.id.add(id);
     	this.number.add(number);
