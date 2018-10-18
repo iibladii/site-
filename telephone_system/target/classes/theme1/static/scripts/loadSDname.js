@@ -1,3 +1,6 @@
+
+
+/*
 $.get("http://127.0.0.1:8080/subdivision/get_dataList",function(data,status){
 	var elem = document.getElementById("selectSubdivision");
 	var dat = '<select class="js-example-basic-single" name="state" style="width: 250px;">';
@@ -21,3 +24,4 @@ $.get("http://127.0.0.1:8080/subdivision/get_dataList",function(data,status){
 	
 	$('.js-example-basic-single').select2();
 });
+*/

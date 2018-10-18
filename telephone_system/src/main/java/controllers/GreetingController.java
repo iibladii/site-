@@ -1203,4 +1203,61 @@ public class GreetingController {
         return "Delete successfull";
     }
     
+    /*
+    @RequestMapping(value = "/kartotekaList", method = RequestMethod.PUT)
+    @ResponseBody
+    public String cartotekaPUT(@RequestBody Kartoteka kartoteka) {
+    	
+    }*/
+    
+    @RequestMapping(value = "/Select2kartotekaList_subdivision", method = RequestMethod.GET)
+    @ResponseBody
+    /**
+	 * Наполнение поля выбора подразделения
+	 * @param name наименования отделов
+	 * @return данны в виде ('подразделение(код)')
+	 */
+    public List<DataListSelect2> select2KartotekaListSubdivision(@RequestParam(value = "name", required = false, defaultValue = "") String name) {
+    	String[][] arr = subdivisionRepository.findAllCodeName(name);//Выберем все наименования и коды подразделений
+    	//Структура данных содержащая информацию из выпадающего списка
+    	List<DataListSelect2> list = new ArrayList<DataListSelect2>();
+    	//Заполним данными список
+    	int chId = 0;//Счётчик для заполнения id
+    	for(int i = 0; i< arr.length; i++) {
+    		DataListSelect2 dl = new DataListSelect2();
+    		dl.setId(chId); chId++;
+    		dl.setText(arr[i][0]  + "(" + arr[i][1] + ")");
+    		dl.setSelected(true);
+    		list.add(dl);
+    	}
+		return list;
+    }
+    
+    @RequestMapping(value = "/Select2kartotekaList_department", method = RequestMethod.GET)
+    @ResponseBody
+    /**
+	 * Наполнение поля выбора отдела
+	 * @param name наименования отделов
+	 * @return данны в виде ('подразделение(код)')
+	 */
+    public List<DataListSelect2> select2KartotekaListDepartment(@RequestParam(value = "name", required = false, defaultValue = "") String name) {
+    	List<String> departmentList = departmentRepository.findAllDepartment();//Выберем все наименования и коды подразделений
+    	//Подготовим данные для передачи
+    	List<DataListSelect2> list = new ArrayList<DataListSelect2>();
+    	/*
+    	DataListSelect2 ds2_ = new DataListSelect2();
+		ds2_.setId(-1);
+		ds2_.setText("");
+		ds2_.setSelected(true);
+		list.add(ds2_);*/
+    	
+    	for(int i = 0; i < departmentList.size(); i++) {
+    		DataListSelect2 ds2 = new DataListSelect2();
+    		ds2.setId(i);
+    		ds2.setText(departmentList.get(i));
+    		ds2.setSelected(false);
+    		list.add(ds2);
+		}
+    	return list;
+    }
 }

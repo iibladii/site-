@@ -130,6 +130,7 @@ function reloadSelect2(str){
 			}
 		});
 	else
+		//$('.js-example-basic-single').val([]);
 		$('.js-example-basic-single').select2({
 			data: ''
 		});
@@ -147,6 +148,9 @@ function initSelect2Set(){
         dataType: 'json',
         async: true,
         success: function(result) {
+        	//Очистка поля
+        	$('#subdivisions_').html('').select2();
+        	console.log('fdfd');
         	$('.js-example-basic-single_').select2({
         		data: result
         	});
