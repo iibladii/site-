@@ -48,6 +48,7 @@ import com.google.gson.JsonParser;
 import controllers.Department;
 import object.CooperatorsDataObject;
 import object.DepartmentDataObject;
+import object.KartotekaDataObject;
 import repository.AdslRepository;
 import repository.SecurityRepository;
 import repository.SubdivisionRepository;
@@ -1244,13 +1245,6 @@ public class GreetingController {
     	List<String> departmentList = departmentRepository.findAllDepartment();//Выберем все наименования и коды подразделений
     	//Подготовим данные для передачи
     	List<DataListSelect2> list = new ArrayList<DataListSelect2>();
-    	/*
-    	DataListSelect2 ds2_ = new DataListSelect2();
-		ds2_.setId(-1);
-		ds2_.setText("");
-		ds2_.setSelected(true);
-		list.add(ds2_);*/
-    	
     	for(int i = 0; i < departmentList.size(); i++) {
     		DataListSelect2 ds2 = new DataListSelect2();
     		ds2.setId(i);
@@ -1259,5 +1253,11 @@ public class GreetingController {
     		list.add(ds2);
 		}
     	return list;
+    }
+    
+    @RequestMapping(value = "/kartoteka", method = RequestMethod.PUT)
+    @ResponseBody
+    public String putKartoteka(@RequestBody KartotekaDataObject kdo) {
+    	return "Put success";
     }
 }
