@@ -23,7 +23,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.NamedQuery;
 
 @Entity
-public class Cross {
+public class Kross {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;

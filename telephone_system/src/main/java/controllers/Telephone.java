@@ -41,8 +41,8 @@ public class Telephone {
     @ManyToOne
     private Adsl adsl;
     
-    @OneToMany(mappedBy = "telephone")
-    private List<Cross> cross;
+    @OneToMany(mappedBy="telephone")
+    private List<Kross> kross;
 
     @OneToOne
     private Department department;
@@ -149,12 +149,12 @@ public class Telephone {
 		this.subdivision = s;
 	}
 	
-	public List<Cross> getCross() {
-		return cross;
+	public List<Kross> getCross() {
+		return kross;
 	}
 	
-	public void setCross(List<Cross> cross) {
-		this.cross = cross;
+	public void setCross(List<Kross> kross) {
+		this.kross = kross;
 	}
 	
 	public String getComments() {

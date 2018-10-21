@@ -86,11 +86,11 @@ function loadADSLTableDel(elem){
     				'</tr>'+
     			'</thead>';
     			for(var i=0;i < parseInt(data.name.length); i++){
-    				if(data.name[i]!=zap.toString()){
+    				//if(data.name[i]!=zap.toString()){
     					adslList += '<tbody>'+
     									'<tr><td class="info">'+data.name[i]+'</td><td class="del"></td></tr>'+
     								'</tbody>';
-    				}
+    				//}
     			}
     			adslList+='</table>';
     			elem2.innerHTML = adslList;
@@ -233,6 +233,7 @@ $(document).on('click','#btn',function(){
 					})
 			};
 			
+			/*
 			//Сформируем список параметров для запроса с учётом записей отмченных пользователем
 			var param = "";
 			for(var i=0; i<event.zp.length; i++) {
@@ -241,13 +242,19 @@ $(document).on('click','#btn',function(){
 						param+="," + event.zp[i]
 					else
 						param+=event.zp[i]
+			*/
+			var param = [];
+			for(var i=0; i<event.zp.length; i++) {
+				if(event.sv[i] == "x")
+						param.push(event.zp[i]);
+				
 			}
 			if(param!=''){
 				$.ajax({
 	    			type: 'DELETE',
 	    			url:  '/departmentList',
 	    			contentType: 'application/json; charset=utf-8',
-	    			data: JSON.stringify(DepartmentDataObject),
+	    			data: JSON.stringify(param),
 	    			dataType: 'json',
 	    			async: true,
 	    			success: function(result) {

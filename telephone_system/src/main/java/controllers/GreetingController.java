@@ -50,7 +50,7 @@ import object.CooperatorsDataObject;
 import object.DepartmentDataObject;
 import object.KartotekaDataObject;
 import repository.AdslRepository;
-import repository.CrossRepository;
+import repository.KrossRepository;
 import repository.SecurityRepository;
 import repository.SubdivisionRepository;
 import repository.TelephoneRepository;
@@ -92,7 +92,7 @@ public class GreetingController {
 	@Autowired
 	private RoleRepository roleRepository;
 	@Autowired
-	private CrossRepository crossRepository;
+	private KrossRepository krossRepository;
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -1067,12 +1067,18 @@ public class GreetingController {
     	//Создадим новый отдел
     	Department department = new Department();
     	department.setName(cdo.getDepartmentName());
+    	departmentRepository.save(department);
+    	
     	//Сопоставим отдел с подразделениями
     	for(int i = 0; i < cdo.getSubdivisionName().length; i++) {
-    		Subdivision sd = subdivisionRepository.findObjectByName(cdo.getSubdivisionName()[i]);
-    		department.setSubdivision(sd);
+    		String name = cdo.getSubdivisionName()[i].substring(0, cdo.getSubdivisionName()[i].lastIndexOf("("));
+    		String code = cdo.getSubdivisionName()[i].substring(cdo.getSubdivisionName()[i].indexOf("(") + 1, cdo.getSubdivisionName()[i].lastIndexOf(")"));
+    		Subdivision sd = subdivisionRepository.findObjectByCodeName(name, code);
+    		//department.setSubdivision(sd);
+    		sd.setDepartment(department);
+    		subdivisionRepository.save(sd);
     	}
-    	departmentRepository.save(department);
+    	
     	return "Department created successfully";
     }
     
@@ -1275,12 +1281,12 @@ public class GreetingController {
     	Subdivision sd = subdivisionRepository.findObjectByCodeName(sdName, sdCode);
     	
     	//Сохраним объекты кросса
-    	List<Cross> lc = new ArrayList<Cross>();
+    	List<Kross> lc = new ArrayList<Kross>();
     	for(int i = 0; i < kdo.getKross().size(); i++) {
-    		Cross cross = new Cross();
-    		cross.setName(kdo.getKross().get(i).getName());
-    		crossRepository.save(cross);
-    		lc.add(cross);
+    		Kross kross = new Kross();
+    		kross.setName(kdo.getKross().get(i).getName());
+    		krossRepository.save(kross);
+    		lc.add(kross);
     	}
     	
     	//Создадим объект

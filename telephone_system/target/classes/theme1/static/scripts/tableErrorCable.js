@@ -15,7 +15,7 @@ function blockInput(){
 }
 
 function loadADSLTable(elem){
-	$.get("/ajax/errorCable_info?name="+document.getElementById("ads_name_").value+'&elem='+elem,function(data,status){
+	$.get("/ajax/errorCable_info?name="+encodeURIComponent(document.getElementById("ads_name_").value)+'&elem='+encodeURIComponent(elem),function(data,status){
 		var elem2 = document.getElementById("ADSLList");//Таблица
 		var adslList='<table border="1" id="usersTable">'+
 			'<thead>'+
@@ -77,7 +77,7 @@ function loadADSLTable(elem){
 }
 
 function loadADSLTableDel(elem){
-	$.get("/ajax/errorCable_info?name="+document.getElementById("ads_name_").value+'&elem='+elem,function(data,status){
+	$.get("/ajax/errorCable_info?name="+encodeURIComponent(document.getElementById("ads_name_").value)+'&elem='+encodeURIComponent(elem),function(data,status){
 		var elem2 = document.getElementById("ADSLList");//Таблица
 		var adslList='<table border="1" id="usersTable">'+
 			'<thead>'+
@@ -219,7 +219,7 @@ $(document).on('click','#btn',function(){
 			}
 			if(param!=''){
 			//Отправим запрос на удаление
-			$.get("/errorCable/errorCable_del?name=" + param ,function(data,status){
+			$.get("/errorCable/errorCable_del?name=" + encodeURIComponent(param) ,function(data,status){
 				if (!(status == "success")) {
 		    		  // обработать ошибку
 		    		  alert( status + ': ' + statusText ); // пример вывода: 404: Not Found
@@ -295,7 +295,7 @@ $(document).on("click", ".page-с", function (){
     	var xhr = new XMLHttpRequest();
     	var params = 'name=' + document.getElementById("adsl_Name").value +
     	  '&oldName=' + zap ;
-    	xhr.open("GET", '/errorCable/errorCable_update?' + params, false);
+    	xhr.open("GET", '/errorCable/errorCable_update?' + encodeURIComponent(params), false);
     	xhr.send();
     	if (xhr.status != 200) {
     		  // обработать ошибку
@@ -349,7 +349,7 @@ $(document).on("click", ".page-с", function (){
     //Обработка кнопки ввод
     $(document).on("click", "#vvod", function() {
     	if(document.getElementById("adsl_").value!=""){
-    		$.get("/errorCable/errorCable_create?name=" + document.getElementById("adsl_").value,function(data,status){
+    		$.get("/errorCable/errorCable_create?name=" + encodeURIComponent(document.getElementById("adsl_").value),function(data,status){
     			var resp_vvod = document.getElementById("response_vvod");
     			if(data == "success")
     				resp_vvod.innerHTML='<p style="color:#005500">Вставка нового кабеля успешно завершена</p>';

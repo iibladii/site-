@@ -239,6 +239,7 @@ $(document).on("click", "#vvod", function() {
 			document.getElementById("p4").value,
 			document.getElementById("p5").value,
 		];
+	alert(document.getElementById("number_").value);
 	var KartotekaDataObject= {
 			'telephone': document.getElementById("number_").value,
 			'departmentName': document.getElementById("sname_").value,
