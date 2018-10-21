@@ -25,7 +25,7 @@ public class Department {
     @OneToMany(mappedBy="department")
     private List<Subdivision> subdivision;
 
-    @ManyToOne
+    @OneToOne
     private Telephone telephone;
 
     public Department() {

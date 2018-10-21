@@ -229,6 +229,47 @@ $(document).on("click", "#vvod", function() {
 	$('#roles_ option:selected').each(function() {
 		dep = $(this).text();
 	});
+	
+	
+	var arr =
+		[
+			document.getElementById("p1").value,
+			document.getElementById("p2").value,
+			document.getElementById("p3").value,
+			document.getElementById("p4").value,
+			document.getElementById("p5").value,
+		];
+	var KartotekaDataObject= {
+			'telephone': document.getElementById("number_").value,
+			'departmentName': document.getElementById("sname_").value,
+			'subdivisionName': document.getElementById("tname_").value,
+			'att1': document.getElementById("DepartmentList_").value,
+			'att2': document.getElementById("SubdivisionList_").value,
+			'cross': arr,
+			'comments': getElementById("note").value,
+			'room': document.getElementById("place_").value
+	};
+	$.ajax({
+		type: 'PUT',
+		url:  '/kartoteka',
+		contentType: 'application/json; charset=utf-8',
+		data: JSON.stringify(CooperatorsDataObject),
+		dataType: 'json',
+		async: true,
+        success: function(result) {
+  			//createCalendar("content","count_elem","button_page", result);
+  			alert(result);
+  			//Обновление таблицы при открытии страницы
+  			getDataInitial('','','','','','','','','');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.status + ' ' + jqXHR.responseText);
+        }
+    });
+	
+	
+	
+	
 });
 
 

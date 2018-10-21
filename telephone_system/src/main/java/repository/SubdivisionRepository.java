@@ -78,6 +78,15 @@ public interface SubdivisionRepository extends CrudRepository<Subdivision, Long>
 	Subdivision findObjectByName(@Param("name") String name);
 	
 	/**
+	 * Поиск подразделения по его названию и коду
+	 * @param name наименование подразделения
+	 * @param code код подразделения
+	 * @returnобъект подразделения
+	 */
+	@Query(value = "select a from Subdivision a WHERE a.name like :name and a.code like :code")
+	Subdivision findObjectByCodeName(@Param("name") String name, @Param("code") String code);
+	
+	/**
 	 * Поиск всех наименований и кодов подразделений связанных с отделом с заданным наименованием
 	 * @return массив наименований и кодов array[][]
 	 */

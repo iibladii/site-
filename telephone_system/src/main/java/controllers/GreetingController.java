@@ -50,6 +50,7 @@ import object.CooperatorsDataObject;
 import object.DepartmentDataObject;
 import object.KartotekaDataObject;
 import repository.AdslRepository;
+import repository.CrossRepository;
 import repository.SecurityRepository;
 import repository.SubdivisionRepository;
 import repository.TelephoneRepository;
@@ -90,6 +91,8 @@ public class GreetingController {
 	private SubdivisionRepository subdivisionRepository;
 	@Autowired
 	private RoleRepository roleRepository;
+	@Autowired
+	private CrossRepository crossRepository;
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -751,11 +754,9 @@ public class GreetingController {
 			Telephone tl = (Telephone) iterator2.next();
 			if (ch > (page - 1) * count) {
 				if (ch <= (page * count)) {
-					for(Department dddd:tl.getDepartment())
-						for(Subdivision sddd:dddd.getSubdivision())
 							tb.add(ch, tl.getNumber(), tl.getAtt1(), tl.getAtt2(), tl.getRoom(),
-									dddd.getName(), sddd.getName(),
-									sddd.getCode(), tl.getAdsl().getName());
+									tl.getDepartment().getName(), tl.getSubdivision().getName(),
+									tl.getSubdivision().getCode(), tl.getAdsl().getName());
 				} else
 					break;
 			}
@@ -1258,6 +1259,44 @@ public class GreetingController {
     @RequestMapping(value = "/kartoteka", method = RequestMethod.PUT)
     @ResponseBody
     public String putKartoteka(@RequestBody KartotekaDataObject kdo) {
-    	return "Put success";
+    	//Проверка номера на совпадения в базе
+    	if(telephoneRepository.findCountNumber(kdo.getTelephone()) > 0)
+    		return "Number olraydy exists";
+    	
+    	//Вставим номер в базу
+    	
+    	//Получим объекты subdivision и department на основе данных запроса
+    	//Получим department
+    	Department dep = departmentRepository.findOne(kdo.getDepartmentName());
+    	//Получим параметры name и code из subdivision
+    	String sdName = kdo.getSubdivisionName().substring(0,kdo.getSubdivisionName().indexOf("("));
+    	String sdCode = kdo.getSubdivisionName().substring(kdo.getSubdivisionName().indexOf("(") + 1, kdo.getSubdivisionName().indexOf(")"));
+    	//Получим объект subdivision
+    	Subdivision sd = subdivisionRepository.findObjectByCodeName(sdName, sdCode);
+    	
+    	//Сохраним объекты кросса
+    	List<Cross> lc = new ArrayList<Cross>();
+    	for(int i = 0; i < kdo.getKross().size(); i++) {
+    		Cross cross = new Cross();
+    		cross.setName(kdo.getKross().get(i).getName());
+    		crossRepository.save(cross);
+    		lc.add(cross);
+    	}
+    	
+    	//Создадим объект
+    	Telephone tp = new Telephone();
+    	tp.setNumber(kdo.getTelephone());
+    	tp.setAtt1(kdo.getAtt1());
+    	tp.setAtt2(kdo.getAtt2());
+    	tp.setDepartment(dep);
+    	tp.setSubdivision(sd);
+    	tp.setCross(lc);
+    	tp.setRoom(kdo.getRoom());
+    	tp.setComments(kdo.getComments());
+    	
+    	//Сохраним объект в бд
+    	telephoneRepository.save(tp);
+    	
+    	return "Insert success";
     }
 }
