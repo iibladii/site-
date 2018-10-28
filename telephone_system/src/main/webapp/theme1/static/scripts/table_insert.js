@@ -1,11 +1,12 @@
 //<!--Генерация таблицы-->$("#poisk").click(function(){//Обработка нажатия кнопки с id = poisk             $('button').click(function(){//Обработка нажатий всех кнопок
 var current_number_button=1;
 var max_number_button=5;
+var isDel = 0;
 
 function getDataInitial(number, att1, att2, room, department, adsl, subdivision, subdivision_code, page){
 	$.ajax({
         type: 'GET',
-        url: '/ajaxtest?number='+number+"&att1="+att1+"&att2="+att2+"&room="+room+"&department="+department+"&adsl="+adsl+"&subdivision="+subdivision+"&subdivision_code="+subdivision_code+"&page="+page,
+        url: '/ajaxtest?number='+number+"&att1="+att1+"&att2="+att2+"&room="+room+"&department="+department+"&adsl="+adsl+"&subdivision="+subdivision+"&subdivision_code="+subdivision_code+"&page="+page+"&isDel=" + isDel,
         dataType: 'json',
         async: true,
         success: function(result) {
@@ -18,22 +19,66 @@ function getDataInitial(number, att1, att2, room, department, adsl, subdivision,
     });
 }
 
+//Обработка нажатия кнопки удалеия
+function getdetails(obj) {
+	var param = obj.id;
+	//alert(param);
+	$.ajax({
+		type: 'DELETE',
+		url:  '/kartoteka',
+		contentType: 'application/json; charset=utf-8',
+		data: JSON.stringify(param),
+		dataType: 'json',
+		async: true,
+		success: function(result) {
+			alert('Статус: ' + result);
+			getDataInitial('','','','','','','','','');
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			alert('Статус: ' + jqXHR.responseText);
+			getDataInitial('','','','','','','','','');
+		}
+	});
+    //alert(obj.id);
+}
+
 function createCalendar(id,id1,id2, data) {
 	  var elem = document.getElementById(id);//Таблица
 	  var elem1 = document.getElementById(id1);//Надпись о числе страниц
 	  var elem2 = document.getElementById(id2);//Кнопки с выбором страницы
-	  var table = '<table><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Подразделение</th><th>Местоположение</th><th>Отдел</th><th>Код подразделения</th></tr></thead><tbody><tr>';
-	  for(var i=0;i < parseInt(data.size); i++){
-		  table += '<td>'+(i+1)+'</td>';
-		  table += '<td>'+data.number[i]+'</td>';
-		  table += '<td>'+data.att1[i]+'</td>';
-		  table += '<td>'+data.att2[i]+'</td>';
-		  table += '<td>'+data.department[i]+'</td>';
-		  table += '<td>'+data.room[i]+'</td>';
-		  table += '<td>'+data.subdivision[i]+'</td>';
-		  table += '<td>'+data.code[i]+'</td>';
-		  table += '</tr><tr>';
+	  
+	  if(isDel == 0){
+		  var table = '<table><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Подразделение</th><th>Местоположение</th><th>Отдел</th><th>Код подразделения</th><th>Delete</th><th>Load</th></tr></thead><tbody><tr>';
+		  for(var i=0;i < parseInt(data.size); i++){
+			  table += '<td>'+(i+1)+'</td>';
+			  table += '<td class="number">'+data.number[i]+'</td>';
+			  table += '<td>'+data.att1[i]+'</td>';
+			  table += '<td>'+data.att2[i]+'</td>';
+			  table += '<td>'+data.department[i]+'</td>';
+			  table += '<td>'+data.room[i]+'</td>';
+			  table += '<td>'+data.subdivision[i]+'</td>';
+			  table += '<td>'+data.code[i]+'</td>';
+			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)">...</button> </td>';//Удаление записи
+			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)">...</button> </td>';//load info
+			  table += '</tr><tr>';
 	  }
+	  }
+	  else{
+		  var table = '<table><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Подразделение</th><th>Местоположение</th><th>Отдел</th><th>Код подразделения</th><th>unDelete</th></tr></thead><tbody><tr>';
+		  for(var i=0;i < parseInt(data.size); i++){
+			  table += '<td>'+(i+1)+'</td>';
+			  table += '<td class="number">'+data.number[i]+'</td>';
+			  table += '<td>'+data.att1[i]+'</td>';
+			  table += '<td>'+data.att2[i]+'</td>';
+			  table += '<td>'+data.department[i]+'</td>';
+			  table += '<td>'+data.room[i]+'</td>';
+			  table += '<td>'+data.subdivision[i]+'</td>';
+			  table += '<td>'+data.code[i]+'</td>';
+			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)">...</button> </td>';//Удаление записи
+			  table += '</tr><tr>';
+		  }
+	  }
+	  
 	  //закрыть таблицу
 	  table += '</tr></tbody></table>';
 	  //только одно присваивание innerHTML
@@ -53,6 +98,17 @@ function createCalendar(id,id1,id2, data) {
 }
 
 
+//Обработка нажатия кнопки корзина
+$(document).on("click", "#kartotekaT", function() {
+	isDel = 1;
+	getDataInitial('','','','','','','','','');
+});
+
+//Обработка нажатия кнопки Картотека
+$(document).on("click", "#kartotekaF", function() {
+	isDel = 0;
+	getDataInitial('','','','','','','','','');
+});
 
 function departmentListInit(){
 	$.ajax({
@@ -231,6 +287,7 @@ $(document).on("click", "#vvod", function() {
 	});
 	
 	
+	
 	var arr =
 		[
 			document.getElementById("p1").value,
@@ -238,23 +295,54 @@ $(document).on("click", "#vvod", function() {
 			document.getElementById("p3").value,
 			document.getElementById("p4").value,
 			document.getElementById("p5").value,
+			document.getElementById("p6").value
 		];
-	alert(document.getElementById("number_").value);
-	var KartotekaDataObject= {
-			'telephone': document.getElementById("number_").value,
-			'departmentName': document.getElementById("sname_").value,
-			'subdivisionName': document.getElementById("tname_").value,
-			'att1': document.getElementById("DepartmentList_").value,
-			'att2': document.getElementById("SubdivisionList_").value,
-			'cross': arr,
-			'comments': getElementById("note").value,
-			'room': document.getElementById("place_").value
+	
+	
+	//var arr = ['q1','q','q','q','q']
+	//alert(document.getElementById("number_").value);
+	//alert($("#DepartmentList_ option:selected").text());
+	//alert(document.getElementById("SubdivisionList_").value);
+	//alert(document.getElementById("att1_").value);
+	//alert(document.getElementById("att2_").value);
+	//alert(document.getElementById("note").value);
+	//alert(document.getElementById("place_").value);
+	
+	/*
+	var arr = [];
+	arr.push('ddd0');
+	arr.push('ddd1');
+	arr.push('ddd2');
+	arr.push('ddd3');
+	arr.push('ddd4');
+	*/
+	
+	
+	var telephone = document.getElementById("number_").value;
+	var dep = $("#DepartmentList_ option:selected").text();
+	var subdiv = $("#SubdivisionList_ option:selected").text();
+	var att1_ = document.getElementById("att1_").value
+	var att2_ = document.getElementById("att2_").value
+	var note = document.getElementById("note").value
+	var place_ = document.getElementById("place_").value
+	
+	alert(arr);
+	
+	var KartotekaDataObject = {
+			'telephone': telephone,
+			'departmentName': dep,
+			'subdivisionName': subdiv,
+			'att1': att1_,
+			'att2': att2_,
+			'kross': arr,
+			'comments': note,
+			'room': place_
 	};
 	$.ajax({
 		type: 'PUT',
 		url:  '/kartoteka',
 		contentType: 'application/json; charset=utf-8',
-		data: JSON.stringify(CooperatorsDataObject),
+		data: JSON.stringify(KartotekaDataObject),
 		dataType: 'json',
 		async: true,
         success: function(result) {
@@ -265,6 +353,7 @@ $(document).on("click", "#vvod", function() {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert(jqXHR.status + ' ' + jqXHR.responseText);
+            getDataInitial('','','','','','','','','');
         }
     });
 	

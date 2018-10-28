@@ -3,8 +3,6 @@ package object;
 import java.util.ArrayList;
 import java.util.List;
 
-import controllers.Kross;
-
 /**
  * Класс для обмена данными между клиентом и сервером
  * @author megroup9gmail.com
@@ -16,7 +14,7 @@ public class KartotekaDataObject {
     private String subdivisionName;
     private String att1;
     private String att2;
-    private List<Kross> kross;
+    private String[] kross;
     private String comments;
     private String room;
     
@@ -29,13 +27,13 @@ public class KartotekaDataObject {
      * @param att2 охрана
      * @param comments комментарии
      */
-    public KartotekaDataObject(String telephone, String departmentName, String subdivisionName, String att1, String att2, String comments, String room) {
+    public KartotekaDataObject(String telephone, String departmentName, String subdivisionName, String att1, String att2, String[] kross, String comments, String room) {
     	this.telephone = telephone;
         this.departmentName = departmentName;
         this.subdivisionName = subdivisionName;
         this.att1 = att1;
         this.att2 = att2;
-        this.kross = new ArrayList<Kross>();
+        this.kross = kross;
         this.comments = comments;
         this.room = room;
     }
@@ -83,12 +81,12 @@ public class KartotekaDataObject {
         this.att2 = att2;
     }
     
-    public List<Kross> getKross() {
+    public String[] getKross() {
         return kross;
     }
 
-    public void setKross(Kross kross) {
-        this.kross.add(kross);
+    public void setKross(String[] kross) {
+        this.kross = kross;
     }
     
     public String getRoom() {

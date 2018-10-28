@@ -129,8 +129,16 @@ public class Telephone {
 		return adsl;
 	}
     
+	public void setAdsl(Adsl adsl) {
+		this.adsl = adsl;
+	}
+	
 	public Security getSecurity() {
 		return security;
+	}
+	
+	public void setSecurity(Security sec) {
+		this.security = sec;
 	}
 	
 	public Department getDepartment() {
@@ -154,6 +162,7 @@ public class Telephone {
 	}
 	
 	public void setCross(List<Kross> kross) {
+		//kross.stream().forEach((x)->{x.setId();});
 		this.kross = kross;
 	}
 	

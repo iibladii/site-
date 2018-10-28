@@ -724,6 +724,7 @@ public class GreetingController {
 	 * @param subdivision_code код подразделения
 	 * @param page номер страницы
 	 * @param count число строк в возвращаемом наборе
+	 * @param isDel удалённые/не удалённые записи
 	 * @return набор строк
 	 */
 	public table1 ajaxTest(
@@ -736,10 +737,20 @@ public class GreetingController {
 			@RequestParam(required = false, defaultValue = "") String subdivision,
 			@RequestParam(required = false, defaultValue = "") String subdivision_code,
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(value="count", defaultValue = "20") Integer count) {
-		List<Telephone> results = telephoneRepository.find("%" + number + "%", "%" + att1 + "%", "%" + att2 + "%",
+			@RequestParam(value="count", defaultValue = "20") Integer count,
+			@RequestParam(value="isDel", defaultValue = "0") Integer isDel) {
+		
+		List<Telephone> results = new ArrayList<Telephone>();
+		if(isDel==0) {
+			results = telephoneRepository.find("%" + number + "%", "%" + att1 + "%", "%" + att2 + "%",
 				"%" + room + "%", "%" + department + "%", "%" + adsl + "%", "%" + subdivision + "%",
 				"%" + subdivision_code + "%");
+		}
+		else
+			results = telephoneRepository.findDel("%" + number + "%", "%" + att1 + "%", "%" + att2 + "%",
+					"%" + room + "%", "%" + department + "%", "%" + adsl + "%", "%" + subdivision + "%",
+					"%" + subdivision_code + "%");
+		
 		Iterator<Telephone> iterator = results.iterator();
 		int ch_page = 1;// Номер строки
 		while (iterator.hasNext()) {
@@ -1262,6 +1273,26 @@ public class GreetingController {
     	return list;
     }
     
+    
+    @RequestMapping(value = "/kartoteka", method = RequestMethod.DELETE)
+    @ResponseBody
+    /**
+     * Удаление данных
+     * @return статус операции
+     */
+    public String kartotekaDELETE(@RequestBody String param) {
+			Telephone telephone = new Telephone();
+			String hh = param.substring(1, param.length()-1);
+			telephone = telephoneRepository.find_(hh);
+			if(telephone.getIsDel() == false)
+				telephone.setIsDel(true);
+			else
+				telephone.setIsDel(false);
+			//telephoneRepository.delete(telephone);
+			telephoneRepository.save(telephone);
+        return "Delete successfull";
+    }
+    
     @RequestMapping(value = "/kartoteka", method = RequestMethod.PUT)
     @ResponseBody
     public String putKartoteka(@RequestBody KartotekaDataObject kdo) {
@@ -1280,14 +1311,13 @@ public class GreetingController {
     	//Получим объект subdivision
     	Subdivision sd = subdivisionRepository.findObjectByCodeName(sdName, sdCode);
     	
-    	//Сохраним объекты кросса
-    	List<Kross> lc = new ArrayList<Kross>();
-    	for(int i = 0; i < kdo.getKross().size(); i++) {
-    		Kross kross = new Kross();
-    		kross.setName(kdo.getKross().get(i).getName());
-    		krossRepository.save(kross);
-    		lc.add(kross);
-    	}
+    	
+    	
+    	
+    	//Create security т.к. вынесено в аттрибут не используем
+    	Security secur = new Security();
+    	secur.setNumber_dot(kdo.getAtt2());
+    	securityRepository.save(secur);
     	
     	//Создадим объект
     	Telephone tp = new Telephone();
@@ -1296,12 +1326,49 @@ public class GreetingController {
     	tp.setAtt2(kdo.getAtt2());
     	tp.setDepartment(dep);
     	tp.setSubdivision(sd);
-    	tp.setCross(lc);
+    	
+    	/*
+    	//Сохраним объекты кросса
+    	List<Kross> lc = new ArrayList<Kross>();
+    	for(int i = 0; i < kdo.getKross().length; i++) {
+    		Kross kross = new Kross();
+    		kross.setName(kdo.getKross()[i]);
+    		krossRepository.save(kross);
+    		lc.add(kross);
+    	}*/
+    	
+    	//tp.setCross(lc);
+    	//Переделать(векроятно избыточный функционал)
     	tp.setRoom(kdo.getRoom());
     	tp.setComments(kdo.getComments());
     	
+    	tp.setSecurity(secur);
+    	tp.setMiniats(false);
+    	tp.setNote("no");
+    	
+    	Adsl adsl = adslRepository.findOne();
+    	tp.setAdsl(adsl);
+    	
+    	tp.setIntercity("no");
+    	tp.setIsDel(false);
+    	
     	//Сохраним объект в бд
     	telephoneRepository.save(tp);
+    	
+    	
+    	
+    	
+    	//Сохраним объекты кросса
+    	List<Kross> lc1 = new ArrayList<Kross>();
+    	for(int i = 0; i < kdo.getKross().length; i++) {
+    		Kross kross = new Kross();
+    		kross.setName(kdo.getKross()[i]);
+    		kross.setTelephone(tp);
+    		krossRepository.save(kross);
+    		lc1.add(kross);
+    	}
+    	
+    	
     	
     	return "Insert success";
     }

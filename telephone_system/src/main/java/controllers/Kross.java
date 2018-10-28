@@ -48,4 +48,12 @@ public class Kross {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public Telephone getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(Telephone telephone) {
+		this.telephone = telephone;
+	}
 }

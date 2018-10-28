@@ -25,8 +25,32 @@ public interface TelephoneRepository extends CrudRepository<Telephone, Long> {
 	 * @param subdivision_code
 	 * @return результаты выборки
 	 */
-	@Query("SELECT p FROM Telephone p, in(p.department) t, in(p.adsl) a, in(t.subdivision) s WHERE p.att1 like :att1 and p.att2 like :att2 and p.number like :number and p.room like :room and t.name like :department and a.name like :adsl and s.name like :subdivision and s.code like :subdivision_code")
+	@Query("SELECT p FROM Telephone p, in(p.department) t, in(p.adsl) a, in(t.subdivision) s WHERE p.att1 like :att1 and p.att2 like :att2 and p.number like :number and p.room like :room and t.name like :department and a.name like :adsl and s.name like :subdivision and s.code like :subdivision_code and p.isDel != true")
     public List<Telephone> find(@Param("number") String number,@Param("att1") String att1,@Param("att2") String att2,@Param("room") String room,@Param("department") String department,@Param("adsl") String adsl,@Param("subdivision") String subdivision,@Param("subdivision_code") String subdivision_code);
+	
+	/**
+	 * Выборка на основе заданных параметров
+	 * @param number
+	 * @param att1
+	 * @param att2
+	 * @param room
+	 * @param department
+	 * @param adsl
+	 * @param subdivision
+	 * @param subdivision_code
+	 * @return результаты выборки
+	 */
+	@Query("SELECT p FROM Telephone p, in(p.department) t, in(p.adsl) a, in(t.subdivision) s WHERE p.att1 like :att1 and p.att2 like :att2 and p.number like :number and p.room like :room and t.name like :department and a.name like :adsl and s.name like :subdivision and s.code like :subdivision_code and p.isDel != false")
+    public List<Telephone> findDel(@Param("number") String number,@Param("att1") String att1,@Param("att2") String att2,@Param("room") String room,@Param("department") String department,@Param("adsl") String adsl,@Param("subdivision") String subdivision,@Param("subdivision_code") String subdivision_code);
+	
+	
+	/**
+	 * Поиск конкретного телефона
+	 * @param number номер
+	 * @return объект телефона
+	 */
+	@Query("SELECT p FROM Telephone p WHERE p.number like :number")
+    public Telephone find_(@Param("number") String number);
 	
 	/**
 	 * Поиск количества совпадений по номеру в базе
