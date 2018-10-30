@@ -21,7 +21,13 @@
   	<link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css"/>
 	<script>
   		$(function() {
-    		$( "#dialog" ).dialog({ autoOpen: false });
+    		$( "#dialog" ).dialog({
+    			maxWidth:650,
+    	        maxHeight: 500,
+    	        width: 650,
+    	        height: 250,
+    	        autoOpen: false
+    			});
     		//http://jquery.page2page.ru/index.php5/%D0%94%D0%B8%D0%B0%D0%BB%D0%BE%D0%B3%D0%BE%D0%B2%D0%BE%D0%B5_%D0%BE%D0%BA%D0%BD%D0%BE_UI
   		});
   	</script>
@@ -30,12 +36,12 @@
 	<div id="dialog" title="Добавление элементов">
 		Введите код подразделения:<br/>
 		<br/>
-		<input id="code_" name="code" type="text" size="30" placeholder="Код"></input>
+		<input id="code_" name="code" type="text" size="30" style="width: 600px;" placeholder="Код"></input>
 		<br/>
 		<br/>
 		Введите наименование подразделения:<br/>
 		<br/>
-		<input id="adsl_" name="adsl" type="text" size="30" placeholder="Отдел"></input>
+		<input id="adsl_" name="adsl" type="text" size="30" style="width: 600px;" placeholder="Отдел"></input>
 		<br/>
 		<br/>
     	<button class="page-p" id="vvod" style="cursor:pointer">Ввод</button>

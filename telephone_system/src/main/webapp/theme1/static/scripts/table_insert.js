@@ -48,32 +48,32 @@ function createCalendar(id,id1,id2, data) {
 	  var elem2 = document.getElementById(id2);//Кнопки с выбором страницы
 	  
 	  if(isDel == 0){
-		  var table = '<table><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Подразделение</th><th>Местоположение</th><th>Отдел</th><th>Код подразделения</th><th>Delete</th><th>Load</th></tr></thead><tbody><tr>';
+		  var table = '<table id="zaptable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Отдел</th><th>Подразделение</th><th>Код подразделения</th><th>Местоположение</th><th>Удалить</th><th>Просмотр</th></tr></thead><tbody><tr>';
 		  for(var i=0;i < parseInt(data.size); i++){
 			  table += '<td>'+(i+1)+'</td>';
 			  table += '<td class="number">'+data.number[i]+'</td>';
 			  table += '<td>'+data.att1[i]+'</td>';
 			  table += '<td>'+data.att2[i]+'</td>';
 			  table += '<td>'+data.department[i]+'</td>';
-			  table += '<td>'+data.room[i]+'</td>';
 			  table += '<td>'+data.subdivision[i]+'</td>';
 			  table += '<td>'+data.code[i]+'</td>';
+			  table += '<td>'+data.room[i]+'</td>';
 			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)">...</button> </td>';//Удаление записи
-			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)">...</button> </td>';//load info
+			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "viewclick(this)">...</button> </td>';//load info
 			  table += '</tr><tr>';
 	  }
 	  }
 	  else{
-		  var table = '<table><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Подразделение</th><th>Местоположение</th><th>Отдел</th><th>Код подразделения</th><th>unDelete</th></tr></thead><tbody><tr>';
+		  var table = '<table id="zaptable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Отдел</th><th>Подразделение</th><th>Код подразделения</th><th>Местоположение</th><th>Восстановить</th></tr></thead><tbody><tr>';
 		  for(var i=0;i < parseInt(data.size); i++){
 			  table += '<td>'+(i+1)+'</td>';
 			  table += '<td class="number">'+data.number[i]+'</td>';
 			  table += '<td>'+data.att1[i]+'</td>';
 			  table += '<td>'+data.att2[i]+'</td>';
 			  table += '<td>'+data.department[i]+'</td>';
-			  table += '<td>'+data.room[i]+'</td>';
 			  table += '<td>'+data.subdivision[i]+'</td>';
 			  table += '<td>'+data.code[i]+'</td>';
+			  table += '<td>'+data.room[i]+'</td>';
 			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)">...</button> </td>';//Удаление записи
 			  table += '</tr><tr>';
 		  }
@@ -108,6 +108,22 @@ $(document).on("click", "#kartotekaT", function() {
 $(document).on("click", "#kartotekaF", function() {
 	isDel = 0;
 	getDataInitial('','','','','','','','','');
+});
+
+//Обработка нажатия кнопки фильтр
+$(document).on("click", "#poisk", function() {
+	isDel = 0;
+	getDataInitial(
+			document.getElementById("number").value,
+			document.getElementById("att1").value,
+			document.getElementById("att2").value,
+			document.getElementById("room").value,
+			document.getElementById("department").value,
+			'',
+			document.getElementById("subdivision").value,
+			document.getElementById("subdivision_code").value,
+			''
+			);
 });
 
 function departmentListInit(){
@@ -370,6 +386,60 @@ $(document).on("click", "#create", function() {
 	else
 		$("#dialog").dialog('close');
 });
+
+
+//Обработка нажатия кнопки опции
+$(document).on("click", "#Option", function() {
+	if(!($("#tableOption").dialog("isOpen")))
+		$("#tableOption").dialog('open');
+	else
+		$("#tableOption").dialog('close');
+});
+
+function viewclick(obj){
+	var param = obj.id;//Номер телефона
+	if(!($("#dialogView").dialog("isOpen")))
+		$("#dialogView").dialog('open');
+	else
+		$("#dialogView").dialog('close');
+}
+
+
+/*
+//Скрытие показ столбцов таблицы
+function hide(index){
+	$("#zaptable thead th:nth-child("+num+"), #zaptable tbody td:nth-child("+num+")").hide();
+}
+function show(index){
+	$('#zaptable tbody td, #zaptable thead th').show();
+}
+
+//Обработка нажатия кнопки при выборе состава таблицы
+$(document).on("click", "#accept", function() {
+	hide(2);
+});
+*/
+//var dt = $('table').DataTable();
+
+$('#_number').change(function() {
+	alert('fg');
+  //dt.columns(0).visible(!$(this).is(':checked'))
+});
+
+$('#_chainNumber').change(function() {
+	var dt = $('table').DataTable();
+	dt.columns([1, 2]).visible(!$(this).is(':checked'))
+})
+
+//Обработка нажатия кнопки при выборе состава таблицы
+$(document).on("click", "#accept", function() {
+	var dt = $('table').DataTable();
+	dt.columns([1, 2]).visible(!$(this).is(':checked'));
+});
+
+
+
+
 
 /*
 //Обработка нажатия кнопки ввод

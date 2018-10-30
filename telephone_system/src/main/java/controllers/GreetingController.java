@@ -1284,13 +1284,16 @@ public class GreetingController {
 			Telephone telephone = new Telephone();
 			String hh = param.substring(1, param.length()-1);
 			telephone = telephoneRepository.find_(hh);
-			if(telephone.getIsDel() == false)
+			if(telephone.getIsDel() == false) {
 				telephone.setIsDel(true);
-			else
+				telephoneRepository.save(telephone);
+				return " Delete successfull";
+			}
+			else {
 				telephone.setIsDel(false);
-			//telephoneRepository.delete(telephone);
-			telephoneRepository.save(telephone);
-        return "Delete successfull";
+				telephoneRepository.save(telephone);
+				return " Repair successfull";
+			}
     }
     
     @RequestMapping(value = "/kartoteka", method = RequestMethod.PUT)
