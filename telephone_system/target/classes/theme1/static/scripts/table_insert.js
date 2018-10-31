@@ -65,7 +65,7 @@ function createCalendar(id,id1,id2, data) {
 	  var elem2 = document.getElementById(id2);//Кнопки с выбором страницы
 	  
 	  if(isDel == 0){
-		  var table = '<table id="zaptable" class="mytable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Отдел</th><th>Подразделение</th><th>Код подразделения</th><th>Местоположение</th><th>Удалить</th><th>Просмотр</th></tr></thead><tbody><tr>';
+		  var table = '<table id="zaptable" class="mytable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Отдел</th><th>Подразделение</th><th>Код подразделения</th><th>Местоположение</th><th>Состав кросса</th><th>Удалить</th><th>Просмотр</th></tr></thead><tbody><tr>';
 		  for(var i=0;i < parseInt(data.size); i++){
 			  table += '<td>'+(i+1)+'</td>';
 			  //if(ts[0] ==)
@@ -76,13 +76,14 @@ function createCalendar(id,id1,id2, data) {
 			  table += '<td>'+data.subdivision[i]+'</td>';
 			  table += '<td>'+data.code[i]+'</td>';
 			  table += '<td>'+data.room[i]+'</td>';
+			  table += '<td>'+'none'+'</td>';
 			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)">...</button> </td>';//Удаление записи
 			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "viewclick(this)">...</button> </td>';//load info
 			  table += '</tr><tr>';
 	  }
 	  }
 	  else{
-		  var table = '<table id="zaptable" class="mytable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Отдел</th><th>Подразделение</th><th>Код подразделения</th><th>Местоположение</th><th>Восстановить</th></tr></thead><tbody><tr>';
+		  var table = '<table id="zaptable" class="mytable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Отдел</th><th>Подразделение</th><th>Код подразделения</th><th>Местоположение</th><th>Состав кросса</th><th>Восстановить</th></tr></thead><tbody><tr>';
 		  for(var i=0;i < parseInt(data.size); i++){
 			  table += '<td>'+(i+1)+'</td>';
 			  table += '<td class="number">'+data.number[i]+'</td>';
@@ -92,6 +93,7 @@ function createCalendar(id,id1,id2, data) {
 			  table += '<td>'+data.subdivision[i]+'</td>';
 			  table += '<td>'+data.code[i]+'</td>';
 			  table += '<td>'+data.room[i]+'</td>';
+			  table += '<td>'+'none'+'</td>';
 			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)">...</button> </td>';//Удаление записи
 			  table += '</tr><tr>';
 		  }
