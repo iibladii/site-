@@ -57,4 +57,11 @@ public interface DepartmentRepository extends CrudRepository<Department, Long> {
 	 */
 	@Query(value = "select a.name from Department a")
     List<String> findAllDepartment();
+	
+	/**
+	 * Поиск списка всех отделов
+	 * @return список наименований подразделений
+	 */
+	@Query(value = "select a.name from Department a Where a.name like :name")
+    List<String> findAllDep(@Param("name") String name);
 }

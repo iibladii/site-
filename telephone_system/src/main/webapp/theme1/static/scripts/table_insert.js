@@ -390,18 +390,44 @@ $(document).on("click", "#create", function() {
 
 //Обработка нажатия кнопки опции
 $(document).on("click", "#Option", function() {
-	if(!($("#tableOption").dialog("isOpen")))
+	if(!($("#tableOption").dialog("isOpen"))){
 		$("#tableOption").dialog('open');
+	}
 	else
 		$("#tableOption").dialog('close');
 });
 
 function viewclick(obj){
 	var param = obj.id;//Номер телефона
-	if(!($("#dialogView").dialog("isOpen")))
+	if(!($("#dialogView").dialog("isOpen"))){
 		$("#dialogView").dialog('open');
-	else
-		$("#dialogView").dialog('close');
+	}
+		
+		$.ajax({
+	        type: 'GET',
+	        url:   '/Select2kartotekaListtModify?number='+param ,
+	        dataType: 'json',
+	        async: true,
+	        success: function(result) {
+	        	document.getElementById("_number_").value = result.telephone;
+	        	document.getElementById("_att1_").value = result.att1;
+	        	document.getElementById("_att2_").value = result.att2;
+	        	document.getElementById("_place_").value = result.room;
+	        	document.getElementById("_p1").value = result.kross[0];
+	        	document.getElementById("_p2").value = result.kross[1];
+	        	document.getElementById("_p3").value = result.kross[2];
+	        	document.getElementById("_p4").value = result.kross[3];
+	        	document.getElementById("_p5").value = result.kross[4];
+	        	document.getElementById("_p6").value = result.kross[5];
+	        	document.getElementById("_note").value = result.comments;
+	        },
+	        error: function(jqXHR, textStatus, errorThrown) {
+	            alert(jqXHR.status + ' ' + jqXHR.responseText);
+	        }
+	    });
+		
+	//else
+	//	$("#dialogView").dialog('close');
 }
 
 

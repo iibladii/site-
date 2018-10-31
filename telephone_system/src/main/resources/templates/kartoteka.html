@@ -41,11 +41,9 @@
   		});
   		$(function() {
     		$( "#dialogView" ).dialog({
-    			maxWidth:480,
-    	        maxHeight: 850,
-    	        width: 480,
-    	        height: 850,
-    	        autoOpen: false
+    			autoOpen: false ,
+    			width: 380,
+    			maxWidth:380,
     			});
   		});
   	</script>
@@ -58,42 +56,45 @@
 
 	<div id="dialogView" title="Модификация элементов карточки">
 	Введите номер:<br/>
-	<input id="_number_" name="number" type="text" size="30" placeholder="Номер"></input>
+	<input id="_number_" name="number" type="text" size="30" placeholder="Номер" style="width: 290px;"></input>
 	<br/>
 	<br/>
 	Введите связанные номера:<br/>
-	<input id="_att1_" name="att1" type="text" size="30" placeholder="Связанные номера"></input>
+	<input id="_att1_" name="att1" type="text" size="30" placeholder="Связанные номера" style="width: 290px;"></input>
 	<br/>
 	<br/>
 	Введите охрана:<br/>
-	<input id="_att2_" name="att2" type="text" size="30" placeholder="Охрана"></input>
+	<input id="_att2_" name="att2" type="text" size="30" placeholder="Охрана" style="width: 290px;"></input>
 	<br/>
 	<br/>
 	Введите местоположение:<br/>
-	<input id="_place_" name="place" type="text" size="30" placeholder="Местоположение"></input>	
+	<input id="_place_" name="place" type="text" size="30" placeholder="Местоположение" style="width: 290px;"></input>	
 	<br/>
 	<br/>
 	Введите отдел:<br/>
-	<select id="_DepartmentList_" class="js-example-basic-single_" name="states[]"  style="width: 250px;"></select>
+	<select id="_DepartmentList_" class="js-example-basic-single_" name="states[]"  style="width: 300px;"></select>
 	<!-- <input id="Department_" name="department" type="text" size="30" placeholder="Отдел"></input> -->
 	<br/>
 	<br/>
 	Выберите подразделение:<br/>
-	<select id="_SubdivisionList_" class="js-example-basic-single" name="states[]"   style="width: 250px;"></select>
+	<select id="_SubdivisionList_" class="js-example-basic-single" name="states[]"   style="width: 300px;"></select>
 	<!-- <div id="selectSubdivision_">Connect...</div> -->
 	<br/>
 	<br/>
 	Введите элементы кросса:<br/>
-	<input id="_p1" name="adsl" type="text" size="30" placeholder="Элемент 1"></input><br/>
-	<input id="_p2" name="adsl" type="text" size="30" placeholder="Элемент 2"></input><br/>
-	<input id="_p3" name="adsl" type="text" size="30" placeholder="Элемент 3"></input><br/>
-	<input id="_p4" name="adsl" type="text" size="30" placeholder="Элемент 4"></input><br/>
-	<input id="_p5" name="adsl" type="text" size="30" placeholder="Элемент 5"></input><br/>
-	<input id="_p6" name="adsl" type="text" size="30" placeholder="Элемент 6"></input><br/>
+	<input id="_p1" name="adsl" type="text" size="30" placeholder="Элемент 1" style="width: 290px;"></input><br/>
+	<input id="_p2" name="adsl" type="text" size="30" placeholder="Элемент 2" style="width: 290px;"></input><br/>
+	<input id="_p3" name="adsl" type="text" size="30" placeholder="Элемент 3" style="width: 290px;"></input><br/>
+	<input id="_p4" name="adsl" type="text" size="30" placeholder="Элемент 4" style="width: 290px;"></input><br/>
+	<input id="_p5" name="adsl" type="text" size="30" placeholder="Элемент 5" style="width: 290px;"></input><br/>
+	<input id="_p6" name="adsl" type="text" size="30" placeholder="Элемент 6" style="width: 290px;"></input><br/>
 	<br/>
-	<textarea id="_note" rows="10" cols="32"></textarea><br/>
+	Комментарии:<br/>
+	<textarea id="_note" rows="10" cols="32" style="width: 290px;"></textarea><br/>
 	<br/>
     <button class="page-p" id="_vvod" style="cursor:pointer">Ввод</button>
+    &nbsp;
+    <button id="pre_prosmotr" style="cursor:pointer">Печать</button>
 	</div>
 	
 	
@@ -102,40 +103,41 @@
 
 	<div id="dialog" title="Создание новой карточки">
 	Введите номер:<br/>
-	<input id="number_" name="number" type="text" size="30" placeholder="Номер"></input>
+	<input id="number_" name="number" type="text" size="30" placeholder="Номер" style="width: 290px;"></input>
 	<br/>
 	<br/>
 	Введите связанные номера:<br/>
-	<input id="att1_" name="att1" type="text" size="30" placeholder="Связанные номера"></input>
+	<input id="att1_" name="att1" type="text" size="30" placeholder="Связанные номера" style="width: 290px;"></input>
 	<br/>
 	<br/>
 	Введите охрана:<br/>
-	<input id="att2_" name="att2" type="text" size="30" placeholder="Охрана"></input>
+	<input id="att2_" name="att2" type="text" size="30" placeholder="Охрана" style="width: 290px;"></input>
 	<br/>
 	<br/>
 	Введите местоположение:<br/>
-	<input id="place_" name="place" type="text" size="30" placeholder="Местоположение"></input>	
+	<input id="place_" name="place" type="text" size="30" placeholder="Местоположение" style="width: 290px;"></input>	
 	<br/>
 	<br/>
 	Введите отдел:<br/>
-	<select id="DepartmentList_" class="js-example-basic-single_" name="states[]"  style="width: 250px;"></select>
+	<select id="DepartmentList_" class="js-example-basic-single_" name="states[]"  style="width: 296px;"></select>
 	<!-- <input id="Department_" name="department" type="text" size="30" placeholder="Отдел"></input> -->
 	<br/>
 	<br/>
 	Выберите подразделение:<br/>
-	<select id="SubdivisionList_" class="js-example-basic-single" name="states[]"   style="width: 250px;"></select>
+	<select id="SubdivisionList_" class="js-example-basic-single" name="states[]"   style="width: 296px;"></select>
 	<!-- <div id="selectSubdivision_">Connect...</div> -->
 	<br/>
 	<br/>
 	Введите элементы кросса:<br/>
-	<input id="p1" name="adsl" type="text" size="30" placeholder="Элемент 1"></input><br/>
-	<input id="p2" name="adsl" type="text" size="30" placeholder="Элемент 2"></input><br/>
-	<input id="p3" name="adsl" type="text" size="30" placeholder="Элемент 3"></input><br/>
-	<input id="p4" name="adsl" type="text" size="30" placeholder="Элемент 4"></input><br/>
-	<input id="p5" name="adsl" type="text" size="30" placeholder="Элемент 5"></input><br/>
-	<input id="p6" name="adsl" type="text" size="30" placeholder="Элемент 6"></input><br/>
+	<input id="p1" name="adsl" type="text" size="30" placeholder="Элемент 1" style="width: 290px;"></input><br/>
+	<input id="p2" name="adsl" type="text" size="30" placeholder="Элемент 2" style="width: 290px;"></input><br/>
+	<input id="p3" name="adsl" type="text" size="30" placeholder="Элемент 3" style="width: 290px;"></input><br/>
+	<input id="p4" name="adsl" type="text" size="30" placeholder="Элемент 4" style="width: 290px;"></input><br/>
+	<input id="p5" name="adsl" type="text" size="30" placeholder="Элемент 5" style="width: 290px;"></input><br/>
+	<input id="p6" name="adsl" type="text" size="30" placeholder="Элемент 6" style="width: 290px;"></input><br/>
 	<br/>
-	<textarea id="note" rows="10" cols="32"></textarea><br/>
+	Введите комментарии:<br/>
+	<textarea id="note" rows="10" cols="32" style="width: 290px;"></textarea><br/>
 	<br/>
     <button class="page-p" id="vvod" style="cursor:pointer">Ввод</button>
 	</div>
@@ -170,6 +172,10 @@
     		<div>
         		<input type="checkbox" id="_aim" name="feature" value="claws" checked="true"/>
         		<label for="_aim">Местоположение</label>
+    		</div>
+    		<div>
+        		<input type="checkbox" id="_kross" name="feature" value="claws"/>
+        		<label for="_kross">Состав кросса</label>
     		</div>
     	</div>
     	<br/>

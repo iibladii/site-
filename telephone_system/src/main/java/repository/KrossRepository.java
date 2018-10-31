@@ -21,4 +21,11 @@ public interface KrossRepository extends CrudRepository<Kross, Long> {
 	@Query(value = "select a from Kross a WHERE a.name like :name")
     List<Kross> findCrossObject(@Param("name") String name);
 	
+	/**
+	 * Получение списка элементов кросса по номеру
+	 * @param number номер телефона
+	 * @return список элементов кросса
+	 */
+	@Query(value = "select a.name from Kross a, in(a.telephone) t WHERE t.number like :number")
+    String[] findCrossByTelephone(@Param("number") String number);
 }
