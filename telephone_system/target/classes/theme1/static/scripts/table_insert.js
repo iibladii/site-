@@ -2,6 +2,23 @@
 var current_number_button=1;
 var max_number_button=5;
 var isDel = 0;
+//var ts[] = {1,1,1,1,1,1,1,1};//1 - столбец виден, 0 - скрыт
+
+function getDataInitialSync(number, att1, att2, room, department, adsl, subdivision, subdivision_code, page){
+	$.ajax({
+        type: 'GET',
+        url: '/ajaxtest?number='+number+"&att1="+att1+"&att2="+att2+"&room="+room+"&department="+department+"&adsl="+adsl+"&subdivision="+subdivision+"&subdivision_code="+subdivision_code+"&page="+page+"&isDel=" + isDel,
+        dataType: 'json',
+        async: false,
+        success: function(result) {
+  			createCalendar("content","count_elem","button_page", result);
+  			//alert(result);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.status + ' ' + jqXHR.responseText);
+        }
+    });
+}
 
 function getDataInitial(number, att1, att2, room, department, adsl, subdivision, subdivision_code, page){
 	$.ajax({
@@ -48,9 +65,10 @@ function createCalendar(id,id1,id2, data) {
 	  var elem2 = document.getElementById(id2);//Кнопки с выбором страницы
 	  
 	  if(isDel == 0){
-		  var table = '<table id="zaptable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Отдел</th><th>Подразделение</th><th>Код подразделения</th><th>Местоположение</th><th>Удалить</th><th>Просмотр</th></tr></thead><tbody><tr>';
+		  var table = '<table id="zaptable" class="mytable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Отдел</th><th>Подразделение</th><th>Код подразделения</th><th>Местоположение</th><th>Удалить</th><th>Просмотр</th></tr></thead><tbody><tr>';
 		  for(var i=0;i < parseInt(data.size); i++){
 			  table += '<td>'+(i+1)+'</td>';
+			  //if(ts[0] ==)
 			  table += '<td class="number">'+data.number[i]+'</td>';
 			  table += '<td>'+data.att1[i]+'</td>';
 			  table += '<td>'+data.att2[i]+'</td>';
@@ -64,7 +82,7 @@ function createCalendar(id,id1,id2, data) {
 	  }
 	  }
 	  else{
-		  var table = '<table id="zaptable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Отдел</th><th>Подразделение</th><th>Код подразделения</th><th>Местоположение</th><th>Восстановить</th></tr></thead><tbody><tr>';
+		  var table = '<table id="zaptable" class="mytable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Отдел</th><th>Подразделение</th><th>Код подразделения</th><th>Местоположение</th><th>Восстановить</th></tr></thead><tbody><tr>';
 		  for(var i=0;i < parseInt(data.size); i++){
 			  table += '<td>'+(i+1)+'</td>';
 			  table += '<td class="number">'+data.number[i]+'</td>';
@@ -86,7 +104,7 @@ function createCalendar(id,id1,id2, data) {
 	  var button_p = '<button class="page-l" style="cursor:pointer">&lt;</button>&nbsp;';
 	  if(data.page_no-2>0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page_no-2)+'">'+(data.page_no-2)+'</button>&nbsp;';
 	  if(data.page_no-1>0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page_no-1)+'">'+(data.page_no-1)+'</button>&nbsp;';
-	  if(data.page_no>0) button_p +='<button class="page-с" style="cursor:pointer; background:green"  value="'+data.page_no+'">'+data.page_no+'</button>&nbsp;';
+	  if(data.page_no>0) button_p +='<button id="current-page" class="page-с" style="cursor:pointer; background:green"  value="'+data.page_no+'">'+data.page_no+'</button>&nbsp;';
 	  if(data.page_no+1<=Math.ceil(parseInt(data.page_count)/20)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page_no+1)+'">'+(data.page_no+1)+'</button>&nbsp;';
 	  if(data.page_no+2<=Math.ceil(parseInt(data.page_count)/20)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page_no+2)+'">'+data.page_no+2+'</button>&nbsp;';
 	  button_p +='<button class="page-r" style="cursor:pointer">&gt;</button>&nbsp;';
@@ -95,6 +113,9 @@ function createCalendar(id,id1,id2, data) {
 	  var countElem;
 	  countElem='<a>&nbsp;Страница '+data.page_no+' из '+Math.ceil(parseInt(data.page_count)/20)+'</a>';
 	  elem1.innerHTML = countElem;
+	  
+	  //Скроем лишние колонки
+	  viewColumn();
 }
 
 
@@ -228,7 +249,10 @@ $(document).ready(function() {
 	
 	//Инициализация таблицы при открытии страницы
 	getDataInitial('','','','','','','','','');
-
+	
+	//Скроем лишние колонки в таблице
+//	viewColumn();
+	
 	//Инициализация списка подразделений
 	departmentListInit();
 	
@@ -255,6 +279,7 @@ $(document).ready(function() {
 		getDataInitial($(this).attr("value"));
 	});
 	
+	
 	//Обрабатывает нажатие кнопки с классом page-p кнопка поиск
 	$("body").on("click", ".page-p", function (){
 		/*
@@ -268,6 +293,8 @@ $(document).ready(function() {
 		alert('subdivision_code:  '+document.getElementById("subdivision_code").value);
 		alert('page:  '+'1');
 		*/
+		
+		
 		getDataInitial(
 				document.getElementById("number").value,
 				document.getElementById("att1").value,
@@ -281,6 +308,8 @@ $(document).ready(function() {
 				'1'
 				);
 	});
+	
+	
 });
 
 
@@ -430,41 +459,61 @@ function viewclick(obj){
 	//	$("#dialogView").dialog('close');
 }
 
+//Отвечает за сокрытие лишних колонок в таблице
+function viewColumn(){
+	//Спрячим лишние кнопки
+	if(document.getElementById("_number").checked == false){
+		document.getElementById("zaptable").classList.add("hide2");
+		document.getElementById("zaptable").classList.add("hide2_");
+	}
+	if(document.getElementById("_chainNumber").checked == false){
+		document.getElementById("zaptable").classList.add("hide3");
+		document.getElementById("zaptable").classList.add("hide3_");
+	}
+	if(document.getElementById("_security").checked == false){
+		document.getElementById("zaptable").classList.add("hide4");
+		document.getElementById("zaptable").classList.add("hide4_");
+	}
+	if(document.getElementById("_department").checked == false){
+		document.getElementById("zaptable").classList.add("hide5");
+		document.getElementById("zaptable").classList.add("hide5_");
+	}
+	if(document.getElementById("_subdivision").checked == false){
+		document.getElementById("zaptable").classList.add("hide6");
+		document.getElementById("zaptable").classList.add("hide6_");
+	}
+	if(document.getElementById("_subdivisionCode").checked == false){
+		document.getElementById("zaptable").classList.add("hide7");
+		document.getElementById("zaptable").classList.add("hide7_");
+	}
+	if(document.getElementById("_aim").checked == false){
+		document.getElementById("zaptable").classList.add("hide8");
+		document.getElementById("zaptable").classList.add("hide8_");
+	}
+	if(document.getElementById("_kross").checked == false){
+		document.getElementById("zaptable").classList.add("hide9");
+		document.getElementById("zaptable").classList.add("hide9_");
+	}
+}
+
+//Обработка нажатия кнопки при выборе состава таблицы
+$(document).on("click", "#accept", function() {
+	//Обновим талицу
+	getDataInitialSync('','','','','','','','',document.getElementById("current-page").value);
+	
+});
 
 /*
-//Скрытие показ столбцов таблицы
-function hide(index){
-	$("#zaptable thead th:nth-child("+num+"), #zaptable tbody td:nth-child("+num+")").hide();
-}
-function show(index){
-	$('#zaptable tbody td, #zaptable thead th').show();
-}
-
-//Обработка нажатия кнопки при выборе состава таблицы
-$(document).on("click", "#accept", function() {
-	hide(2);
+window.addEventListener("DOMContentLoaded", function() {
+	
+    var d = document.querySelector("#accept"),
+        e = document.querySelector(".ms-pub-contentLayout");
+    d.addEventListener("click", function(a) {
+       a.preventDefault();
+       e.classList.toggle("hide")
+    })
 });
 */
-//var dt = $('table').DataTable();
-
-$('#_number').change(function() {
-	alert('fg');
-  //dt.columns(0).visible(!$(this).is(':checked'))
-});
-
-$('#_chainNumber').change(function() {
-	var dt = $('table').DataTable();
-	dt.columns([1, 2]).visible(!$(this).is(':checked'))
-})
-
-//Обработка нажатия кнопки при выборе состава таблицы
-$(document).on("click", "#accept", function() {
-	var dt = $('table').DataTable();
-	dt.columns([1, 2]).visible(!$(this).is(':checked'));
-});
-
-
-
 
 
 /*
