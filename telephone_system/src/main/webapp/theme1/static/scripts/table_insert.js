@@ -390,7 +390,7 @@ $(document).on("click", "#vvod", function() {
 
 
 
-$(document).on("click", "#vvod", function() {
+$(document).on("click", "#_vvod", function() {
 	var dep;//Выбранный отдел
 	//Получим позиции всех выбранных значений в списке
 	$('#roles_ option:selected').each(function() {
