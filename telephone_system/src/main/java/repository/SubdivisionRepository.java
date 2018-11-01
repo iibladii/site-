@@ -14,6 +14,22 @@ import controllers.Subdivision;
 public interface SubdivisionRepository extends CrudRepository<Subdivision, Long> {
 
 	/**
+	 * Получение объекта подразделения
+	 * @param number номер телефона
+	 * @return объект подразделения
+	 */
+	@Query(value = "SELECT s.department FROM Subdivision s, in(s.telephone) t WHERE t.number like :number")
+	Department findDepListFromTelephone(@Param("number") String number);
+	
+	/**
+	 * Получение наименования подразделения по номеру телефона
+	 * @param number номер телефона
+	 * @return объект подразделения
+	 */
+	@Query(value = "SELECT s.name FROM Subdivision s, in(s.telephone) t WHERE t.number like :number")
+	String findSubdivNameByTelephone(@Param("number") String number);
+	
+	/**
 	 * Выборка подразделения имеющего заданное наименование и код
 	 * @param name наименование подразделения
 	 * @param code код подразделения

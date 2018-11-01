@@ -1363,7 +1363,7 @@ public class GreetingController {
     
     
     
-    /*
+    
     @RequestMapping(value = "/Select2kartotekaList_subdivisionModify", method = RequestMethod.GET)
     @ResponseBody
     /**
@@ -1371,9 +1371,11 @@ public class GreetingController {
 	 * @param name наименования отделов
 	 * @return данны в виде ('подразделение(код)')
 	 */
-    /*
-    public List<DataListSelect2> select2KartotekaListSubdivisionModify(@RequestParam(value = "name", required = false, defaultValue = "") String name) {
-    	String[][] arr = subdivisionRepository.findAllCodeName(name);//Выберем все наименования и коды подразделений
+    public List<DataListSelect2> select2KartotekaListSubdivisionModify(@RequestParam(value = "telephone", required = false, defaultValue = "") String telephone) {
+    	//Department dep = subdivisionRepository.findDepListFromTelephone(telephone);//Получим отдела подразделения по номеру телефона
+    	String dep = telephoneRepository.findDepartmentName(telephone);
+    	String[][] sName = telephoneRepository.findSubdivisionCodeName(telephone);//Получим наименование подразделения по номеру телефона
+    	String[][] arr = subdivisionRepository.findAllCodeName(dep);//Выберем все наименования и коды подразделений
     	//Структура данных содержащая информацию из выпадающего списка
     	List<DataListSelect2> list = new ArrayList<DataListSelect2>();
     	//Заполним данными список
@@ -1382,11 +1384,15 @@ public class GreetingController {
     		DataListSelect2 dl = new DataListSelect2();
     		dl.setId(chId); chId++;
     		dl.setText(arr[i][0]  + "(" + arr[i][1] + ")");
-    		dl.setSelected(true);
+    		if(arr[i][0].equals(sName[0][0]) && arr[i][1].equals(sName[0][1]))
+    			dl.setSelected(true);
+    		else
+    			dl.setSelected(false);
     		list.add(dl);
     	}
 		return list;
-    }*/
+		
+    }
     
     @RequestMapping(value = "/Select2kartotekaList_departmentModify", method = RequestMethod.GET)
     @ResponseBody
@@ -1395,7 +1401,7 @@ public class GreetingController {
 	 * @param name наименования отделов
 	 * @return данны в виде ('подразделение(код)')
 	 */
-    public List<DataListSelect2> select2KartotekaListDepartmentModify(@RequestParam(value = "number", required = false, defaultValue = "") String number) {
+    public List<DataListSelect2> select2KartotekaListDepartmentModify(@RequestParam(value = "telephone", required = false, defaultValue = "") String number) {
     	//List<String> departmentList = departmentRepository.findAllDep(name);//Выберем все наименования и коды подразделений
     	List<String> departmentList = departmentRepository.findAllDepartment();//Выберем все наименования и коды подразделений
     	
@@ -1417,7 +1423,7 @@ public class GreetingController {
     	return list;
     }
     
-    @RequestMapping(value = "/Select2kartotekaListtModify", method = RequestMethod.GET)
+    @RequestMapping(value = "/Select2kartotekaListModify", method = RequestMethod.GET)
     @ResponseBody
     /**
      * Сохранение

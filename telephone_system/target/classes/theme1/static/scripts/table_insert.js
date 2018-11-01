@@ -72,13 +72,13 @@ function createCalendar(id,id1,id2, data) {
 			  table += '<td class="number">'+data.number[i]+'</td>';
 			  table += '<td>'+data.att1[i]+'</td>';
 			  table += '<td>'+data.att2[i]+'</td>';
-			  table += '<td>'+data.department[i]+'</td>';
 			  table += '<td>'+data.subdivision[i]+'</td>';
+			  table += '<td>'+data.department[i]+'</td>';
 			  table += '<td>'+data.code[i]+'</td>';
 			  table += '<td>'+data.room[i]+'</td>';
 			  table += '<td>'+'none'+'</td>';
-			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)">...</button> </td>';//Удаление записи
-			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "viewclick(this)">...</button> </td>';//load info
+			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button> </td>';//Удаление записи
+			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "viewclick(this)"><img src="styles/kartoteka/img/tableView.png" style="vertical-align: middle"></img></button> </td>';//load info
 			  table += '</tr><tr>';
 	  }
 	  }
@@ -89,12 +89,12 @@ function createCalendar(id,id1,id2, data) {
 			  table += '<td class="number">'+data.number[i]+'</td>';
 			  table += '<td>'+data.att1[i]+'</td>';
 			  table += '<td>'+data.att2[i]+'</td>';
-			  table += '<td>'+data.department[i]+'</td>';
 			  table += '<td>'+data.subdivision[i]+'</td>';
+			  table += '<td>'+data.department[i]+'</td>';
 			  table += '<td>'+data.code[i]+'</td>';
 			  table += '<td>'+data.room[i]+'</td>';
 			  table += '<td>'+'none'+'</td>';
-			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)">...</button> </td>';//Удаление записи
+			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableRepair.png" style="vertical-align: middle"></img></button> </td>';//Удаление записи
 			  table += '</tr><tr>';
 		  }
 	  }
@@ -344,27 +344,6 @@ $(document).on("click", "#vvod", function() {
 			document.getElementById("p5").value,
 			document.getElementById("p6").value
 		];
-	
-	
-	//var arr = ['q1','q','q','q','q']
-	//alert(document.getElementById("number_").value);
-	//alert($("#DepartmentList_ option:selected").text());
-	//alert(document.getElementById("SubdivisionList_").value);
-	//alert(document.getElementById("att1_").value);
-	//alert(document.getElementById("att2_").value);
-	//alert(document.getElementById("note").value);
-	//alert(document.getElementById("place_").value);
-	
-	/*
-	var arr = [];
-	arr.push('ddd0');
-	arr.push('ddd1');
-	arr.push('ddd2');
-	arr.push('ddd3');
-	arr.push('ddd4');
-	*/
-	
-	
 	var telephone = document.getElementById("number_").value;
 	var dep = $("#DepartmentList_ option:selected").text();
 	var subdiv = $("#SubdivisionList_ option:selected").text();
@@ -410,6 +389,64 @@ $(document).on("click", "#vvod", function() {
 });
 
 
+
+$(document).on("click", "#vvod", function() {
+	var dep;//Выбранный отдел
+	//Получим позиции всех выбранных значений в списке
+	$('#roles_ option:selected').each(function() {
+		dep = $(this).text();
+	});
+
+	var arr =
+		[
+			document.getElementById("p1").value,
+			document.getElementById("p2").value,
+			document.getElementById("p3").value,
+			document.getElementById("p4").value,
+			document.getElementById("p5").value,
+			document.getElementById("p6").value
+		];
+	var telephone = document.getElementById("_number_").value;
+	var dep = $("#_DepartmentList_ option:selected").text();
+	var subdiv = $("#_SubdivisionList_ option:selected").text();
+	var att1_ = document.getElementById("_att1_").value
+	var att2_ = document.getElementById("_att2_").value
+	var note = document.getElementById("_note").value
+	var place_ = document.getElementById("_place_").value
+	
+	alert(arr);
+	
+	var KartotekaDataObject = {
+			'telephone': telephone,
+			'departmentName': dep,
+			'subdivisionName': subdiv,
+			'att1': att1_,
+			'att2': att2_,
+			'kross': arr,
+			'comments': note,
+			'room': place_
+	};
+	$.ajax({
+		type: 'POST',
+		url:  '/kartoteka',
+		contentType: 'application/json; charset=utf-8',
+		data: JSON.stringify(KartotekaDataObject),
+		dataType: 'json',
+		async: true,
+        success: function(result) {
+  			alert(result);
+  			//Обновление таблицы при открытии страницы
+  			getDataInitial('','','','','','','','','');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.status + ' ' + jqXHR.responseText);
+            getDataInitial('','','','','','','','','');
+        }
+    });
+		
+});
+
+
 //Обработка нажатия кнопки создать
 $(document).on("click", "#create", function() {
 	if(!($("#dialog").dialog("isOpen")))
@@ -433,10 +470,10 @@ function viewclick(obj){
 	if(!($("#dialogView").dialog("isOpen"))){
 		$("#dialogView").dialog('open');
 	}
-		
+		//Получим общие данные
 		$.ajax({
 	        type: 'GET',
-	        url:   '/Select2kartotekaListtModify?number='+param ,
+	        url:   '/Select2kartotekaListModify?number='+param ,
 	        dataType: 'json',
 	        async: true,
 	        success: function(result) {
@@ -456,6 +493,48 @@ function viewclick(obj){
 	            alert(jqXHR.status + ' ' + jqXHR.responseText);
 	        }
 	    });
+		
+		
+		//Получим данные об отделах
+		
+		$.ajax({
+	        type: 'GET',
+	        url:   '/Select2kartotekaList_departmentModify?telephone=' + param,
+	        dataType: 'json',
+	        async: true,
+	        success: function(result) {
+	        	//Очистка поля
+	        	$("#_DepartmentList_").html('').select2();
+	        	//Заполнение данными
+	        	$('#_DepartmentList_').select2({
+	        		data: result
+	        	});
+	        },
+	        error: function(jqXHR, textStatus, errorThrown) {
+	            alert(jqXHR.status + ' ' + jqXHR.responseText);
+	        }
+	    });
+		
+		//Получим данные о списке подразделений
+		
+		$.ajax({
+	        type: 'GET',
+	        url:   '/Select2kartotekaList_subdivisionModify?telephone=' + param,
+	        dataType: 'json',
+	        async: true,
+	        success: function(result) {
+	        	//Очистка поля
+	        	$("#_SubdivisionList_").html('').select2();
+	        	//Заполнение данными
+	        	$('#_SubdivisionList_').select2({
+	        		data: result
+	        	});
+	        },
+	        error: function(jqXHR, textStatus, errorThrown) {
+	            alert(jqXHR.status + ' ' + jqXHR.responseText);
+	        }
+	    });
+	//});
 		
 	//else
 	//	$("#dialogView").dialog('close');
