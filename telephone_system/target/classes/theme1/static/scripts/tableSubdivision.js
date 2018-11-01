@@ -337,7 +337,8 @@ $(document).on("click", ".page-с", function (){
     		  //Оповестим об ошибке коммуникации
     		  loadInfo(document.getElementById("adsl_Name").value,document.getElementById("c_Name").value);
 			  var elem6 = document.getElementById("save_div");
-			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#550000">Сервер не отвечает</p>';
+			  //elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#550000">Сервер не отвечает</p>';
+			  alert('Сервер не отвечает');
     		}
     	else {
     		  // вывести результат
@@ -346,13 +347,15 @@ $(document).on("click", ".page-с", function (){
     			  //Оповестим об успехе сохранения
     			  loadInfo(document.getElementById("adsl_Name").value,document.getElementById("c_Name").value);
     			  var elem6 = document.getElementById("save_div");
-    			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#005500">Сохранение успешно</p>';
+    			  //elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#005500">Сохранение успешно</p>';
+    			  alert('Сохранение успешно');
     		  }
     		  else{
     			  //Оповестим об ошибке сохранения
     			  loadInfo(document.getElementById("adsl_Name").value,document.getElementById("c_Name").value);
     			  var elem6 = document.getElementById("save_div");
     			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#550000">Запись уже существует</p>';
+    			  alert('Запись уже существует');
     		  }
     		}
     	zap=document.getElementById("adsl_Name").value;
@@ -386,17 +389,21 @@ $(document).on("click", ".page-с", function (){
     		$.get("/subdivision/subdivision_create?name=" + encodeURIComponent(document.getElementById("adsl_").value)+"&code=" + encodeURIComponent(document.getElementById("code_").value),function(data,status){
     			var resp_vvod = document.getElementById("response_vvod");
     			if(data == "success")
-    				resp_vvod.innerHTML='<p style="color:#005500">Вставка нового подразделения успешно завершена</p>';
+    				//resp_vvod.innerHTML='<p style="color:#005500">Вставка нового подразделения успешно завершена</p>';
+    				alert('Вставка нового подразделения успешно завершена');
     			else
     				if(data == "entry more then zero")
-    					resp_vvod.innerHTML='<p style="color:#550000">Такой подразделение уже есть в базе</p>';
+    					//resp_vvod.innerHTML='<p style="color:#550000">Такой подразделение уже есть в базе</p>';
+    					alert('Такое подразделение уже есть в базе');
     				else
-    					resp_vvod.innerHTML='<p style="color:#550000">Ошибка коммуникации</p>';
+    					//resp_vvod.innerHTML='<p style="color:#550000">Ошибка коммуникации</p>';
+    					alert('Ошибка коммуникации');
     		loadADSLTable(page);
         });
     	}
     	else{
     		var resp_vvod = document.getElementById("response_vvod");
-    		resp_vvod.innerHTML='<p style="color:#550000">Заполните все поля</p>';
+    		//resp_vvod.innerHTML='<p style="color:#550000">Заполните все поля</p>';\
+    		alert('Заполните все поля');
     	}
     });
