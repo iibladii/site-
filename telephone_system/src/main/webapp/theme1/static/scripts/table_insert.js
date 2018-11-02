@@ -2,6 +2,7 @@
 var current_number_button=1;
 var max_number_button=5;
 var isDel = 0;
+var oldNumber;//Номер телефона с которым работаем
 //var ts[] = {1,1,1,1,1,1,1,1};//1 - столбец виден, 0 - скрыт
 
 function getDataInitialSync(number, att1, att2, room, department, adsl, subdivision, subdivision_code, page){
@@ -414,7 +415,7 @@ $(document).on("click", "#_vvod", function() {
 	var note = document.getElementById("_note").value
 	var place_ = document.getElementById("_place_").value
 	
-	alert(arr);
+	//alert(arr);
 	
 	var KartotekaDataObject = {
 			'telephone': telephone,
@@ -424,7 +425,8 @@ $(document).on("click", "#_vvod", function() {
 			'att2': att2_,
 			'kross': arr,
 			'comments': note,
-			'room': place_
+			'room': place_,
+			'oldNumber': oldNumber
 	};
 	$.ajax({
 		type: 'POST',
@@ -465,6 +467,7 @@ $(document).on("click", "#Option", function() {
 		$("#tableOption").dialog('close');
 });
 
+//Получение данных карточки
 function viewclick(obj){
 	var param = obj.id;//Номер телефона
 	if(!($("#dialogView").dialog("isOpen"))){
@@ -488,6 +491,7 @@ function viewclick(obj){
 	        	document.getElementById("_p5").value = result.kross[4];
 	        	document.getElementById("_p6").value = result.kross[5];
 	        	document.getElementById("_note").value = result.comments;
+	        	oldNumber = result.telephone;
 	        },
 	        error: function(jqXHR, textStatus, errorThrown) {
 	            alert(jqXHR.status + ' ' + jqXHR.responseText);

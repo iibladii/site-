@@ -17,6 +17,7 @@ public class KartotekaDataObject {
     private String[] kross;
     private String comments;
     private String room;
+    private String oldNumber;
     
     /**
      * Инициализация объекта
@@ -27,7 +28,7 @@ public class KartotekaDataObject {
      * @param att2 охрана
      * @param comments комментарии
      */
-    public KartotekaDataObject(String telephone, String departmentName, String subdivisionName, String att1, String att2, String[] kross, String comments, String room) {
+    public KartotekaDataObject(String telephone, String departmentName, String subdivisionName, String att1, String att2, String[] kross, String comments, String room, String oldNumber) {
     	this.telephone = telephone;
         this.departmentName = departmentName;
         this.subdivisionName = subdivisionName;
@@ -36,6 +37,7 @@ public class KartotekaDataObject {
         this.kross = kross;
         this.comments = comments;
         this.room = room;
+        this.oldNumber = oldNumber;
     }
 
     public KartotekaDataObject() {
@@ -103,5 +105,13 @@ public class KartotekaDataObject {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+    
+    public String getOldNumber() {
+        return oldNumber;
+    }
+
+    public void setOldNumber(String oldNumber) {
+        this.oldNumber = oldNumber;
     }
 }

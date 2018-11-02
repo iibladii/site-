@@ -1359,7 +1359,71 @@ public class GreetingController {
     
     
     
-    
+    @RequestMapping(value = "/kartoteka", method = RequestMethod.POST)
+    @ResponseBody
+    public String postKartoteka(@RequestBody KartotekaDataObject kdo) {
+    	//Проверка номера на совпадения в базе
+    	if(telephoneRepository.findCountNumber(kdo.getTelephone()) > 0)
+    		return "Number olraydy exists";
+    	
+    	//Изменим запись о номере в базе
+    	
+    	//Получим объекты subdivision и department на основе данных запроса
+    	//Получим department
+    	Department dep = departmentRepository.findOne(kdo.getDepartmentName());
+    	//Получим параметры name и code из subdivision
+    	String sdName = kdo.getSubdivisionName().substring(0,kdo.getSubdivisionName().indexOf("("));
+    	String sdCode = kdo.getSubdivisionName().substring(kdo.getSubdivisionName().indexOf("(") + 1, kdo.getSubdivisionName().indexOf(")"));
+    	//Получим объект subdivision
+    	Subdivision sd = subdivisionRepository.findObjectByCodeName(sdName, sdCode);
+
+    	
+    	//Проверим есть ли такая запись security
+    	if(securityRepository.findCountRep(kdo.getAtt2())>0)
+    		!!!!Модифицируем
+    	//Если нету создаём
+    	//Create security т.к. вынесено в аттрибут не используем
+    	Security secur = new Security();
+    	secur.setNumber_dot(kdo.getAtt2());
+    	securityRepository.save(secur);
+    	
+    	//Создадим объект
+    	Telephone tp = new Telephone();
+    	tp.setNumber(kdo.getTelephone());
+    	tp.setAtt1(kdo.getAtt1());
+    	tp.setAtt2(kdo.getAtt2());
+    	tp.setDepartment(dep);
+    	tp.setSubdivision(sd);
+
+    	//Переделать(векроятно избыточный функционал)
+    	tp.setRoom(kdo.getRoom());
+    	tp.setComments(kdo.getComments());
+    	
+    	tp.setSecurity(secur);
+    	tp.setMiniats(false);
+    	tp.setNote("no");
+    	
+    	Adsl adsl = adslRepository.findOne();
+    	tp.setAdsl(adsl);
+    	
+    	tp.setIntercity("no");
+    	tp.setIsDel(false);
+    	
+    	//Сохраним объект в бд
+    	telephoneRepository.save(tp);
+
+    	//Сохраним объекты кросса
+    	List<Kross> lc1 = new ArrayList<Kross>();
+    	for(int i = 0; i < kdo.getKross().length; i++) {
+    		Kross kross = new Kross();
+    		kross.setName(kdo.getKross()[i]);
+    		kross.setTelephone(tp);
+    		krossRepository.save(kross);
+    		lc1.add(kross);
+    	}
+
+    	return "Insert success";
+    }
     
     
     
