@@ -12,6 +12,19 @@ import controllers.Security;
 
 public interface SecurityRepository extends CrudRepository<Security, Long> {
 
-	@Query(value = "SELECT count(s) FROM Security s WHERE s.name like :name")
+	/**
+	 * Получим количество объектов с указанным параметром name
+	 * @param name наименование
+	 * @return количество строк в таблице с таким наименованием
+	 */
+	@Query(value = "SELECT count(s) FROM Security s WHERE s.number_dot like :name")
 	public Integer findCountRep(@Param("name") String name);
+	
+	/**
+	 * Получим объект
+	 * @param name имя объекта
+	 * @return объект
+	 */
+	@Query(value = "SELECT s FROM Security s WHERE s.number_dot like :name")
+	public Security findObjRep(@Param("name") String name);
 }

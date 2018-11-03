@@ -1,626 +1,223 @@
-//<!--Генерация таблицы-->$("#poisk").click(function(){//Обработка нажатия кнопки с id = poisk             $('button').click(function(){//Обработка нажатий всех кнопок
-var current_number_button=1;
-var max_number_button=5;
-var isDel = 0;
-var oldNumber;//Номер телефона с которым работаем
-//var ts[] = {1,1,1,1,1,1,1,1};//1 - столбец виден, 0 - скрыт
-
-function getDataInitialSync(number, att1, att2, room, department, adsl, subdivision, subdivision_code, page){
-	$.ajax({
-        type: 'GET',
-        url: '/ajaxtest?number='+number+"&att1="+att1+"&att2="+att2+"&room="+room+"&department="+department+"&adsl="+adsl+"&subdivision="+subdivision+"&subdivision_code="+subdivision_code+"&page="+page+"&isDel=" + isDel,
-        dataType: 'json',
-        async: false,
-        success: function(result) {
-  			createCalendar("content","count_elem","button_page", result);
-  			//alert(result);
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert(jqXHR.status + ' ' + jqXHR.responseText);
-        }
-    });
-}
-
-function getDataInitial(number, att1, att2, room, department, adsl, subdivision, subdivision_code, page){
-	$.ajax({
-        type: 'GET',
-        url: '/ajaxtest?number='+number+"&att1="+att1+"&att2="+att2+"&room="+room+"&department="+department+"&adsl="+adsl+"&subdivision="+subdivision+"&subdivision_code="+subdivision_code+"&page="+page+"&isDel=" + isDel,
-        dataType: 'json',
-        async: true,
-        success: function(result) {
-  			createCalendar("content","count_elem","button_page", result);
-  			//alert(result);
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert(jqXHR.status + ' ' + jqXHR.responseText);
-        }
-    });
-}
-
-//Обработка нажатия кнопки удалеия
-function getdetails(obj) {
-	var param = obj.id;
-	//alert(param);
-	$.ajax({
-		type: 'DELETE',
-		url:  '/kartoteka',
-		contentType: 'application/json; charset=utf-8',
-		data: JSON.stringify(param),
-		dataType: 'json',
-		async: true,
-		success: function(result) {
-			alert('Статус: ' + result);
-			getDataInitial('','','','','','','','','');
-		},
-		error: function(jqXHR, textStatus, errorThrown) {
-			alert('Статус: ' + jqXHR.responseText);
-			getDataInitial('','','','','','','','','');
-		}
-	});
-    //alert(obj.id);
-}
-
-function createCalendar(id,id1,id2, data) {
-	  var elem = document.getElementById(id);//Таблица
-	  var elem1 = document.getElementById(id1);//Надпись о числе страниц
-	  var elem2 = document.getElementById(id2);//Кнопки с выбором страницы
-	  
-	  if(isDel == 0){
-		  var table = '<table id="zaptable" class="mytable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Отдел</th><th>Подразделение</th><th>Код подразделения</th><th>Местоположение</th><th>Состав кросса</th><th>Удалить</th><th>Просмотр</th></tr></thead><tbody><tr>';
-		  for(var i=0;i < parseInt(data.size); i++){
-			  table += '<td>'+(i+1)+'</td>';
-			  //if(ts[0] ==)
-			  table += '<td class="number">'+data.number[i]+'</td>';
-			  table += '<td>'+data.att1[i]+'</td>';
-			  table += '<td>'+data.att2[i]+'</td>';
-			  table += '<td>'+data.subdivision[i]+'</td>';
-			  table += '<td>'+data.department[i]+'</td>';
-			  table += '<td>'+data.code[i]+'</td>';
-			  table += '<td>'+data.room[i]+'</td>';
-			  table += '<td>'+'none'+'</td>';
-			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button> </td>';//Удаление записи
-			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "viewclick(this)"><img src="styles/kartoteka/img/tableView.png" style="vertical-align: middle"></img></button> </td>';//load info
-			  table += '</tr><tr>';
-	  }
-	  }
-	  else{
-		  var table = '<table id="zaptable" class="mytable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Отдел</th><th>Подразделение</th><th>Код подразделения</th><th>Местоположение</th><th>Состав кросса</th><th>Восстановить</th></tr></thead><tbody><tr>';
-		  for(var i=0;i < parseInt(data.size); i++){
-			  table += '<td>'+(i+1)+'</td>';
-			  table += '<td class="number">'+data.number[i]+'</td>';
-			  table += '<td>'+data.att1[i]+'</td>';
-			  table += '<td>'+data.att2[i]+'</td>';
-			  table += '<td>'+data.subdivision[i]+'</td>';
-			  table += '<td>'+data.department[i]+'</td>';
-			  table += '<td>'+data.code[i]+'</td>';
-			  table += '<td>'+data.room[i]+'</td>';
-			  table += '<td>'+'none'+'</td>';
-			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableRepair.png" style="vertical-align: middle"></img></button> </td>';//Удаление записи
-			  table += '</tr><tr>';
-		  }
-	  }
-	  
-	  //закрыть таблицу
-	  table += '</tr></tbody></table>';
-	  //только одно присваивание innerHTML
-	  elem.innerHTML = table;		  
-	  var button_p = '<button class="page-l" style="cursor:pointer">&lt;</button>&nbsp;';
-	  if(data.page_no-2>0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page_no-2)+'">'+(data.page_no-2)+'</button>&nbsp;';
-	  if(data.page_no-1>0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page_no-1)+'">'+(data.page_no-1)+'</button>&nbsp;';
-	  if(data.page_no>0) button_p +='<button id="current-page" class="page-с" style="cursor:pointer; background:green"  value="'+data.page_no+'">'+data.page_no+'</button>&nbsp;';
-	  if(data.page_no+1<=Math.ceil(parseInt(data.page_count)/20)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page_no+1)+'">'+(data.page_no+1)+'</button>&nbsp;';
-	  if(data.page_no+2<=Math.ceil(parseInt(data.page_count)/20)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page_no+2)+'">'+data.page_no+2+'</button>&nbsp;';
-	  button_p +='<button class="page-r" style="cursor:pointer">&gt;</button>&nbsp;';
-	  elem2.innerHTML = button_p;    
-	  //Формируем надпись о номере текущей страницы и числе страниц
-	  var countElem;
-	  countElem='<a>&nbsp;Страница '+data.page_no+' из '+Math.ceil(parseInt(data.page_count)/20)+'</a>';
-	  elem1.innerHTML = countElem;
-	  
-	  //Скроем лишние колонки
-	  viewColumn();
-}
-
-
-//Обработка нажатия кнопки корзина
-$(document).on("click", "#kartotekaT", function() {
-	isDel = 1;
-	getDataInitial('','','','','','','','','');
-});
-
-//Обработка нажатия кнопки Картотека
-$(document).on("click", "#kartotekaF", function() {
-	isDel = 0;
-	getDataInitial('','','','','','','','','');
-});
-
-//Обработка нажатия кнопки фильтр
-$(document).on("click", "#poisk", function() {
-	isDel = 0;
-	getDataInitial(
-			document.getElementById("number").value,
-			document.getElementById("att1").value,
-			document.getElementById("att2").value,
-			document.getElementById("room").value,
-			document.getElementById("department").value,
-			'',
-			document.getElementById("subdivision").value,
-			document.getElementById("subdivision_code").value,
-			''
-			);
-});
-
-function departmentListInit(){
-	$.ajax({
-        type: 'GET',
-        url:   '/Select2kartotekaList_department' ,
-        dataType: 'json',
-        async: true,
-        success: function(result) {
-        	//alert(result[0].selected)
-        	$('#DepartmentList_').select2({
-                data: result
-        	});
-        	//Выбор пустой опции
-        	$('#DepartmentList_').val(null).trigger('change');
-        	
-        	//$('#DepartmentList_').select2({ placeholder: "Select Franchise" });
-        	/*
-        	//Очистка
-        	$('#DepartmentList_').select2( "destroy" );
-        	
-        	$('#DepartmentList_').select2({
-        		data: result
-        	});*/
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert(jqXHR.status + ' ' + jqXHR.responseText);
-        }
-    });
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript" ></script>
+	<script type="text/javascript" src="styles/static/scripts/table_insert.js"></script>
+	<link rel="stylesheet" type="text/css" href="styles/kartoteka/style_menu.css"/>
+	<link rel="stylesheet" type="text/css" href="styles/kartoteka/style_table.css"/>
+	<link rel="stylesheet" type="text/css" href="styles/kartoteka/bloki.css"/>
+	<link rel="stylesheet" type="text/css" href="styles/kartoteka/desineKartoteka.css"/>
+	<!--
+	<script type="text/javascript" src="styles/multyList/select2.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="styles/multyList/select2.min.css"/>
+	-->
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css"/>
 	
-	//init subdivision
-	$('#SubdivisionList_').select2({
-		data: []
-	});
+  	<script type="text/javascript" src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+  	<link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css"/>
+  	
+  	<script type="text/javascript" src="styles/multyList/select2.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="styles/multyList/select2.min.css"/>
 	
-	//init events
-	//Событие выбора элемента отдела из списка
-	$('#DepartmentList_').on('select2:select', function (e) {
 
-		//$('#DepartmentList_ option:selected').each(function() {
-		//	dep = $(this).text();
-		//});
-		//console.log(e.params.data.text);
-		//Очистка
-    	//$('#SubdivisionList_').select2( "destroy" );
-		
-    	
-		$.ajax({
-	        type: 'GET',
-	        url:   '/Select2kartotekaList_subdivision?name='+ e.params.data.text,
-	        dataType: 'json',
-	        async: true,
-	        success: function(result) {
-	        	//Очистка поля
-	        	$("#SubdivisionList_").html('').select2();
-	        	//Заполнение данными
-	        	$('#SubdivisionList_').select2({
-	        		data: result
-	        	});
-	        },
-	        error: function(jqXHR, textStatus, errorThrown) {
-	            alert(jqXHR.status + ' ' + jqXHR.responseText);
-	        }
-	    });
-	});
-	
-}
-
-/*
-//Выбор
-$('#DepartmentList_').on('select2:select', function (e) {
-    var data = e.params.data;
-    console.log(data);
-});
-*/
-/*
-//Событие выбора элемента отдела из списка
-$('#DepartmentList_').on('select2:select', function (e) {
-
-	$('#DepartmentList_ option:selected').each(function() {
-		dep = $(this).text();
-	});
-	
-	$.ajax({
-        type: 'GET',
-        url:   '/Select2kartotekaList_department?depName=',
-        dataType: 'json',
-        async: true,
-        success: function(result) {
-        	$('#SubdivisionList_').select2({
-        		data: result
-        	});
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert(jqXHR.status + ' ' + jqXHR.responseText);
-        }
-    });
-});
-*/
-
-$(document).ready(function() {
-	
-	//Инициализация таблицы при открытии страницы
-	getDataInitial('','','','','','','','','');
-	
-	//Скроем лишние колонки в таблице
-//	viewColumn();
-	
-	//Инициализация списка подразделений
-	departmentListInit();
-	
-	/*
-	//init
-	var dut = [1,2];
-	$('.js-example-basic-multiple_').select2({
-		data: dut
-	});
-	*/
-	
-	//Обрабатывает нажатие кнопки с классом page-p кнопки с номерами страниц
-	$("body").on("click", ".page-l", function () {
-		getDataInitial((current_number_button-1) >= 1 ? current_number_button-- : current_number_button);
-	});
-	
-	//Обрабатывает нажатие кнопки с классом page-p кнопки с номерами страниц
-	$("body").on("click", ".page-r", function (){
-		getDataInitial((current_number_button) < max_number_button ? current_number_button++ : current_number_button);
-	});
-	
-	//Обрабатывает нажатие кнопки с классом page-p кнопки с номерами страниц
-	$("body").on("click", ".page-с", function (){
-		getDataInitial($(this).attr("value"));
-	});
 	
 	
-	//Обрабатывает нажатие кнопки с классом page-p кнопка поиск
-	$("body").on("click", ".page-p", function (){
-		/*
-		alert('number:  '+document.getElementById("number").value);
-		alert('att1:  '+document.getElementById("att1").value);
-		alert('att2:  '+document.getElementById("att2").value);
-		alert('room:  '+document.getElementById("room").value);
-		alert('department:  '+document.getElementById("department").value);
-		//alert('adsl:  '+document.getElementById("adsl").value);
-		alert('subdivision:  '+document.getElementById("subdivision").value);
-		alert('subdivision_code:  '+document.getElementById("subdivision_code").value);
-		alert('page:  '+'1');
-		*/
-		
-		
-		getDataInitial(
-				document.getElementById("number").value,
-				document.getElementById("att1").value,
-				document.getElementById("att2").value,
-				document.getElementById("room").value,
-				document.getElementById("department").value,
-				//document.getElementById("adsl").value,
-				'',
-				document.getElementById("subdivision").value,
-				document.getElementById("subdivision_code").value,
-				'1'
-				);
-	});
+	<script>
+  		$(function() {
+    		$( "#dialog" ).dialog({
+    			autoOpen: false ,
+    			width: 350
+    			}); //Создадим окно закрытым http://jquery.page2page.ru/index.php5/%D0%94%D0%B8%D0%B0%D0%BB%D0%BE%D0%B3%D0%BE%D0%B2%D0%BE%D0%B5_%D0%BE%D0%BA%D0%BD%D0%BE_UI
+  		});
+  		$(function() {
+    		$( "#tableOption" ).dialog({
+    			maxWidth:280,
+    	        maxHeight: 260,
+    	        width: 280,
+    	        height: 260,
+    	        autoOpen: false
+    			});
+  		});
+  		$(function() {
+    		$( "#dialogView" ).dialog({
+    			autoOpen: false ,
+    			width: 380,
+    			maxWidth:380,
+    			});
+  		});
+  	</script>
+</head>
+<body>
+
+
+
+
+
+	<div id="dialogView" title="Модификация элементов карточки">
+	Введите номер:<br/>
+	<input id="_number_" name="number" type="text" size="30" placeholder="Номер" style="width: 290px;"></input>
+	<br/>
+	<br/>
+	Введите связанные номера:<br/>
+	<input id="_att1_" name="att1" type="text" size="30" placeholder="Связанные номера" style="width: 290px;"></input>
+	<br/>
+	<br/>
+	Введите охрана:<br/>
+	<input id="_att2_" name="att2" type="text" size="30" placeholder="Охрана" style="width: 290px;"></input>
+	<br/>
+	<br/>
+	Введите местоположение:<br/>
+	<input id="_place_" name="place" type="text" size="30" placeholder="Местоположение" style="width: 290px;"></input>	
+	<br/>
+	<br/>
+	Введите отдел:<br/>
+	<select id="_DepartmentList_" class="js-example-basic-single_" name="states[]"  style="width: 300px;"></select>
+	<!-- <input id="Department_" name="department" type="text" size="30" placeholder="Отдел"></input> -->
+	<br/>
+	<br/>
+	Выберите подразделение:<br/>
+	<select id="_SubdivisionList_" class="js-example-basic-single" name="states[]"   style="width: 300px;"></select>
+	<!-- <div id="selectSubdivision_">Connect...</div> -->
+	<br/>
+	<br/>
+	Введите элементы кросса:<br/>
+	<input id="_p1" name="adsl" type="text" size="30" placeholder="Элемент 1" style="width: 290px;"></input><br/>
+	<input id="_p2" name="adsl" type="text" size="30" placeholder="Элемент 2" style="width: 290px;"></input><br/>
+	<input id="_p3" name="adsl" type="text" size="30" placeholder="Элемент 3" style="width: 290px;"></input><br/>
+	<input id="_p4" name="adsl" type="text" size="30" placeholder="Элемент 4" style="width: 290px;"></input><br/>
+	<input id="_p5" name="adsl" type="text" size="30" placeholder="Элемент 5" style="width: 290px;"></input><br/>
+	<input id="_p6" name="adsl" type="text" size="30" placeholder="Элемент 6" style="width: 290px;"></input><br/>
+	<br/>
+	Комментарии:<br/>
+	<textarea id="_note" rows="10" cols="32" style="width: 290px;"></textarea><br/>
+	<br/>
+    <button class="page-p" id="_vvod" style="cursor:pointer">Ввод</button>
+    &nbsp;
+    <button id="pre_prosmotr" style="cursor:pointer"><img src="styles/kartoteka/img/kartockaPrint.png" style="vertical-align: middle"></img></button>
+	</div>
 	
 	
-});
 
 
 
-
-/*
-$(document).on("click", "#vvod", function() {
-	var arr = [];//Массив содержащий список ролей данного пользователя
-	var values = $('#roles_').val();//Вернём все значения списком
-	//Получим позиции всех выбранных значений в списке
-	$('#roles_ option:selected').each(function() {
-		arr.push($(this).text());
-	});
-});*/
-$(document).on("click", "#vvod", function() {
-	var dep;//Выбранный отдел
-	//Получим позиции всех выбранных значений в списке
-	$('#roles_ option:selected').each(function() {
-		dep = $(this).text();
-	});
+	<div id="dialog" title="Создание новой карточки">
+	Введите номер:<br/>
+	<input id="number_" name="number" type="text" size="30" placeholder="Номер" style="width: 290px;"></input>
+	<br/>
+	<br/>
+	Введите связанные номера:<br/>
+	<input id="att1_" name="att1" type="text" size="30" placeholder="Связанные номера" style="width: 290px;"></input>
+	<br/>
+	<br/>
+	Введите охрана:<br/>
+	<input id="att2_" name="att2" type="text" size="30" placeholder="Охрана" style="width: 290px;"></input>
+	<br/>
+	<br/>
+	Введите местоположение:<br/>
+	<input id="place_" name="place" type="text" size="30" placeholder="Местоположение" style="width: 290px;"></input>	
+	<br/>
+	<br/>
+	Введите отдел:<br/>
+	<select id="DepartmentList_" class="js-example-basic-single_" name="states[]"  style="width: 296px;"></select>
+	<!-- <input id="Department_" name="department" type="text" size="30" placeholder="Отдел"></input> -->
+	<br/>
+	<br/>
+	Выберите подразделение:<br/>
+	<select id="SubdivisionList_" class="js-example-basic-single" name="states[]"   style="width: 296px;"></select>
+	<!-- <div id="selectSubdivision_">Connect...</div> -->
+	<br/>
+	<br/>
+	Введите элементы кросса:<br/>
+	<input id="p1" name="adsl" type="text" size="30" placeholder="Элемент 1" style="width: 290px;"></input><br/>
+	<input id="p2" name="adsl" type="text" size="30" placeholder="Элемент 2" style="width: 290px;"></input><br/>
+	<input id="p3" name="adsl" type="text" size="30" placeholder="Элемент 3" style="width: 290px;"></input><br/>
+	<input id="p4" name="adsl" type="text" size="30" placeholder="Элемент 4" style="width: 290px;"></input><br/>
+	<input id="p5" name="adsl" type="text" size="30" placeholder="Элемент 5" style="width: 290px;"></input><br/>
+	<input id="p6" name="adsl" type="text" size="30" placeholder="Элемент 6" style="width: 290px;"></input><br/>
+	<br/>
+	Введите комментарии:<br/>
+	<textarea id="note" rows="10" cols="32" style="width: 290px;"></textarea><br/>
+	<br/>
+    <button class="page-p" id="vvod" style="cursor:pointer">Ввод</button>
+	</div>
+	
+	<!-- Окно с выбором опций таблицы -->
+	<div id="tableOption" title="Опции таблицы">
+		<div>
+        	<div>
+        		<input type="checkbox" id="_number" name="feature" value="scales" checked="true"/>
+        		<label for="_number">Номер</label>
+    		</div>
+    		<div>
+        		<input type="checkbox" id="_chainNumber" name="feature" value="horns" checked="true"/>
+        		<label for="_chainNumber">Связанные номера</label>
+    		</div>
+    		<div>
+        		<input type="checkbox" id="_security" name="feature" value="claws" checked="true"/>
+        		<label for="_security">Охрана</label>
+    		</div>
+    		<div>
+        		<input type="checkbox" id="_department" name="feature" value="claws" checked="true"/>
+        		<label for="_department">Отдел</label>
+    		</div>
+    		<div>
+        		<input type="checkbox" id="_subdivision" name="feature" value="claws" checked="true"/>
+        		<label for="_subdivision">Подразделение</label>
+    		</div>
+    		<div>
+        		<input type="checkbox" id="_subdivisionCode" name="feature" value="claws" checked="true"/>
+        		<label for="_subdivisionCode">Код подразделения</label>
+    		</div>
+    		<div>
+        		<input type="checkbox" id="_aim" name="feature" value="claws" checked="true"/>
+        		<label for="_aim">Местоположение</label>
+    		</div>
+    		<div>
+        		<input type="checkbox" id="_kross" name="feature" value="claws"/>
+        		<label for="_kross">Состав кросса</label>
+    		</div>
+    	</div>
+    	<br/>
+    	<button id="accept" style="cursor:pointer">Принять</button>
+	</div>
 	
 	
-	
-	var arr =
-		[
-			document.getElementById("p1").value,
-			document.getElementById("p2").value,
-			document.getElementById("p3").value,
-			document.getElementById("p4").value,
-			document.getElementById("p5").value,
-			document.getElementById("p6").value
-		];
-	var telephone = document.getElementById("number_").value;
-	var dep = $("#DepartmentList_ option:selected").text();
-	var subdiv = $("#SubdivisionList_ option:selected").text();
-	var att1_ = document.getElementById("att1_").value
-	var att2_ = document.getElementById("att2_").value
-	var note = document.getElementById("note").value
-	var place_ = document.getElementById("place_").value
-	
-	alert(arr);
-	
-	var KartotekaDataObject = {
-			'telephone': telephone,
-			'departmentName': dep,
-			'subdivisionName': subdiv,
-			'att1': att1_,
-			'att2': att2_,
-			'kross': arr,
-			'comments': note,
-			'room': place_
-	};
-	$.ajax({
-		type: 'PUT',
-		url:  '/kartoteka',
-		contentType: 'application/json; charset=utf-8',
-		data: JSON.stringify(KartotekaDataObject),
-		dataType: 'json',
-		async: true,
-        success: function(result) {
-  			//createCalendar("content","count_elem","button_page", result);
-  			alert(result);
-  			//Обновление таблицы при открытии страницы
-  			getDataInitial('','','','','','','','','');
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert(jqXHR.status + ' ' + jqXHR.responseText);
-            getDataInitial('','','','','','','','','');
-        }
-    });
-	
-	
-	
-	
-});
-
-
-
-$(document).on("click", "#_vvod", function() {
-	var dep;//Выбранный отдел
-	//Получим позиции всех выбранных значений в списке
-	$('#roles_ option:selected').each(function() {
-		dep = $(this).text();
-	});
-
-	var arr =
-		[
-			document.getElementById("p1").value,
-			document.getElementById("p2").value,
-			document.getElementById("p3").value,
-			document.getElementById("p4").value,
-			document.getElementById("p5").value,
-			document.getElementById("p6").value
-		];
-	var telephone = document.getElementById("_number_").value;
-	var dep = $("#_DepartmentList_ option:selected").text();
-	var subdiv = $("#_SubdivisionList_ option:selected").text();
-	var att1_ = document.getElementById("_att1_").value
-	var att2_ = document.getElementById("_att2_").value
-	var note = document.getElementById("_note").value
-	var place_ = document.getElementById("_place_").value
-	
-	//alert(arr);
-	
-	var KartotekaDataObject = {
-			'telephone': telephone,
-			'departmentName': dep,
-			'subdivisionName': subdiv,
-			'att1': att1_,
-			'att2': att2_,
-			'kross': arr,
-			'comments': note,
-			'room': place_,
-			'oldNumber': oldNumber
-	};
-	$.ajax({
-		type: 'POST',
-		url:  '/kartoteka',
-		contentType: 'application/json; charset=utf-8',
-		data: JSON.stringify(KartotekaDataObject),
-		dataType: 'json',
-		async: true,
-        success: function(result) {
-  			alert(result);
-  			//Обновление таблицы при открытии страницы
-  			getDataInitial('','','','','','','','','');
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert(jqXHR.status + ' ' + jqXHR.responseText);
-            getDataInitial('','','','','','','','','');
-        }
-    });
-		
-});
-
-
-//Обработка нажатия кнопки создать
-$(document).on("click", "#create", function() {
-	if(!($("#dialog").dialog("isOpen")))
-		$("#dialog").dialog('open');
-	else
-		$("#dialog").dialog('close');
-});
-
-
-//Обработка нажатия кнопки опции
-$(document).on("click", "#Option", function() {
-	if(!($("#tableOption").dialog("isOpen"))){
-		$("#tableOption").dialog('open');
-	}
-	else
-		$("#tableOption").dialog('close');
-});
-
-//Получение данных карточки
-function viewclick(obj){
-	var param = obj.id;//Номер телефона
-	if(!($("#dialogView").dialog("isOpen"))){
-		$("#dialogView").dialog('open');
-	}
-		//Получим общие данные
-		$.ajax({
-	        type: 'GET',
-	        url:   '/Select2kartotekaListModify?number='+param ,
-	        dataType: 'json',
-	        async: true,
-	        success: function(result) {
-	        	document.getElementById("_number_").value = result.telephone;
-	        	document.getElementById("_att1_").value = result.att1;
-	        	document.getElementById("_att2_").value = result.att2;
-	        	document.getElementById("_place_").value = result.room;
-	        	document.getElementById("_p1").value = result.kross[0];
-	        	document.getElementById("_p2").value = result.kross[1];
-	        	document.getElementById("_p3").value = result.kross[2];
-	        	document.getElementById("_p4").value = result.kross[3];
-	        	document.getElementById("_p5").value = result.kross[4];
-	        	document.getElementById("_p6").value = result.kross[5];
-	        	document.getElementById("_note").value = result.comments;
-	        	oldNumber = result.telephone;
-	        },
-	        error: function(jqXHR, textStatus, errorThrown) {
-	            alert(jqXHR.status + ' ' + jqXHR.responseText);
-	        }
-	    });
-		
-		
-		//Получим данные об отделах
-		
-		$.ajax({
-	        type: 'GET',
-	        url:   '/Select2kartotekaList_departmentModify?telephone=' + param,
-	        dataType: 'json',
-	        async: true,
-	        success: function(result) {
-	        	//Очистка поля
-	        	$("#_DepartmentList_").html('').select2();
-	        	//Заполнение данными
-	        	$('#_DepartmentList_').select2({
-	        		data: result
-	        	});
-	        },
-	        error: function(jqXHR, textStatus, errorThrown) {
-	            alert(jqXHR.status + ' ' + jqXHR.responseText);
-	        }
-	    });
-		
-		//Получим данные о списке подразделений
-		
-		$.ajax({
-	        type: 'GET',
-	        url:   '/Select2kartotekaList_subdivisionModify?telephone=' + param,
-	        dataType: 'json',
-	        async: true,
-	        success: function(result) {
-	        	//Очистка поля
-	        	$("#_SubdivisionList_").html('').select2();
-	        	//Заполнение данными
-	        	$('#_SubdivisionList_').select2({
-	        		data: result
-	        	});
-	        },
-	        error: function(jqXHR, textStatus, errorThrown) {
-	            alert(jqXHR.status + ' ' + jqXHR.responseText);
-	        }
-	    });
-	//});
-		
-	//else
-	//	$("#dialogView").dialog('close');
-}
-
-//Отвечает за сокрытие лишних колонок в таблице
-function viewColumn(){
-	//Спрячим лишние кнопки
-	if(document.getElementById("_number").checked == false){
-		document.getElementById("zaptable").classList.add("hide2");
-		document.getElementById("zaptable").classList.add("hide2_");
-	}
-	if(document.getElementById("_chainNumber").checked == false){
-		document.getElementById("zaptable").classList.add("hide3");
-		document.getElementById("zaptable").classList.add("hide3_");
-	}
-	if(document.getElementById("_security").checked == false){
-		document.getElementById("zaptable").classList.add("hide4");
-		document.getElementById("zaptable").classList.add("hide4_");
-	}
-	if(document.getElementById("_department").checked == false){
-		document.getElementById("zaptable").classList.add("hide5");
-		document.getElementById("zaptable").classList.add("hide5_");
-	}
-	if(document.getElementById("_subdivision").checked == false){
-		document.getElementById("zaptable").classList.add("hide6");
-		document.getElementById("zaptable").classList.add("hide6_");
-	}
-	if(document.getElementById("_subdivisionCode").checked == false){
-		document.getElementById("zaptable").classList.add("hide7");
-		document.getElementById("zaptable").classList.add("hide7_");
-	}
-	if(document.getElementById("_aim").checked == false){
-		document.getElementById("zaptable").classList.add("hide8");
-		document.getElementById("zaptable").classList.add("hide8_");
-	}
-	if(document.getElementById("_kross").checked == false){
-		document.getElementById("zaptable").classList.add("hide9");
-		document.getElementById("zaptable").classList.add("hide9_");
-	}
-}
-
-//Обработка нажатия кнопки при выборе состава таблицы
-$(document).on("click", "#accept", function() {
-	//Обновим талицу
-	getDataInitialSync('','','','','','','','',document.getElementById("current-page").value);
-	
-});
-
-/*
-window.addEventListener("DOMContentLoaded", function() {
-	
-    var d = document.querySelector("#accept"),
-        e = document.querySelector(".ms-pub-contentLayout");
-    d.addEventListener("click", function(a) {
-       a.preventDefault();
-       e.classList.toggle("hide")
-    })
-});
-*/
-
-
-/*
-//Обработка нажатия кнопки ввод
-$(document).on("click", "#vvod", function() {
-	$.get("/ajax/kartoteka_create/number_",function(data,status){
-
-	}
-});
-*/
-
-/*
-$('#mySelect2').select2({
-	  ajax: {
-	    url: '/subdivision/get_dataList',
-	    processResults: function (data) {
-	      // Tranforms the top-level key of the response object from 'items' to 'results'
-	      return {
-	        results: data.items
-	      };
-	    }
-	  }
-	});
-*/
-
+	<script src="styles/static/scripts/loadSDname.js"></script><!-- Загрузим инфу об подразделениях -->
+	<!--Шапка основной страницы-->
+	<div id="header_table" style="height:22px; background-color:#9f9f9f; font-family: Arial; font-size: 13px;">
+		<script src="styles/static/scripts/menu_headr_icon.js"></script> <!-- Грузим шапку меню -->
+		<div style="width:350px;height:20px;float:right;">
+			<div align="right">
+					<div style="width:64px;height:5px;float:right;"><form th:action="@{/logout}" method="post"><input type="submit" value="Выход"/></form></div>
+				 	<div style="width:150px;height:10px;float:right;margin-top: +0.25em;" th:inline="text">Вы вошли как:&nbsp;[[${#httpServletRequest.remoteUser}]]&nbsp;</div>
+			</div>
+		</div>
+	</div>
+	<!--Меню-->
+	<div id="menu">
+		<script src="styles/static/scripts/menu_headr.js"></script> <!-- Грузим шапку меню -->
+   	</div>
+   <div id="splitter"></div>
+   <div id="menu_knopki">
+		&nbsp;
+		<button style="cursor:pointer" id="create"><img src="styles/kartoteka/img/plus.png" style="vertical-align: middle"></img>Создать</button>
+		<button style="cursor:pointer" id="kartotekaF"><img src="styles/kartoteka/img/book.png" style="vertical-align: middle"></img>Картотека</button>
+		<button style="cursor:pointer" id="kartotekaT"><img src="styles/kartoteka/img/korzina.png" style="vertical-align: middle"></img>Корзина</button>
+		<button style="cursor:pointer" id="Option"><img src="styles/kartoteka/img/tableOption.png" style="vertical-align: middle"></img>Опции таблицы</button>
+   </div>
+   <div id="filtr">
+   		<script src="styles/static/scripts/filtr.js"></script><!-- Грузим фильтр -->
+   </div>
+   <div id="splitter"></div><!--Разделитель-->
+   <div id="spisok"><!--Тут основная картотека-->
+	<p></p><!--Переход на новую строку перед ниформацией о числе страниц-->
+    <div class="wrap"><!--div с двойным позиционированием по правому и левому краю-->
+        <div class="left" id="count_elem"></div><div class="right" id="button_page"></div>
+    </div>
+	<p></p><!--Переход на новую строку после информации о числе страниц-->
+   <div id="content"><!-- Тут происходит прорисовка основной таблицы --></div>
+   </div>
+</body>
+</html>

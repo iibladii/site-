@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import controllers.Adsl;
 //https://www.petrikainulainen.net/programming/spring-framework/spring-data-jpa-tutorial-three-custom-queries-with-query-methods/ - manual
 import controllers.Kross;
+import controllers.Telephone;
 
 public interface KrossRepository extends CrudRepository<Kross, Long> {
 	
@@ -28,4 +29,23 @@ public interface KrossRepository extends CrudRepository<Kross, Long> {
 	 */
 	@Query(value = "select a.name from Kross a, in(a.telephone) t WHERE t.number like :number")
     String[] findCrossByTelephone(@Param("number") String number);
+	
+	/**
+	 * Подсчёт количества записей с параметром name
+	 * @param name наименование кросса
+	 * @return количество записей с заданным name
+	 */
+	@Query(value = "select count(k) from Kross k WHERE k.name like :name")
+    Integer findIfCross(@Param("name") String name);
+	
+	/**
+	 * Получение кросса с заданнм name
+	 * @param name наименование кросса
+	 * @return объект кросса с заданнм параметром name
+	 */
+	@Query(value = "select k from Kross k WHERE k.name like :name")
+    Kross[] findObjCross(@Param("name") String name);
+	
+	@Query(value = "select k from Kross k WHERE k.telephone like :telephone")
+    Kross[] findForDel(@Param("telephone") Telephone telephone);
 }

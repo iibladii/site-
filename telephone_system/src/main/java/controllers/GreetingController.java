@@ -1362,12 +1362,10 @@ public class GreetingController {
     @RequestMapping(value = "/kartoteka", method = RequestMethod.POST)
     @ResponseBody
     public String postKartoteka(@RequestBody KartotekaDataObject kdo) {
-    	//Проверка номера на совпадения в базе
-    	if(telephoneRepository.findCountNumber(kdo.getTelephone()) > 0)
-    		return "Number olraydy exists";
+    	//if(telephoneRepository.findCountNumber(kdo.getTelephone()) > 0)
     	
     	//Изменим запись о номере в базе
-    	
+
     	//Получим объекты subdivision и department на основе данных запроса
     	//Получим department
     	Department dep = departmentRepository.findOne(kdo.getDepartmentName());
@@ -1377,18 +1375,23 @@ public class GreetingController {
     	//Получим объект subdivision
     	Subdivision sd = subdivisionRepository.findObjectByCodeName(sdName, sdCode);
 
-    	
+    	Security secur = new Security();
     	//Проверим есть ли такая запись security
     	if(securityRepository.findCountRep(kdo.getAtt2())>0)
-    		!!!!Модифицируем
-    	//Если нету создаём
-    	//Create security т.к. вынесено в аттрибут не используем
-    	Security secur = new Security();
-    	secur.setNumber_dot(kdo.getAtt2());
+    		secur = securityRepository.findObjRep(kdo.getAtt2());
+    		//Если нету создаём
+    		//Create security т.к. вынесено в аттрибут не используем
+    	secur.setNumber_dot(kdo.getAtt2()); 		
     	securityRepository.save(secur);
     	
     	//Создадим объект
-    	Telephone tp = new Telephone();
+    	Telephone tp = telephoneRepository.find_(kdo.getOldNumber());
+    	
+    	//Если номер был изменён
+    	if(!kdo.getTelephone().equals(kdo.getOldNumber())) {
+    		tp.setNumber(kdo.getTelephone());
+    	}
+    	
     	tp.setNumber(kdo.getTelephone());
     	tp.setAtt1(kdo.getAtt1());
     	tp.setAtt2(kdo.getAtt2());
@@ -1414,14 +1417,29 @@ public class GreetingController {
 
     	//Сохраним объекты кросса
     	List<Kross> lc1 = new ArrayList<Kross>();
+    	
+    	//Удалим текущие записи и вставим новые
+    	Kross[] kk = krossRepository.findForDel(tp);
+    	for(int i = 0; i < kk.length; i++)
+    		krossRepository.delete(kk[i]);
+    	
     	for(int i = 0; i < kdo.getKross().length; i++) {
+    		//Узнаем есть ли запись с таким параметром nam
     		Kross kross = new Kross();
-    		kross.setName(kdo.getKross()[i]);
+    		//if(krossRepository.findIfCross(kdo.getKross()[i])>0)
+    		//{
+    			//Kross[] kk = krossRepository.findObjCross(kdo.getKross()[i]);
+    		//	kross = kk[0];
+    		//}
+    		String str = kdo.getKross()[i];
+    		kross.setName(str);
     		kross.setTelephone(tp);
     		krossRepository.save(kross);
     		lc1.add(kross);
     	}
-
+    	tp.setCross(lc1);
+    	telephoneRepository.save(tp);
+    	
     	return "Insert success";
     }
     
