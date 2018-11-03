@@ -50,6 +50,7 @@ import object.CooperatorsDataObject;
 import object.DepartmentDataObject;
 import object.KartotekaDataObject;
 import repository.AdslRepository;
+import repository.KrossRepository;
 import repository.SecurityRepository;
 import repository.SubdivisionRepository;
 import repository.TelephoneRepository;
@@ -90,6 +91,8 @@ public class GreetingController {
 	private SubdivisionRepository subdivisionRepository;
 	@Autowired
 	private RoleRepository roleRepository;
+	@Autowired
+	private KrossRepository krossRepository;
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -721,6 +724,7 @@ public class GreetingController {
 	 * @param subdivision_code код подразделения
 	 * @param page номер страницы
 	 * @param count число строк в возвращаемом наборе
+	 * @param isDel удалённые/не удалённые записи
 	 * @return набор строк
 	 */
 	public table1 ajaxTest(
@@ -733,10 +737,20 @@ public class GreetingController {
 			@RequestParam(required = false, defaultValue = "") String subdivision,
 			@RequestParam(required = false, defaultValue = "") String subdivision_code,
 			@RequestParam(required = false, defaultValue = "1") Integer page,
-			@RequestParam(value="count", defaultValue = "20") Integer count) {
-		List<Telephone> results = telephoneRepository.find("%" + number + "%", "%" + att1 + "%", "%" + att2 + "%",
+			@RequestParam(value="count", defaultValue = "20") Integer count,
+			@RequestParam(value="isDel", defaultValue = "0") Integer isDel) {
+		
+		List<Telephone> results = new ArrayList<Telephone>();
+		if(isDel==0) {
+			results = telephoneRepository.find("%" + number + "%", "%" + att1 + "%", "%" + att2 + "%",
 				"%" + room + "%", "%" + department + "%", "%" + adsl + "%", "%" + subdivision + "%",
 				"%" + subdivision_code + "%");
+		}
+		else
+			results = telephoneRepository.findDel("%" + number + "%", "%" + att1 + "%", "%" + att2 + "%",
+					"%" + room + "%", "%" + department + "%", "%" + adsl + "%", "%" + subdivision + "%",
+					"%" + subdivision_code + "%");
+		
 		Iterator<Telephone> iterator = results.iterator();
 		int ch_page = 1;// Номер строки
 		while (iterator.hasNext()) {
@@ -751,11 +765,9 @@ public class GreetingController {
 			Telephone tl = (Telephone) iterator2.next();
 			if (ch > (page - 1) * count) {
 				if (ch <= (page * count)) {
-					for(Department dddd:tl.getDepartment())
-						for(Subdivision sddd:dddd.getSubdivision())
 							tb.add(ch, tl.getNumber(), tl.getAtt1(), tl.getAtt2(), tl.getRoom(),
-									dddd.getName(), sddd.getName(),
-									sddd.getCode(), tl.getAdsl().getName());
+									tl.getDepartment().getName(), tl.getSubdivision().getName(),
+									tl.getSubdivision().getCode(), tl.getAdsl().getName());
 				} else
 					break;
 			}
@@ -1066,12 +1078,18 @@ public class GreetingController {
     	//Создадим новый отдел
     	Department department = new Department();
     	department.setName(cdo.getDepartmentName());
+    	departmentRepository.save(department);
+    	
     	//Сопоставим отдел с подразделениями
     	for(int i = 0; i < cdo.getSubdivisionName().length; i++) {
-    		Subdivision sd = subdivisionRepository.findObjectByName(cdo.getSubdivisionName()[i]);
-    		department.setSubdivision(sd);
+    		String name = cdo.getSubdivisionName()[i].substring(0, cdo.getSubdivisionName()[i].lastIndexOf("("));
+    		String code = cdo.getSubdivisionName()[i].substring(cdo.getSubdivisionName()[i].indexOf("(") + 1, cdo.getSubdivisionName()[i].lastIndexOf(")"));
+    		Subdivision sd = subdivisionRepository.findObjectByCodeName(name, code);
+    		//department.setSubdivision(sd);
+    		sd.setDepartment(department);
+    		subdivisionRepository.save(sd);
     	}
-    	departmentRepository.save(department);
+    	
     	return "Department created successfully";
     }
     
@@ -1255,9 +1273,242 @@ public class GreetingController {
     	return list;
     }
     
+    
+    @RequestMapping(value = "/kartoteka", method = RequestMethod.DELETE)
+    @ResponseBody
+    /**
+     * Удаление данных
+     * @return статус операции
+     */
+    public String kartotekaDELETE(@RequestBody String param) {
+			Telephone telephone = new Telephone();
+			String hh = param.substring(1, param.length()-1);
+			telephone = telephoneRepository.find_(hh);
+			if(telephone.getIsDel() == false) {
+				telephone.setIsDel(true);
+				telephoneRepository.save(telephone);
+				return " Delete successfull";
+			}
+			else {
+				telephone.setIsDel(false);
+				telephoneRepository.save(telephone);
+				return " Repair successfull";
+			}
+    }
+    
     @RequestMapping(value = "/kartoteka", method = RequestMethod.PUT)
     @ResponseBody
     public String putKartoteka(@RequestBody KartotekaDataObject kdo) {
-    	return "Put success";
+    	//Проверка номера на совпадения в базе
+    	if(telephoneRepository.findCountNumber(kdo.getTelephone()) > 0)
+    		return "Number olraydy exists";
+    	
+    	//Вставим номер в базу
+    	
+    	//Получим объекты subdivision и department на основе данных запроса
+    	//Получим department
+    	Department dep = departmentRepository.findOne(kdo.getDepartmentName());
+    	//Получим параметры name и code из subdivision
+    	String sdName = kdo.getSubdivisionName().substring(0,kdo.getSubdivisionName().indexOf("("));
+    	String sdCode = kdo.getSubdivisionName().substring(kdo.getSubdivisionName().indexOf("(") + 1, kdo.getSubdivisionName().indexOf(")"));
+    	//Получим объект subdivision
+    	Subdivision sd = subdivisionRepository.findObjectByCodeName(sdName, sdCode);
+
+    	//Create security т.к. вынесено в аттрибут не используем
+    	Security secur = new Security();
+    	secur.setNumber_dot(kdo.getAtt2());
+    	securityRepository.save(secur);
+    	
+    	//Создадим объект
+    	Telephone tp = new Telephone();
+    	tp.setNumber(kdo.getTelephone());
+    	tp.setAtt1(kdo.getAtt1());
+    	tp.setAtt2(kdo.getAtt2());
+    	tp.setDepartment(dep);
+    	tp.setSubdivision(sd);
+
+    	//Переделать(векроятно избыточный функционал)
+    	tp.setRoom(kdo.getRoom());
+    	tp.setComments(kdo.getComments());
+    	
+    	tp.setSecurity(secur);
+    	tp.setMiniats(false);
+    	tp.setNote("no");
+    	
+    	Adsl adsl = adslRepository.findOne();
+    	tp.setAdsl(adsl);
+    	
+    	tp.setIntercity("no");
+    	tp.setIsDel(false);
+    	
+    	//Сохраним объект в бд
+    	telephoneRepository.save(tp);
+
+    	//Сохраним объекты кросса
+    	List<Kross> lc1 = new ArrayList<Kross>();
+    	for(int i = 0; i < kdo.getKross().length; i++) {
+    		Kross kross = new Kross();
+    		kross.setName(kdo.getKross()[i]);
+    		kross.setTelephone(tp);
+    		krossRepository.save(kross);
+    		lc1.add(kross);
+    	}
+
+    	return "Insert success";
+    }
+    
+    
+    
+    @RequestMapping(value = "/kartoteka", method = RequestMethod.POST)
+    @ResponseBody
+    public String postKartoteka(@RequestBody KartotekaDataObject kdo) {
+    	//Проверка номера на совпадения в базе
+    	if(telephoneRepository.findCountNumber(kdo.getTelephone()) > 0)
+    		return "Number olraydy exists";
+    	
+    	//Изменим запись о номере в базе
+    	
+    	//Получим объекты subdivision и department на основе данных запроса
+    	//Получим department
+    	Department dep = departmentRepository.findOne(kdo.getDepartmentName());
+    	//Получим параметры name и code из subdivision
+    	String sdName = kdo.getSubdivisionName().substring(0,kdo.getSubdivisionName().indexOf("("));
+    	String sdCode = kdo.getSubdivisionName().substring(kdo.getSubdivisionName().indexOf("(") + 1, kdo.getSubdivisionName().indexOf(")"));
+    	//Получим объект subdivision
+    	Subdivision sd = subdivisionRepository.findObjectByCodeName(sdName, sdCode);
+
+    	
+    	//Проверим есть ли такая запись security
+    	if(securityRepository.findCountRep(kdo.getAtt2())>0)
+    		!!!!Модифицируем
+    	//Если нету создаём
+    	//Create security т.к. вынесено в аттрибут не используем
+    	Security secur = new Security();
+    	secur.setNumber_dot(kdo.getAtt2());
+    	securityRepository.save(secur);
+    	
+    	//Создадим объект
+    	Telephone tp = new Telephone();
+    	tp.setNumber(kdo.getTelephone());
+    	tp.setAtt1(kdo.getAtt1());
+    	tp.setAtt2(kdo.getAtt2());
+    	tp.setDepartment(dep);
+    	tp.setSubdivision(sd);
+
+    	//Переделать(векроятно избыточный функционал)
+    	tp.setRoom(kdo.getRoom());
+    	tp.setComments(kdo.getComments());
+    	
+    	tp.setSecurity(secur);
+    	tp.setMiniats(false);
+    	tp.setNote("no");
+    	
+    	Adsl adsl = adslRepository.findOne();
+    	tp.setAdsl(adsl);
+    	
+    	tp.setIntercity("no");
+    	tp.setIsDel(false);
+    	
+    	//Сохраним объект в бд
+    	telephoneRepository.save(tp);
+
+    	//Сохраним объекты кросса
+    	List<Kross> lc1 = new ArrayList<Kross>();
+    	for(int i = 0; i < kdo.getKross().length; i++) {
+    		Kross kross = new Kross();
+    		kross.setName(kdo.getKross()[i]);
+    		kross.setTelephone(tp);
+    		krossRepository.save(kross);
+    		lc1.add(kross);
+    	}
+
+    	return "Insert success";
+    }
+    
+    
+    
+    
+    @RequestMapping(value = "/Select2kartotekaList_subdivisionModify", method = RequestMethod.GET)
+    @ResponseBody
+    /**
+	 * Наполнение поля выбора подразделения
+	 * @param name наименования отделов
+	 * @return данны в виде ('подразделение(код)')
+	 */
+    public List<DataListSelect2> select2KartotekaListSubdivisionModify(@RequestParam(value = "telephone", required = false, defaultValue = "") String telephone) {
+    	//Department dep = subdivisionRepository.findDepListFromTelephone(telephone);//Получим отдела подразделения по номеру телефона
+    	String dep = telephoneRepository.findDepartmentName(telephone);
+    	String[][] sName = telephoneRepository.findSubdivisionCodeName(telephone);//Получим наименование подразделения по номеру телефона
+    	String[][] arr = subdivisionRepository.findAllCodeName(dep);//Выберем все наименования и коды подразделений
+    	//Структура данных содержащая информацию из выпадающего списка
+    	List<DataListSelect2> list = new ArrayList<DataListSelect2>();
+    	//Заполним данными список
+    	int chId = 0;//Счётчик для заполнения id
+    	for(int i = 0; i< arr.length; i++) {
+    		DataListSelect2 dl = new DataListSelect2();
+    		dl.setId(chId); chId++;
+    		dl.setText(arr[i][0]  + "(" + arr[i][1] + ")");
+    		if(arr[i][0].equals(sName[0][0]) && arr[i][1].equals(sName[0][1]))
+    			dl.setSelected(true);
+    		else
+    			dl.setSelected(false);
+    		list.add(dl);
+    	}
+		return list;
+		
+    }
+    
+    @RequestMapping(value = "/Select2kartotekaList_departmentModify", method = RequestMethod.GET)
+    @ResponseBody
+    /**
+	 * Наполнение поля выбора отдела
+	 * @param name наименования отделов
+	 * @return данны в виде ('подразделение(код)')
+	 */
+    public List<DataListSelect2> select2KartotekaListDepartmentModify(@RequestParam(value = "telephone", required = false, defaultValue = "") String number) {
+    	//List<String> departmentList = departmentRepository.findAllDep(name);//Выберем все наименования и коды подразделений
+    	List<String> departmentList = departmentRepository.findAllDepartment();//Выберем все наименования и коды подразделений
+    	
+    	//Получим подразделение связанное с номером
+    	String name = telephoneRepository.findDepartmentName(number);
+    	
+    	//Подготовим данные для передачи
+    	List<DataListSelect2> list = new ArrayList<DataListSelect2>();
+    	for(int i = 0; i < departmentList.size(); i++) {
+    		DataListSelect2 ds2 = new DataListSelect2();
+    		ds2.setId(i);
+    		ds2.setText(departmentList.get(i));
+    		if(departmentList.get(i).equals(name))
+    			ds2.setSelected(true);
+    		else
+    			ds2.setSelected(false);
+    		list.add(ds2);
+		}
+    	return list;
+    }
+    
+    @RequestMapping(value = "/Select2kartotekaListModify", method = RequestMethod.GET)
+    @ResponseBody
+    /**
+     * Сохранение
+     * @param number номер телефона
+     * @return объект телефона
+     */
+    public KartotekaDataObject s2kdm(@RequestParam(value = "number", required = false, defaultValue = "") String number) {
+    	KartotekaDataObject kdo = new KartotekaDataObject();
+    	
+    	Telephone telephone = telephoneRepository.find_(number);
+    	
+    	kdo.setTelephone(telephone.getNumber());
+    	kdo.setAtt1(telephone.getAtt1());
+    	kdo.setAtt2(telephone.getAtt2());
+    	
+    	String[] kross = krossRepository.findCrossByTelephone(number);
+    	kdo.setKross(kross);
+    	
+    	kdo.setComments(telephone.getComments());
+    	kdo.setRoom(telephone.getComments());
+    	
+    	return kdo;
     }
 }

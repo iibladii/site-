@@ -16,5 +16,8 @@ public interface AdslRepository extends CrudRepository<Adsl, Long> {
 	
 	@Query(value = "select count(a) from Adsl a WHERE a.name like :name")
     Integer findAllcount(@Param("name") String name);
+
+	@Query(value = "select a from Adsl a")
+    Adsl findOne();
 }
 //https://docs.spring.io/spring-data/jpa/docs/current/reference/html/

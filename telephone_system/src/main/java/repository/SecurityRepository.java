@@ -12,4 +12,6 @@ import controllers.Security;
 
 public interface SecurityRepository extends CrudRepository<Security, Long> {
 
+	@Query(value = "SELECT count(s) FROM Security s WHERE s.name like :name")
+	public Integer findCountRep(@Param("name") String name);
 }

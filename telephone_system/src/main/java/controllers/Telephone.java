@@ -30,15 +30,25 @@ public class Telephone {
     
     private Boolean miniats;
     
+    private Boolean isDel;
+    
     private String note;
     
     private String number;
  
+    private String comments;
+    
     @ManyToOne
     private Adsl adsl;
-
+    
     @OneToMany(mappedBy="telephone")
-    private List<Department> department;
+    private List<Kross> kross;
+
+    @OneToOne
+    private Department department;
+    
+    @OneToOne
+    private Subdivision subdivision;
     
     @ManyToOne
     private Security security;
@@ -91,6 +101,14 @@ public class Telephone {
 		this.miniats = miniats;
 	}
 		
+	public Boolean getIsDel() {
+		return isDel;
+	}
+
+	public void setIsDel(Boolean isDel) {
+		this.isDel = isDel;
+	}
+	
 	public String getNote() {
 		return note;
 	}
@@ -111,17 +129,49 @@ public class Telephone {
 		return adsl;
 	}
     
+	public void setAdsl(Adsl adsl) {
+		this.adsl = adsl;
+	}
+	
 	public Security getSecurity() {
 		return security;
 	}
 	
-	public List<Department> getDepartment() {
+	public void setSecurity(Security sec) {
+		this.security = sec;
+	}
+	
+	public Department getDepartment() {
 		return department;
 	}
 	
-	public void setDepartment(Department sd) {
-		this.department.add(sd);
+	public void setDepartment(Department d) {
+		this.department = d;
 	}
 	
+	public Subdivision getSubdivision() {
+		return subdivision;
+	}
+	
+	public void setSubdivision(Subdivision s) {
+		this.subdivision = s;
+	}
+	
+	public List<Kross> getCross() {
+		return kross;
+	}
+	
+	public void setCross(List<Kross> kross) {
+		//kross.stream().forEach((x)->{x.setId();});
+		this.kross = kross;
+	}
+	
+	public String getComments() {
+		return comments;
+	}
+	
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
 }
 

@@ -16,6 +16,8 @@ head.innerHTML = ''+
 '&nbsp;'+
 '<input id="subdivision_code" type="text" size="17" placeholder="Код подразделения"></input>'+
 '&nbsp;'+
+'<input id="kross_selem" type="text" size="17" placeholder="Элемент кросса"></input>'+
+'&nbsp;'+
 //'<input id="adsl" type="text" size="15" placeholder="ADSL"></input>'+
 //'&nbsp;'+
 '<button class="page-p" id="poisk" style="cursor:pointer"><img src="styles/kartoteka/img/poisk.png" style="vertical-align: middle"></img>Применить</button>';

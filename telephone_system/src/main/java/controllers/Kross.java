@@ -11,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
@@ -24,19 +23,14 @@ import javax.persistence.Table;
 import org.hibernate.annotations.NamedQuery;
 
 @Entity
-public class Subdivision {
+public class Kross {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
 
     private String name;
-
-    private String code;
-
-    @ManyToOne
-    private Department department;
     
-    @OneToOne
+    @ManyToOne
     private Telephone telephone;
     
 	public Integer getId() {
@@ -46,29 +40,13 @@ public class Subdivision {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
+	
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-	
-	public Department getDepartment() {
-		return department;
-	}
-
-	public void setDepartment(Department department) {
-		this.department = department;
 	}
 	
 	public Telephone getTelephone() {
