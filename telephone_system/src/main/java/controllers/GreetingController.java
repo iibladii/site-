@@ -101,6 +101,13 @@ public class GreetingController {
 	private DotsRepository dotsRepository;
 
 	@Secured(value = { "ROLE_ADMIN" })
+	@RequestMapping(value = "/GetTest", method = RequestMethod.GET)	
+	public String GetTest() {
+		return "Success";
+	}
+	
+	
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/greeting", method = RequestMethod.GET)
 	/**
 	 * Тестовый метод(del)

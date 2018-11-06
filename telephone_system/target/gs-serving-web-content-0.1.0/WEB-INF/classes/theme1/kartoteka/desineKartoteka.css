@@ -1,0 +1,111 @@
+		#header {
+			font-size: 1.4em; /* Размер текста */
+			text-align: right;
+			/*width: 100%;  Ширина */
+			background: #fff; /* Цвет фона */
+				-moz-box-sizing: border-box; /* Для Firefox */
+				-webkit-box-sizing: border-box; /* Для Safari и Chrome */
+			box-sizing: border-box; /* Для IE и Opera */
+			margin-right: 155px;
+			background: #c7b39b;
+			height: 30;	
+		}
+		#content {
+			width: 100%; /* Ширина */
+			background: #fc0; /* Цвет фона */
+				-moz-box-sizing: border-box; /* Для Firefox */
+				-webkit-box-sizing: border-box; /* Для Safari и Chrome */
+			box-sizing: border-box; /* Для IE и Opera */
+			margin-left: 0px;
+		}
+		#splitter {
+			text-align: centr; /* Выравнивание по центру */
+			width: 100%; /* Ширина */
+			background: #fff; /* Цвет фона */
+				-moz-box-sizing: border-box; /* Для Firefox */
+				-webkit-box-sizing: border-box; /* Для Safari и Chrome */
+			box-sizing: border-box; /* Для IE и Opera */
+			margin-left: 0px;
+			height: 5px;
+		}
+		#menu {
+			text-align: left; /* Выравнивание по центру */
+			width: 100%; /* Ширина */
+			background: #fff; /* Цвет фона */
+				-moz-box-sizing: border-box; /* Для Firefox */
+				-webkit-box-sizing: border-box; /* Для Safari и Chrome */
+			box-sizing: border-box; /* Для IE и Opera */
+			margin-left: 0px;
+			height: 35px;
+			min-width: 600px;
+		}
+		#menu_knopki {
+			text-align: left; /* Выравнивание по центру */
+			width: 100%; /* Ширина */
+			background: #fff; /* Цвет фона */
+				-moz-box-sizing: border-box; /* Для Firefox */
+				-webkit-box-sizing: border-box; /* Для Safari и Chrome */
+			box-sizing: border-box; /* Для IE и Opera */
+			margin-left: 0px;
+			height: 30px;
+		}
+		#filtr {
+			text-align: left; /* Выравнивание по центру */
+			width: 100%; /* Ширина */
+			background: #fff; /* Цвет фона */
+				-moz-box-sizing: border-box; /* Для Firefox */
+				-webkit-box-sizing: border-box; /* Для Safari и Chrome */
+			box-sizing: border-box; /* Для IE и Opera */
+			margin-left: 0px;
+			height: 86px;
+			border: 4px double black; /* Параметры границы */
+			/*padding: 10px;  Поля вокруг текста */
+			margin:0;
+			padding:0;
+			min-width: 1245px;
+		}
+		#spisok {
+			/*text-align: left;  Выравнивание по центру */
+			width: 100%; /* Ширина */
+			background: #fff; /* Цвет фона */
+				-moz-box-sizing: border-box; /* Для Firefox */
+				-webkit-box-sizing: border-box; /* Для Safari и Chrome */
+			box-sizing: border-box; /* Для IE и Opera */
+			margin-left: 0px;
+			border: 4px double black; /* Параметры границы */
+			/*padding: 10px;  Поля вокруг текста */
+			margin:0;
+			padding:0;
+		}
+		#filtr_zagolovok {
+			text-align: left; /* Выравнивание по центру */
+			width: 100%; /* Ширина */
+			background: #fff; /* Цвет фона */
+				-moz-box-sizing: border-box; /* Для Firefox */
+				-webkit-box-sizing: border-box; /* Для Safari и Chrome */
+			box-sizing: border-box; /* Для IE и Opera */
+			margin-left: 0px;
+			height: 35px;
+			border-bottom: 1px solid black; /* Параметры границы */
+			padding: 10px; /* Поля вокруг текста */
+		}
+		#chisloStranic_i_perecluchenie {
+			text-align: left; /* Выравнивание по центру */
+			width: 100%; /* Ширина */
+			background: #fff; /* Цвет фона */
+				-moz-box-sizing: border-box; /* Для Firefox */
+				-webkit-box-sizing: border-box; /* Для Safari и Chrome */
+			box-sizing: border-box; /* Для IE и Opera */
+			margin-left: 0px;
+			height: 35px;
+			border-bottom: 1px solid black; /* Параметры границы */
+			/*padding: 10px;  Поля вокруг текста */
+			margin:0px;
+			/*padding:0;*/
+		}
+		body {
+			font: 10pt Arial, Helvetica, sans-serif; /* Шрифт на веб-странице */
+			background: #c7b39b; /* Цвет фона и путь к файлу */
+			margin:0;
+			padding:0;
+		}
