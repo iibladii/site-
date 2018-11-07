@@ -99,9 +99,10 @@ public class GreetingController {
 	private User_roleRepository user_roleRepository;
 	@Autowired
 	private DotsRepository dotsRepository;
-
+	
 	@Secured(value = { "ROLE_ADMIN" })
-	@RequestMapping(value = "/GetTest", method = RequestMethod.GET)	
+	@RequestMapping(value = "/GetTest", method = RequestMethod.GET)
+	@ResponseBody
 	public String GetTest() {
 		return "Success";
 	}
@@ -120,7 +121,7 @@ public class GreetingController {
 		model.addAttribute("name", name);
 		return "greeting";
 	}
-	
+	@Secured(value = { "ROLE_ADMIN" })
 	@ResponseBody
 	@RequestMapping(value = "/load_data")
 	/**
@@ -167,6 +168,7 @@ public class GreetingController {
 		return response;
 	}
 	
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/kartoteka", method = RequestMethod.GET)
 	/**
 	 * Страница картотека
@@ -179,6 +181,7 @@ public class GreetingController {
 		return "kartoteka";
 	}
 	
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/subdivision", method = RequestMethod.GET)
 	/**
 	 * Страница подразделение
@@ -191,6 +194,7 @@ public class GreetingController {
 		return "subdivision";
 	}
 
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/ajax/getRole", method = RequestMethod.GET)
 	@ResponseBody
 	/**
@@ -248,8 +252,9 @@ public class GreetingController {
 		}
 	}
 
-		@ResponseBody
+		@Secured(value = { "ROLE_ADMIN" })
 		@RequestMapping(value = "/ajax/errorCable_info")
+		@ResponseBody
 		/**
 		 * Получение информации об аварийных кабелях
 		 * @param name наименование кабеля
@@ -278,8 +283,9 @@ public class GreetingController {
 			return adsl_view;
 		}
 	
-		@ResponseBody
+		@Secured(value = { "ROLE_ADMIN" })
 		@RequestMapping(value = "/errorCable/errorCable_del")
+		@ResponseBody
 		/**
 		 * Получение списка аварийных точек кабеля
 		 * @param name наименование кабеля
@@ -298,8 +304,9 @@ public class GreetingController {
 				return "Delete success";
 		}
 		
-		@ResponseBody
+		@Secured(value = { "ROLE_ADMIN" })
 		@RequestMapping(value = "/errorCable/errorCable_update")
+		@ResponseBody
 		public String get_errorCable_update(@RequestParam(value = "name") String name,
 				@RequestParam(value = "oldName") String oldName) {
 			//Обновим данные
@@ -318,8 +325,9 @@ public class GreetingController {
 			}
 		}
 		
-		@ResponseBody
+		@Secured(value = { "ROLE_ADMIN" })
 		@RequestMapping(value = "/errorCable/errorCable_create")
+		@ResponseBody
 		public String get_errorCable_create(@RequestParam(value = "name") String adsl) {
 			if(errorCableRepository.findAllcount(adsl)>0) {
 	        	return "entry more then zero";
@@ -332,8 +340,9 @@ public class GreetingController {
 			return "success";
 		}
 		
-		@ResponseBody
+		@Secured(value = { "ROLE_ADMIN" })	
 		@RequestMapping(value = "/subdivision/subdivision_info")
+		@ResponseBody
 		/**
 		 * Получение данных о подразделениях
 		 * @param name наименование
@@ -364,8 +373,9 @@ public class GreetingController {
 			return adsl_view;
 		}
 	
-		@ResponseBody
+		@Secured(value = { "ROLE_ADMIN" })
 		@RequestMapping(value = "/subdivision/department_del")
+		@ResponseBody
 		/**
 		 * Удаление подразделения
 		 * @param name Наименование подразделения(Уникальное значение)
@@ -384,8 +394,9 @@ public class GreetingController {
 				return "Delete success";
 		}
 		
-		@ResponseBody
+		@Secured(value = { "ROLE_ADMIN" })
 		@RequestMapping(value = "/subdivision/department_update")
+		@ResponseBody
 		public String department_update(@RequestParam(value = "name") String name,
 				@RequestParam(value = "oldName") String oldName) {
 			//Обновим данные
@@ -404,8 +415,9 @@ public class GreetingController {
 			}
 		}
 		
-		@ResponseBody
+		@Secured(value = { "ROLE_ADMIN" })
 		@RequestMapping(value = "/subdivision/subdivision_del")
+		@ResponseBody
 		/**
 		 * Удаление подразделения
 		 * @param name Наименование подразделения(Уникальное значение)
@@ -424,8 +436,9 @@ public class GreetingController {
 				return "Delete success";
 		}
 		
-		@ResponseBody
+		@Secured(value = { "ROLE_ADMIN" })
 		@RequestMapping(value = "/subdivision/subdivision_update")
+		@ResponseBody
 		/**
 		 * Иззменение наименования подразделения
 		 * @param name название подразделения
@@ -452,8 +465,9 @@ public class GreetingController {
 			}
 		}
 		
-		@ResponseBody
+		@Secured(value = { "ROLE_ADMIN" })
 		@RequestMapping(value = "/subdivision/subdivision_create")
+		@ResponseBody
 		public String get_department_create(@RequestParam(value = "name") String name, @RequestParam(value = "code") String code) {
 			if(subdivisionRepository.findAllcount(name)>0) {
 	        	return "entry more then zero";
@@ -467,8 +481,9 @@ public class GreetingController {
 			return "success";
 		}
 		
-	@ResponseBody
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/ajax/adsl_info")
+	@ResponseBody
 	/**
 	 * Информация об ADSL
 	 * @param name
@@ -499,8 +514,9 @@ public class GreetingController {
 		return adsl_view;
 	}
 
-	@ResponseBody
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/adsl/adsl_update")
+	@ResponseBody
 	/**
 	 * Обновление записей об ADSL
 	 * @param name наименование ADSL(Все записи уникальны)
@@ -526,8 +542,9 @@ public class GreetingController {
 	}
 	
 	
-	@ResponseBody
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/adsl/adsl_create", method=RequestMethod.POST)
+	@ResponseBody
 	/**
 	 * Создание новой записи ADSL
 	 * @param adsl наименование ADSL
@@ -540,8 +557,9 @@ public class GreetingController {
 		return "success";
 	}
 	
-	@ResponseBody
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/adsl/adsl_del")
+	@ResponseBody
 	/**
 	 * Удаление записи ADSL
 	 * @param name наименование записи
@@ -560,8 +578,9 @@ public class GreetingController {
 			return "Delete success";
 	}
 	
-	@ResponseBody
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/ajax/kartoteka_create")
+	@ResponseBody
 	/**
 	 * Создание новой записи
 	 * @param number Телефонный номер
@@ -639,6 +658,7 @@ public class GreetingController {
 		return "success";
 	}
 	
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/errorCable")
 	/**
 	 * Страница с записияи об авариях
@@ -648,6 +668,7 @@ public class GreetingController {
 		return "errorCable";
 	}
 	
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/adsl")
 	/**
 	 * Страница ADSL
@@ -657,8 +678,9 @@ public class GreetingController {
 		return "adsl";
 	}
 	
-	@ResponseBody
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/ajax/adsl_create")
+	@ResponseBody
 	/**
 	 * Создание новой записи ADSL
 	 * @param adsl
@@ -676,6 +698,7 @@ public class GreetingController {
 		return "success";
 	}
 	
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/getUserNameRole", method = RequestMethod.GET)
 	@ResponseBody
 	/**
@@ -691,6 +714,7 @@ public class GreetingController {
 		return sw;
 	}
 
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/getUsers", method = RequestMethod.GET)
 	@ResponseBody
 	/**
@@ -707,16 +731,19 @@ public class GreetingController {
 		}
 		return unr;
 	}
-
+	
+	@Secured(value = { "ROLE_ADMIN" })
+	@RequestMapping(value = "/test")
+	@ResponseBody
 	/**
 	 * Тест соединения
 	 * @return test OK
 	 */
-	@RequestMapping(value = "/test")
 	public String test() {
 		return "test OK";
 	}
 
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/ajaxtest", method = RequestMethod.GET)
 	@ResponseBody
 	/**
@@ -783,8 +810,9 @@ public class GreetingController {
 		return tb;
 	}
 
-	@ResponseBody
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/subdivision/get_dataList")
+	@ResponseBody
 	/**
 	 * Получение списка подразделений
 	 * @return Список подразделений
@@ -806,8 +834,9 @@ public class GreetingController {
 		//return cs2;
 	}
 	
-	@ResponseBody
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/subdivision/get_dataListJson")
+	@ResponseBody
 	/**
 	 * Получение списка подразделений в формате Json
 	 * @param search наименование подразделения
@@ -854,8 +883,9 @@ public class GreetingController {
 	    return new ResponseEntity<String>(cs2,responseHeaders, HttpStatus.OK);
 	}
 	
-	@ResponseBody
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/cooperators/update")
+	@ResponseBody
 	/**
 	 * Получение списка подразделений
 	 * @return Список подразделений
@@ -873,6 +903,7 @@ public class GreetingController {
 	}
 
 	//Удалить!! restful manual https://devcolibri.com/rest-%D0%BD%D0%B0-%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D0%B5-spring-mvc/
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/cooperators", method = RequestMethod.GET)
 	/**
 	 * Страница сотрудники
@@ -883,6 +914,7 @@ public class GreetingController {
 		return "cooperators";
 	}
 	
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/cooperators", method = RequestMethod.POST)
     @ResponseBody
     /**
@@ -960,6 +992,7 @@ public class GreetingController {
         return "Data change completed successfully.";
     }
 	
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/cooperators", method = RequestMethod.PUT)
     @ResponseBody
     /**
@@ -999,6 +1032,7 @@ public class GreetingController {
 		return "User with this login already exists";
     }
 	
+	@Secured(value = { "ROLE_ADMIN" })
 	@RequestMapping(value = "/cooperators", method = RequestMethod.DELETE)
     @ResponseBody
     /**
@@ -1021,6 +1055,7 @@ public class GreetingController {
         return "Delete successfull";
     }
     
+	@Secured(value = { "ROLE_ADMIN" })
     @RequestMapping(value = "/roleList", method = RequestMethod.GET)
     @ResponseBody
 	/**
@@ -1034,7 +1069,7 @@ public class GreetingController {
 	}
     
     
-    
+	@Secured(value = { "ROLE_ADMIN" })
     @RequestMapping(value = "/department", method = RequestMethod.GET)
 	/**
 	 * Страница отдел
@@ -1044,6 +1079,7 @@ public class GreetingController {
 		return "department";
 	}
     
+	@Secured(value = { "ROLE_ADMIN" })
     @RequestMapping(value = "/departmentList", method = RequestMethod.GET)
     @ResponseBody
 	/**
@@ -1072,6 +1108,7 @@ public class GreetingController {
 		return di;
 	}
     
+	@Secured(value = { "ROLE_ADMIN" })
     @RequestMapping(value = "/departmentList", method = RequestMethod.PUT)
     @ResponseBody
     /**
@@ -1100,6 +1137,7 @@ public class GreetingController {
     	return "Department created successfully";
     }
     
+	@Secured(value = { "ROLE_ADMIN" })
     @RequestMapping(value = "/getSubdivisionList", method = RequestMethod.GET)
     @ResponseBody
 	/**
@@ -1153,6 +1191,7 @@ public class GreetingController {
 	}
     
     
+	@Secured(value = { "ROLE_ADMIN" })
     @RequestMapping(value = "/departmentList", method = RequestMethod.POST)
     @ResponseBody
     /**
@@ -1214,6 +1253,7 @@ public class GreetingController {
         return "Data change completed successfully.";
     }
     
+	@Secured(value = { "ROLE_ADMIN" })
     @RequestMapping(value = "/departmentList", method = RequestMethod.DELETE)
     @ResponseBody
     /**
@@ -1236,6 +1276,7 @@ public class GreetingController {
     	
     }*/
     
+	@Secured(value = { "ROLE_ADMIN" })
     @RequestMapping(value = "/Select2kartotekaList_subdivision", method = RequestMethod.GET)
     @ResponseBody
     /**
@@ -1259,6 +1300,7 @@ public class GreetingController {
 		return list;
     }
     
+	@Secured(value = { "ROLE_ADMIN" })
     @RequestMapping(value = "/Select2kartotekaList_department", method = RequestMethod.GET)
     @ResponseBody
     /**
@@ -1280,7 +1322,7 @@ public class GreetingController {
     	return list;
     }
     
-    
+	@Secured(value = { "ROLE_ADMIN" })
     @RequestMapping(value = "/kartoteka", method = RequestMethod.DELETE)
     @ResponseBody
     /**
@@ -1303,6 +1345,7 @@ public class GreetingController {
 			}
     }
     
+	@Secured(value = { "ROLE_ADMIN" })
     @RequestMapping(value = "/kartoteka", method = RequestMethod.PUT)
     @ResponseBody
     public String putKartoteka(@RequestBody KartotekaDataObject kdo) {
@@ -1365,7 +1408,7 @@ public class GreetingController {
     }
     
     
-    
+	@Secured(value = { "ROLE_ADMIN" })
     @RequestMapping(value = "/kartoteka", method = RequestMethod.POST)
     @ResponseBody
     public String postKartoteka(@RequestBody KartotekaDataObject kdo) {
@@ -1450,9 +1493,7 @@ public class GreetingController {
     	return "Insert success";
     }
     
-    
-    
-    
+	@Secured(value = { "ROLE_ADMIN" })
     @RequestMapping(value = "/Select2kartotekaList_subdivisionModify", method = RequestMethod.GET)
     @ResponseBody
     /**
@@ -1483,6 +1524,7 @@ public class GreetingController {
 		
     }
     
+	@Secured(value = { "ROLE_ADMIN" })
     @RequestMapping(value = "/Select2kartotekaList_departmentModify", method = RequestMethod.GET)
     @ResponseBody
     /**
@@ -1512,6 +1554,7 @@ public class GreetingController {
     	return list;
     }
     
+	@Secured(value = { "ROLE_ADMIN" })
     @RequestMapping(value = "/Select2kartotekaListModify", method = RequestMethod.GET)
     @ResponseBody
     /**

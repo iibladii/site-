@@ -1,7 +1,7 @@
 var flag=0;//Если 0-Режим просмотра 1-режим удаления
 var zap="";//Выделенная запись в таблице ADSL
 var page=1;//Текущая страница
-
+var mainURL;//URL
 function UNblockInput(){
 	$('#save').prop("disabled", false);//Разблокируем кнопку
 	$('#UserInfo input').prop("disabled", false);//Разблокируем
@@ -18,7 +18,7 @@ function blockInput(){
 function loadADSLTable(elem){
         $.ajax({
             type: 'GET',
-            url:  '/departmentList?page=' + elem + '&sizePage=20&name=' + encodeURIComponent(document.getElementById("ads_name_").value),
+            url:  mainURL + '/departmentList?page=' + elem + '&sizePage=20&name=' + encodeURIComponent(document.getElementById("ads_name_").value),
             dataType: 'json',
             async: true,
             success: function(data) {
@@ -73,7 +73,7 @@ function loadADSLTable(elem){
 function loadADSLTableDel(elem){
 	$.ajax({
         type: 'GET',
-        url:  '/departmentList?page=' + elem + '&sizePage=20&name=' + encodeURIComponent(document.getElementById("ads_name_").value),
+        url:  mainURL + '/departmentList?page=' + elem + '&sizePage=20&name=' + encodeURIComponent(document.getElementById("ads_name_").value),
         dataType: 'json',
         async: true,
         success: function(data) {
@@ -117,7 +117,7 @@ function reloadSelect2(str){
 	if(str!='')
 		$.ajax({
 			type: 'GET',
-			url:   '/getSubdivisionList?name='+encodeURIComponent(str),
+			url:   mainURL + '/getSubdivisionList?name='+encodeURIComponent(str),
 			dataType: 'json',
 			async: true,
 			success: function(data) {
@@ -144,7 +144,7 @@ function initSelect2Set(){
 
 	$.ajax({
         type: 'GET',
-        url:   '/getSubdivisionList' ,
+        url:   mainURL + '/getSubdivisionList' ,
         dataType: 'json',
         async: true,
         success: function(result) {
@@ -193,6 +193,16 @@ function loadInfo(str){
 
 //При загрузке документа заполним таблицу
 $(document).ready(function() {
+	
+	//Вычисление поддомена
+	var ch = 0;
+	var ref = window.location.href;
+	var path = window.location.pathname;
+	for(var i = ref.length - 1; i > 0; i--){
+		if(ref[i] == '/') { ch = i; break;}
+	}
+	mainURL = ref.substring(0, ch);
+	
 	loadInfo("");
 	blockInput();
 	loadADSLTable(1);	
@@ -252,7 +262,7 @@ $(document).on('click','#btn',function(){
 			if(param!=''){
 				$.ajax({
 	    			type: 'DELETE',
-	    			url:  '/departmentList',
+	    			url:  mainURL + '/departmentList',
 	    			contentType: 'application/json; charset=utf-8',
 	    			data: JSON.stringify(param),
 	    			dataType: 'json',
@@ -351,7 +361,7 @@ $(document).on("click", ".page-с", function (){
     		};    		
     		$.ajax({
     			type: 'PUT',
-    			url:  '/departmentList',
+    			url:  mainURL + '/departmentList',
     			contentType: 'application/json; charset=utf-8',
     			data: JSON.stringify(DepartmentDataObject),
     			dataType: 'json',
@@ -391,7 +401,7 @@ $(document).on("click", ".page-с", function (){
     		};
     		$.ajax({
     			type: 'POST',
-    			url:  '/departmentList',
+    			url:  mainURL + '/departmentList',
     			contentType: 'application/json; charset=utf-8',
     			data: JSON.stringify(DepartmentDataObject),
     			dataType: 'json',

@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Implementation-Title: gs-serving-web-content
+Implementation-Title: test
 Implementation-Version: 0.1.0
 Built-By: megroup9gmail.com
 Implementation-Vendor-Id: org.springframework

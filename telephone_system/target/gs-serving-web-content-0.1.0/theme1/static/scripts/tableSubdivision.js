@@ -1,7 +1,7 @@
 var flag=0;//Если 0-Режим просмотра 1-режим удаления
 var zap="";//Выделенная запись в таблице ADSL
 var page=1;//Текущая страница
-
+var mainURL;//Поддомен
 function UNblockInput(){
 	$('#save').prop("disabled", false);//Разблокируем кнопку
 	$('#UserInfo input').prop("disabled", false);//Разблокируем
@@ -16,7 +16,7 @@ function blockInput(){
 
 //Отправка запроса на получение данных-> получение результата запровс -> отображение полученных данных
 function loadADSLTable(elem){
-	$.get("/subdivision/subdivision_info?name="+encodeURIComponent(document.getElementById("ads_name_").value)+'&elem='+encodeURIComponent(elem)+"&code="+encodeURIComponent(document.getElementById("subdiv_code_").value),function(data,status){
+	$.get(mainURL + "/subdivision/subdivision_info?name="+encodeURIComponent(document.getElementById("ads_name_").value)+'&elem='+encodeURIComponent(elem)+"&code="+encodeURIComponent(document.getElementById("subdiv_code_").value),function(data,status){
 		var elem2 = document.getElementById("ADSLList");//Таблица
 		var adslList='<table border="1" id="usersTable">'+
 			'<thead>'+
@@ -99,7 +99,7 @@ function loadADSLTable(elem){
 }
 
 function loadADSLTableDel(elem){
-	$.get("/subdivision/subdivision_info?name="+encodeURIComponent(document.getElementById("ads_name_").value)+'&elem='+encodeURIComponent(elem)+"&code="+encodeURIComponent(document.getElementById("subdiv_code_").value),function(data,status){
+	$.get(mainURL + "/subdivision/subdivision_info?name="+encodeURIComponent(document.getElementById("ads_name_").value)+'&elem='+encodeURIComponent(elem)+"&code="+encodeURIComponent(document.getElementById("subdiv_code_").value),function(data,status){
 		var elem2 = document.getElementById("ADSLList");//Таблица
 		var adslList='<table border="1" id="usersTable">'+
 			'<thead>'+	
@@ -202,6 +202,17 @@ function loadInfo(str,code){
 
 //При загрузке документа заполним таблицу
 $(document).ready(function() {
+	//Вычисление поддомена
+	var ch = 0;
+	var ref = window.location.href;
+	var path = window.location.pathname;
+	for(var i = ref.length - 1; i > 0; i--){
+		if(ref[i] == '/') { ch = i; break;}
+	}
+	mainURL = ref.substring(0, ch);
+	
+	
+	
 	loadInfo("","");
 	blockInput();
 	loadADSLTable(1);
@@ -253,7 +264,7 @@ $(document).on('click','#btn',function(){
 			}
 			if(param!=''){
 			//Отправим запрос на удаление
-			$.get("/subdivision/subdivision_del?name=" + encodeURIComponent(param) ,function(data,status){
+			$.get(mainURL + "/subdivision/subdivision_del?name=" + encodeURIComponent(param) ,function(data,status){
 				if (!(status == "success")) {
 		    		  //обработать ошибку
 		    		  alert( status + ': ' + statusText ); // пример вывода: 404: Not Found
@@ -329,7 +340,7 @@ $(document).on("click", ".page-с", function (){
     	var xhr = new XMLHttpRequest();
     	var params = 'name=' + encodeURIComponent(document.getElementById("adsl_Name").value) +
     	  '&oldName=' + encodeURIComponent(zap) ;
-    	xhr.open("GET", '/subdivision/subdivision_update?' + params, false);
+    	xhr.open("GET", mainURL + '/subdivision/subdivision_update?' + params, false);
     	xhr.send();
     	if (xhr.status != 200) {
     		  // обработать ошибку
@@ -386,7 +397,7 @@ $(document).on("click", ".page-с", function (){
     //Обработка кнопки ввод
     $(document).on("click", "#vvod", function() {
     	if(document.getElementById("adsl_").value!=""){
-    		$.get("/subdivision/subdivision_create?name=" + encodeURIComponent(document.getElementById("adsl_").value)+"&code=" + encodeURIComponent(document.getElementById("code_").value),function(data,status){
+    		$.get(mainURL + "/subdivision/subdivision_create?name=" + encodeURIComponent(document.getElementById("adsl_").value)+"&code=" + encodeURIComponent(document.getElementById("code_").value),function(data,status){
     			var resp_vvod = document.getElementById("response_vvod");
     			if(data == "success")
     				//resp_vvod.innerHTML='<p style="color:#005500">Вставка нового подразделения успешно завершена</p>';

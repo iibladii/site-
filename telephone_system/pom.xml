@@ -152,4 +152,6 @@
     </build>
 
     <packaging>war</packaging>
+    <name>test</name>
+    <description>retsdfgfbxc</description>
 </project>

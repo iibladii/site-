@@ -1,6 +1,7 @@
 var flag=0;//Если 0-Режим просмотра 1-режим удаления
 var zap="";//Выделенная запись в таблице ADSL
 var page=1;//Текущая страница
+var mainURL;//URL
 
 function UNblockInput(){
 	$('#save').prop("disabled", false);//Разблокируем кнопку
@@ -15,7 +16,7 @@ function blockInput(){
 }
 
 function loadADSLTable(elem){
-	$.get("/ajax/errorCable_info?name="+encodeURIComponent(document.getElementById("ads_name_").value)+'&elem='+encodeURIComponent(elem),function(data,status){
+	$.get(mainURL + "/ajax/errorCable_info?name="+encodeURIComponent(document.getElementById("ads_name_").value)+'&elem='+encodeURIComponent(elem),function(data,status){
 		var elem2 = document.getElementById("ADSLList");//Таблица
 		var adslList='<table border="1" id="usersTable">'+
 			'<thead>'+
@@ -77,7 +78,7 @@ function loadADSLTable(elem){
 }
 
 function loadADSLTableDel(elem){
-	$.get("/ajax/errorCable_info?name="+encodeURIComponent(document.getElementById("ads_name_").value)+'&elem='+encodeURIComponent(elem),function(data,status){
+	$.get(mainURL + "/ajax/errorCable_info?name="+encodeURIComponent(document.getElementById("ads_name_").value)+'&elem='+encodeURIComponent(elem),function(data,status){
 		var elem2 = document.getElementById("ADSLList");//Таблица
 		var adslList='<table border="1" id="usersTable">'+
 			'<thead>'+
@@ -168,6 +169,16 @@ function loadInfo(str){
 }
 
 $(document).ready(function() {//При загрузке документа заполним таблицу
+	
+	//Вычисление поддомена
+	var ch = 0;
+	var ref = window.location.href;
+	var path = window.location.pathname;
+	for(var i = ref.length - 1; i > 0; i--){
+		if(ref[i] == '/') { ch = i; break;}
+	}
+	mainURL = ref.substring(0, ch);
+	
 	loadInfo("");
 	blockInput();
 	loadADSLTable(1);
@@ -295,7 +306,7 @@ $(document).on("click", ".page-с", function (){
     	var xhr = new XMLHttpRequest();
     	var params = 'name=' + document.getElementById("adsl_Name").value +
     	  '&oldName=' + zap ;
-    	xhr.open("GET", '/errorCable/errorCable_update?' + encodeURIComponent(params), false);
+    	xhr.open("GET", mainURL + '/errorCable/errorCable_update?' + encodeURIComponent(params), false);
     	xhr.send();
     	if (xhr.status != 200) {
     		  // обработать ошибку
@@ -349,7 +360,7 @@ $(document).on("click", ".page-с", function (){
     //Обработка кнопки ввод
     $(document).on("click", "#vvod", function() {
     	if(document.getElementById("adsl_").value!=""){
-    		$.get("/errorCable/errorCable_create?name=" + encodeURIComponent(document.getElementById("adsl_").value),function(data,status){
+    		$.get(mainURL + "/errorCable/errorCable_create?name=" + encodeURIComponent(document.getElementById("adsl_").value),function(data,status){
     			var resp_vvod = document.getElementById("response_vvod");
     			if(data == "success")
     				resp_vvod.innerHTML='<p style="color:#005500">Вставка нового кабеля успешно завершена</p>';

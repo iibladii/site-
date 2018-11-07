@@ -3,12 +3,13 @@ var current_number_button=1;
 var max_number_button=5;
 var isDel = 0;
 var oldNumber;//Номер телефона с которым работаем
+var mainURL;//базовый URL
 //var ts[] = {1,1,1,1,1,1,1,1};//1 - столбец виден, 0 - скрыт
 
 function getDataInitialSync(number, att1, att2, room, department, adsl, subdivision, subdivision_code, page){
 	$.ajax({
         type: 'GET',
-        url: '/ajaxtest?number='+number+"&att1="+att1+"&att2="+att2+"&room="+room+"&department="+department+"&adsl="+adsl+"&subdivision="+subdivision+"&subdivision_code="+subdivision_code+"&page="+page+"&isDel=" + isDel,
+        url: mainURL + '/ajaxtest?number='+number+"&att1="+att1+"&att2="+att2+"&room="+room+"&department="+department+"&adsl="+adsl+"&subdivision="+subdivision+"&subdivision_code="+subdivision_code+"&page="+page+"&isDel=" + isDel,
         dataType: 'json',
         async: false,
         success: function(result) {
@@ -24,7 +25,7 @@ function getDataInitialSync(number, att1, att2, room, department, adsl, subdivis
 function getDataInitial(number, att1, att2, room, department, adsl, subdivision, subdivision_code, page){
 	$.ajax({
         type: 'GET',
-        url: '/ajaxtest?number='+number+"&att1="+att1+"&att2="+att2+"&room="+room+"&department="+department+"&adsl="+adsl+"&subdivision="+subdivision+"&subdivision_code="+subdivision_code+"&page="+page+"&isDel=" + isDel,
+        url: mainURL + '/ajaxtest?number='+number+"&att1="+att1+"&att2="+att2+"&room="+room+"&department="+department+"&adsl="+adsl+"&subdivision="+subdivision+"&subdivision_code="+subdivision_code+"&page="+page+"&isDel=" + isDel,
         dataType: 'json',
         async: true,
         success: function(result) {
@@ -43,7 +44,7 @@ function getdetails(obj) {
 	//alert(param);
 	$.ajax({
 		type: 'DELETE',
-		url:  '/kartoteka',
+		url:  mainURL + '/kartoteka',
 		contentType: 'application/json; charset=utf-8',
 		data: JSON.stringify(param),
 		dataType: 'json',
@@ -153,7 +154,7 @@ $(document).on("click", "#poisk", function() {
 function departmentListInit(){
 	$.ajax({
         type: 'GET',
-        url:   '/Select2kartotekaList_department' ,
+        url:   mainURL + '/Select2kartotekaList_department' ,
         dataType: 'json',
         async: true,
         success: function(result) {
@@ -197,7 +198,7 @@ function departmentListInit(){
     	
 		$.ajax({
 	        type: 'GET',
-	        url:   '/Select2kartotekaList_subdivision?name='+ e.params.data.text,
+	        url:   mainURL + '/Select2kartotekaList_subdivision?name='+ e.params.data.text,
 	        dataType: 'json',
 	        async: true,
 	        success: function(result) {
@@ -249,6 +250,28 @@ $('#DepartmentList_').on('select2:select', function (e) {
 */
 
 $(document).ready(function() {
+	
+	
+	//Выделение поддомена
+	var ch = 0;
+	var ref = window.location.href;
+	var path = window.location.pathname;
+	//console.log(ref);
+	//console.log(path);
+	for(var i = ref.length - 1; i > 0; i--){
+		if(ref[i] == '/') { ch = i; break;}
+	}
+	//console.log(ch);
+	mainURL = ref.substring(0, ch)
+	//console.log(mainURL);
+	
+	
+	
+	
+	
+	
+	//console.log('Поддомен: '  + res[1]);
+	
 	
 	//Инициализация таблицы при открытии страницы
 	getDataInitial('','','','','','','','','');
@@ -367,7 +390,7 @@ $(document).on("click", "#vvod", function() {
 	};
 	$.ajax({
 		type: 'PUT',
-		url:  '/kartoteka',
+		url:  mainURL + '/kartoteka',
 		contentType: 'application/json; charset=utf-8',
 		data: JSON.stringify(KartotekaDataObject),
 		dataType: 'json',
@@ -430,7 +453,7 @@ $(document).on("click", "#_vvod", function() {
 	};
 	$.ajax({
 		type: 'POST',
-		url:  '/kartoteka',
+		url:  mainURL + '/kartoteka',
 		contentType: 'application/json; charset=utf-8',
 		data: JSON.stringify(KartotekaDataObject),
 		dataType: 'json',
@@ -476,7 +499,7 @@ function viewclick(obj){
 		//Получим общие данные
 		$.ajax({
 	        type: 'GET',
-	        url:   '/Select2kartotekaListModify?number='+param ,
+	        url:   mainURL + '/Select2kartotekaListModify?number='+param ,
 	        dataType: 'json',
 	        async: true,
 	        success: function(result) {
@@ -503,7 +526,7 @@ function viewclick(obj){
 		
 		$.ajax({
 	        type: 'GET',
-	        url:   '/Select2kartotekaList_departmentModify?telephone=' + param,
+	        url:   mainURL + '/Select2kartotekaList_departmentModify?telephone=' + param,
 	        dataType: 'json',
 	        async: true,
 	        success: function(result) {
@@ -523,7 +546,7 @@ function viewclick(obj){
 		
 		$.ajax({
 	        type: 'GET',
-	        url:   '/Select2kartotekaList_subdivisionModify?telephone=' + param,
+	        url:   mainURL + '/Select2kartotekaList_subdivisionModify?telephone=' + param,
 	        dataType: 'json',
 	        async: true,
 	        success: function(result) {
