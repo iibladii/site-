@@ -4,7 +4,7 @@ body {
 }*/
 
 table {
-    
+    able-layout: fixed;
     width: 100%;
     margin-bottom: 18px;
     padding: 0;
@@ -38,6 +38,7 @@ table th {
 table td {
     vertical-align: top;
     border-top: 1px solid #ddd;
+    word-wrap:break-word;
 }
 
 table th+th,table td+td,table th+td {

@@ -67,7 +67,7 @@ function createCalendar(id,id1,id2, data) {
 	  var elem2 = document.getElementById(id2);//Кнопки с выбором страницы
 	  
 	  if(isDel == 0){
-		  var table = '<table id="zaptable" class="mytable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Подразделение</th><th>Отдел</th><th>Код отдела</th><th>Местоположение</th><th>Состав кросса</th><th>Удалить</th><th>Просмотр</th></tr></thead><tbody><tr>';
+		  var table = '<table id="zaptable" class="mytable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Подразделение</th><th>Отдел</th><th>Код отдела</th><th>Местоположение</th><th>Состав кросса</th><th></th><th></th></tr></thead><tbody><tr>';
 		  for(var i=0; i < parseInt(data.size); i++){
 			  table += '<td width="10px">'+(i+1)+'</td>';
 			  table += '<td class="number">'+data.number[i]+'</td>';
@@ -85,13 +85,13 @@ function createCalendar(id,id1,id2, data) {
 			  }
 			  table += '</td>';
 			  
-			  table += '<td  width="40px"> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button> </td>';//Удаление записи
-			  table += '<td  width="40px"> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "viewclick(this)"><img src="styles/kartoteka/img/tableView.png" style="vertical-align: middle"></img></button> </td>';//load info
+			  table += '<td  width="20px"> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button> </td>';//Удаление записи
+			  table += '<td  width="20px"> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "viewclick(this)"><img src="styles/kartoteka/img/tableView.png" style="vertical-align: middle"></img></button> </td>';//load info
 			  table += '</tr><tr>';
 	  }
 	  }
 	  else{
-		  var table = '<table id="zaptable" class="mytable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Подразделение</th><th>Отдел</th><th>Код отдела</th><th>Местоположение</th><th>Состав кросса</th><th>Восстановить</th></tr></thead><tbody><tr>';
+		  var table = '<table id="zaptable" class="mytable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Подразделение</th><th>Отдел</th><th>Код отдела</th><th>Местоположение</th><th>Состав кросса</th><th></th></tr></thead><tbody><tr>';
 		  for(var i=0;i < parseInt(data.size); i++){
 			  table += '<td width="10px">'+(i+1)+'</td>';
 			  table += '<td class="number">'+data.number[i]+'</td>';
@@ -111,7 +111,7 @@ function createCalendar(id,id1,id2, data) {
 			  table += '</td>';
 			  
 			  
-			  table += '<td  width="40px"> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableRepair.png" style="vertical-align: middle"></img></button> </td>';//Удаление записи
+			  table += '<td  width="20px"> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableRepair.png" style="vertical-align: middle"></img></button> </td>';//Удаление записи
 			  table += '</tr><tr>';
 		  }
 	  }

@@ -775,7 +775,7 @@ public class GreetingController {
 			@RequestParam(required = false, defaultValue = "1") Integer page,
 			@RequestParam(value="count", defaultValue = "20") Integer count,
 			@RequestParam(value="isDel", defaultValue = "0") Integer isDel,
-			@RequestParam(required = false, defaultValue = "") Integer kross) {
+			@RequestParam(required = false, defaultValue = "") String kross) {
 		
 		List<Telephone> results = new ArrayList<Telephone>();
 		if(isDel==0) {
@@ -807,21 +807,16 @@ public class GreetingController {
 							ArrayList<String> krs = new ArrayList<String>();
 							String[] fkbt = krossRepository.findCrossByTelephone(tl.getNumber());
 							krs.addAll(Arrays.asList(fkbt));
-							/*
-							for(int d =0; d < fkbt.length; d++) {
-								krs.add
-							}*/
-							
 							krossT kr = new krossT(krs);
-					/*
-							ArrayList<String> krs = new ArrayList<String>();
-							krs.add("red");
-							krs.add("bad");
-							krossT kr = new krossT(krs);
-					*/
+							//Среди элементов ищем заданный по условию
+							int ch1 = 0;
+							for(int i = 0; i <fkbt.length; i++) {
+								if(fkbt[i].equals(kross) || kross.equals(""))
+									ch1++;
+							}
 							//////////////////////////////////////////////////////
-							
-							tb.add(ch, tl.getNumber(), tl.getAtt1(), tl.getAtt2(), tl.getRoom(),
+							if(ch1 > 0)//Если элемент найден
+								tb.add(ch, tl.getNumber(), tl.getAtt1(), tl.getAtt2(), tl.getRoom(),
 									tl.getDepartment().getName(), tl.getSubdivision().getName(),
 									tl.getSubdivision().getCode(), tl.getAdsl().getName(), kr);
 				} else
