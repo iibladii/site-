@@ -3,6 +3,9 @@ package tables;
 import java.util.ArrayList;
 
 public class table1 {
+	//Информация о кроссе
+	
+	
     private ArrayList<Integer> id;
     private ArrayList<String> number;
     private ArrayList<String> att1;
@@ -12,8 +15,14 @@ public class table1 {
     private ArrayList<String> subdivision;
     private ArrayList<String> code;
     private ArrayList<String> adsl;
+    
+    
+    private ArrayList<krossT> kross; 
+    
+    
     private Integer page_no;
     private Integer page_count;
+    
     public table1(Integer page_no,Integer page_count) {
     	this.id = new ArrayList<Integer>();
     	this.number = new ArrayList<String>();
@@ -26,6 +35,7 @@ public class table1 {
     	this.adsl = new ArrayList<String>();
     	this.page_no=page_no;
     	this.page_count=page_count;
+    	this.kross = new ArrayList<krossT>();
     }
 
     /**
@@ -40,7 +50,7 @@ public class table1 {
      * @param code код подразделения
      * @param adsl адсл
      */
-    public void add(Integer id,String number,String att1,String att2,String room,String subdivision,String department,String code,String adsl) {
+    public void add(Integer id,String number,String att1,String att2,String room,String subdivision,String department,String code,String adsl, krossT kross) {
     	this.id.add(id);
     	this.number.add(number);
     	this.att1.add(att1);
@@ -50,6 +60,7 @@ public class table1 {
     	this.subdivision.add(subdivision);
     	this.code.add(code);
     	this.adsl.add(adsl);
+    	this.kross.add(kross);
     }
     
     public ArrayList<Integer> getId() {
@@ -98,5 +109,9 @@ public class table1 {
     
     public Integer getPage_count() {
         return page_count;
+    }
+    
+    public ArrayList<krossT> getKross() {
+        return kross;
     }
 }

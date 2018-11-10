@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -73,6 +74,7 @@ import tables.departmentInfo;
 import tables.subdivision;
 import tables.subdivisionSelect2;
 import tables.errorCableInfo;
+import tables.krossT;
 import tables.table1;
 
 @Controller
@@ -772,7 +774,8 @@ public class GreetingController {
 			@RequestParam(required = false, defaultValue = "") String subdivision_code,
 			@RequestParam(required = false, defaultValue = "1") Integer page,
 			@RequestParam(value="count", defaultValue = "20") Integer count,
-			@RequestParam(value="isDel", defaultValue = "0") Integer isDel) {
+			@RequestParam(value="isDel", defaultValue = "0") Integer isDel,
+			@RequestParam(required = false, defaultValue = "") Integer kross) {
 		
 		List<Telephone> results = new ArrayList<Telephone>();
 		if(isDel==0) {
@@ -799,9 +802,28 @@ public class GreetingController {
 			Telephone tl = (Telephone) iterator2.next();
 			if (ch > (page - 1) * count) {
 				if (ch <= (page * count)) {
+					
+							//Поиск элементов кросса//////////////////////////////
+							ArrayList<String> krs = new ArrayList<String>();
+							String[] fkbt = krossRepository.findCrossByTelephone(tl.getNumber());
+							krs.addAll(Arrays.asList(fkbt));
+							/*
+							for(int d =0; d < fkbt.length; d++) {
+								krs.add
+							}*/
+							
+							krossT kr = new krossT(krs);
+					/*
+							ArrayList<String> krs = new ArrayList<String>();
+							krs.add("red");
+							krs.add("bad");
+							krossT kr = new krossT(krs);
+					*/
+							//////////////////////////////////////////////////////
+							
 							tb.add(ch, tl.getNumber(), tl.getAtt1(), tl.getAtt2(), tl.getRoom(),
 									tl.getDepartment().getName(), tl.getSubdivision().getName(),
-									tl.getSubdivision().getCode(), tl.getAdsl().getName());
+									tl.getSubdivision().getCode(), tl.getAdsl().getName(), kr);
 				} else
 					break;
 			}

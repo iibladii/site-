@@ -26,7 +26,7 @@ function loadADSLTable(elem){
         		var adslList='<table border="1" id="usersTable" width="600px">'+
         			'<thead>'+
         				'<tr>'+
-        					'<th>Отдел</th>'+
+        					'<th>Подразделение</th>'+
         				'</tr>'+
         			'</thead>';
         			for(var i=0;i < parseInt(data.name.length); i++){
@@ -81,7 +81,7 @@ function loadADSLTableDel(elem){
     		var adslList='<table border="1" id="usersTable">'+
     			'<thead>'+
     				'<tr>'+
-    					'<th>Отдел</th>'+
+    					'<th>Подразделение</th>'+
     					'<th>&nbsp&nbsp</th>'+
     				'</tr>'+
     			'</thead>';
@@ -170,12 +170,12 @@ function loadInfo(str){
 	'<div>'+
 		'&nbsp;'+
 		'<div>'+
-			'<div>Наименование отдела:</div><br/>'+
+			'<div>Наименование подразделения:</div><br/>'+
 			'<div><input style=" width:400px" type="text" id="adsl_Name" value="'+str+'" readonly="readonly"></input></div>'+
 		'</div>'+
 		'&nbsp;'+
 		'<div>'+
-			'<div">Сопоставленные подразделения:</div><br/>'+
+			'<div">Сопоставленные отделы:</div><br/>'+
 			'<div style=" width:100%" id="selectSubdivision"></div>'+
 			'<br/>'+
 		'</div>'+

@@ -22,11 +22,11 @@ function loadADSLTable(elem){
 			'<thead>'+
 				'<tr>'+
 					'<th id="column-header-1">Код&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
-					'<th id="column-header-2">Подразделение&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
+					'<th id="column-header-2">отдел&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
 				'</tr>'+
 			'</thead>';
 			for(var i=0;i < parseInt(data.roleList.length); i++){
-				if(data.roleList[i]!=zap.toString() && data.codeList[i]!=zap.toString()){
+				if(data.roleList[i]!=zap.toString()){
 					adslList+='<tbody>'+
 					'<tr><td class="info">'+data.codeList[i]+'</td><td class="info">'+data.roleList[i]+'</td></tr>'+
 					'</tbody>';
@@ -105,7 +105,7 @@ function loadADSLTableDel(elem){
 			'<thead>'+	
 				'<tr>'+
 					'<th>Код&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
-					'<th>Подразделение&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
+					'<th>отдел&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
 					'<th>&nbsp&nbsp</th>'+
 				'</tr>'+
 			'</thead>';
@@ -161,16 +161,16 @@ function loadInfo(str,code){
 	
 	
 	elem6.innerHTML=''+
-	'<div>Выбранное подразделение:</div>'+
+	'<div>Выбранное отдел:</div>'+
 	'<div>'+
 		'&nbsp;'+
 		'<div>'+
-			'<div>Код подразделения:</div><br/>'+
+			'<div>Код отдела:</div><br/>'+
 			'<div><input style=" width:400px" type="text" id="c_Name" value="'+code+'"></input></div>'+
 		'</div>'+
 		'&nbsp;'+
 		'<div>'+
-			'<div">Наименование подразделения:</div><br/>'+
+			'<div">Наименование отдела:</div><br/>'+
 			'<div><input style=" width:400px" type="text" id="adsl_Name" value="'+str+'"></input></div>'+
 			'<br/>'+
 		'</div>'+
@@ -180,7 +180,7 @@ function loadInfo(str,code){
 	'</div>';
 	/*
 	elem6.innerHTML=''+
-	'<div>Данные подразделение:</div>'+
+	'<div>Данные отдел:</div>'+
 	'<div>'+
 		'&nbsp;'+
 		'<div>'+
@@ -401,11 +401,11 @@ $(document).on("click", ".page-с", function (){
     			var resp_vvod = document.getElementById("response_vvod");
     			if(data == "success")
     				//resp_vvod.innerHTML='<p style="color:#005500">Вставка нового подразделения успешно завершена</p>';
-    				alert('Вставка нового подразделения успешно завершена');
+    				alert('Вставка нового отдела успешно завершена');
     			else
     				if(data == "entry more then zero")
-    					//resp_vvod.innerHTML='<p style="color:#550000">Такой подразделение уже есть в базе</p>';
-    					alert('Такое подразделение уже есть в базе');
+    					//resp_vvod.innerHTML='<p style="color:#550000">Такой 123деление уже есть в базе</p>';
+    					alert('Такой отдел уже есть в базе');
     				else
     					//resp_vvod.innerHTML='<p style="color:#550000">Ошибка коммуникации</p>';
     					alert('Ошибка коммуникации');

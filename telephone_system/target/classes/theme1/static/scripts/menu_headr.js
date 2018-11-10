@@ -15,8 +15,8 @@ var headr = ''+
 	'<ul>'+
        '<li><a href="' + mainURL + '/kartoteka">Картотека</a></li>'+
        '<li><a href="' + mainURL + '/errorCable">Неисправные пары</a></li>'+
-       '<li><a href="' + mainURL + '/subdivision">Подразделение</a></li>'+
-       '<li><a href="' + mainURL + '/department">Отдел</a></li>'+
+       '<li><a href="' + mainURL + '/subdivision">Отдел</a></li>'+
+       '<li><a href="' + mainURL + '/department">Подразделение</a></li>'+
     '</ul>'+
 '</li>';
 

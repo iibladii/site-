@@ -1,5 +1,6 @@
 var flag=0;//Если 0-Режим просмотра 1-режим удаления
 var zap="";//Выделенная запись
+var mainURL;//Поддомен
 function UNblockInput(){
 	$('#save').prop("disabled", false);//Разблокируем кнопку
 	$('#UserInfo input').prop("disabled", false);//Разблокируем
@@ -14,7 +15,7 @@ function blockInput(){
 
 //Обновление списка пользователей
 function load_table(){
-	$.get("/getUsers",function(data,status){
+	$.get(mainURL + "/getUsers",function(data,status){
 		var elem2 = document.getElementById("UserList");//Таблица
 		var userList='<table border="1" id="usersTable">'+
 			'<thead>'+
@@ -40,6 +41,18 @@ function load_table(){
 }
 
 $(document).ready(function() {//При загрузке документа заполним таблицу
+	
+	//Выделение поддомена
+	var ch = 0;
+	var ref = window.location.href;
+	var path = window.location.pathname;
+	for(var i = ref.length - 1; i > 0; i--){
+		if(ref[i] == '/') { ch = i; break;}
+	}
+	mainURL = ref.substring(0, ch)
+	
+	
+	
 	load_table();
 	
 	var elem6 = document.getElementById("UserInfo");//Таблица
@@ -169,7 +182,7 @@ $(document).on('click','#btn',function(){
 			//Отправим запрос на удаление
 			$.ajax({
     			type: 'DELETE',
-    			url:  '/cooperators',
+    			url:  mainURL + '/cooperators',
     			contentType: 'application/json; charset=utf-8',
     			data: JSON.stringify(param),
     			dataType: 'json',
@@ -209,7 +222,7 @@ $(document).on('click','#btn',function(){
     	if(flag==0){
     	zap=$(this).text();
     	load_table();
-    	$.get("/ajax/getRole?name="+$(this).text()+"",function(data,status){
+    	$.get(mainURL + "/ajax/getRole?name="+$(this).text()+"",function(data,status){
     		var elem1 = document.getElementById("fname");//Имя
     		var elem2 = document.getElementById("sname");//Фамилия
     		var elem3 = document.getElementById("tname");//Отчество
@@ -278,7 +291,7 @@ $(document).on('click','#btn',function(){
 
     		$.ajax({
     			type: 'POST',
-    			url:  '/cooperators',
+    			url:  mainURL + '/cooperators',
     			contentType: 'application/json; charset=utf-8',
     			data: JSON.stringify(CooperatorsDataObject),
     			dataType: 'json',
@@ -333,7 +346,7 @@ $(document).on('click','#btn',function(){
 
     		$.ajax({
     			type: 'PUT',
-    			url:  '/cooperators',
+    			url:  mainURL + '/cooperators',
     			contentType: 'application/json; charset=utf-8',
     			data: JSON.stringify(CooperatorsDataObject),
     			dataType: 'json',

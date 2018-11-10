@@ -6,15 +6,15 @@ var oldNumber;//Номер телефона с которым работаем
 var mainURL;//базовый URL
 //var ts[] = {1,1,1,1,1,1,1,1};//1 - столбец виден, 0 - скрыт
 
-function getDataInitialSync(number, att1, att2, room, department, adsl, subdivision, subdivision_code, page){
+function getDataInitialSync(number, att1, att2, room, department, adsl, subdivision, subdivision_code, page, kross){
 	$.ajax({
         type: 'GET',
-        url: mainURL + '/ajaxtest?number='+number+"&att1="+att1+"&att2="+att2+"&room="+room+"&department="+department+"&adsl="+adsl+"&subdivision="+subdivision+"&subdivision_code="+subdivision_code+"&page="+page+"&isDel=" + isDel,
+        url: mainURL + '/ajaxtest?number='+number+"&att1="+att1+"&att2="+att2+"&room="+room+"&department="+department+"&adsl="+adsl+"&subdivision="+subdivision+"&subdivision_code="+subdivision_code+"&page="+page+"&isDel=" + isDel + "&kross=" + kross,
         dataType: 'json',
         async: false,
         success: function(result) {
   			createCalendar("content","count_elem","button_page", result);
-  			//alert(result);
+  			//console.log(result.kross);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert(jqXHR.status + ' ' + jqXHR.responseText);
@@ -22,15 +22,15 @@ function getDataInitialSync(number, att1, att2, room, department, adsl, subdivis
     });
 }
 
-function getDataInitial(number, att1, att2, room, department, adsl, subdivision, subdivision_code, page){
+function getDataInitial(number, att1, att2, room, department, adsl, subdivision, subdivision_code, page, kross){
 	$.ajax({
         type: 'GET',
-        url: mainURL + '/ajaxtest?number='+number+"&att1="+att1+"&att2="+att2+"&room="+room+"&department="+department+"&adsl="+adsl+"&subdivision="+subdivision+"&subdivision_code="+subdivision_code+"&page="+page+"&isDel=" + isDel,
+        url: mainURL + '/ajaxtest?number='+number+"&att1="+att1+"&att2="+att2+"&room="+room+"&department="+department+"&adsl="+adsl+"&subdivision="+subdivision+"&subdivision_code="+subdivision_code+"&page="+page+"&isDel=" + isDel + "&kross=" + kross,
         dataType: 'json',
         async: true,
         success: function(result) {
   			createCalendar("content","count_elem","button_page", result);
-  			//alert(result);
+  			//console.log(result.kross);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert(jqXHR.status + ' ' + jqXHR.responseText);
@@ -51,11 +51,11 @@ function getdetails(obj) {
 		async: true,
 		success: function(result) {
 			alert('Статус: ' + result);
-			getDataInitial('','','','','','','','','');
+			getDataInitial('','','','','','','','','','');
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
 			alert('Статус: ' + jqXHR.responseText);
-			getDataInitial('','','','','','','','','');
+			getDataInitial('','','','','','','','','','');
 		}
 	});
     //alert(obj.id);
@@ -67,10 +67,9 @@ function createCalendar(id,id1,id2, data) {
 	  var elem2 = document.getElementById(id2);//Кнопки с выбором страницы
 	  
 	  if(isDel == 0){
-		  var table = '<table id="zaptable" class="mytable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Отдел</th><th>Подразделение</th><th>Код подразделения</th><th>Местоположение</th><th>Состав кросса</th><th>Удалить</th><th>Просмотр</th></tr></thead><tbody><tr>';
-		  for(var i=0;i < parseInt(data.size); i++){
-			  table += '<td>'+(i+1)+'</td>';
-			  //if(ts[0] ==)
+		  var table = '<table id="zaptable" class="mytable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Подразделение</th><th>Отдел</th><th>Код отдела</th><th>Местоположение</th><th>Состав кросса</th><th>Удалить</th><th>Просмотр</th></tr></thead><tbody><tr>';
+		  for(var i=0; i < parseInt(data.size); i++){
+			  table += '<td width="10px">'+(i+1)+'</td>';
 			  table += '<td class="number">'+data.number[i]+'</td>';
 			  table += '<td>'+data.att1[i]+'</td>';
 			  table += '<td>'+data.att2[i]+'</td>';
@@ -78,16 +77,23 @@ function createCalendar(id,id1,id2, data) {
 			  table += '<td>'+data.department[i]+'</td>';
 			  table += '<td>'+data.code[i]+'</td>';
 			  table += '<td>'+data.room[i]+'</td>';
-			  table += '<td>'+'none'+'</td>';
-			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button> </td>';//Удаление записи
-			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "viewclick(this)"><img src="styles/kartoteka/img/tableView.png" style="vertical-align: middle"></img></button> </td>';//load info
+			  
+			  table += '<td>';
+			  for(var j = 0; j < parseInt(data.size); j++){
+				  if(j != 0) table += ', ';
+				  table += data.kross[i].kross[j];				  
+			  }
+			  table += '</td>';
+			  
+			  table += '<td  width="40px"> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button> </td>';//Удаление записи
+			  table += '<td  width="40px"> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "viewclick(this)"><img src="styles/kartoteka/img/tableView.png" style="vertical-align: middle"></img></button> </td>';//load info
 			  table += '</tr><tr>';
 	  }
 	  }
 	  else{
-		  var table = '<table id="zaptable" class="mytable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Отдел</th><th>Подразделение</th><th>Код подразделения</th><th>Местоположение</th><th>Состав кросса</th><th>Восстановить</th></tr></thead><tbody><tr>';
+		  var table = '<table id="zaptable" class="mytable"><thead><tr><th>#</th><th>Номер</th><th>Связанные номера</th><th>Охрана</th><th>Подразделение</th><th>Отдел</th><th>Код отдела</th><th>Местоположение</th><th>Состав кросса</th><th>Восстановить</th></tr></thead><tbody><tr>';
 		  for(var i=0;i < parseInt(data.size); i++){
-			  table += '<td>'+(i+1)+'</td>';
+			  table += '<td width="10px">'+(i+1)+'</td>';
 			  table += '<td class="number">'+data.number[i]+'</td>';
 			  table += '<td>'+data.att1[i]+'</td>';
 			  table += '<td>'+data.att2[i]+'</td>';
@@ -95,8 +101,17 @@ function createCalendar(id,id1,id2, data) {
 			  table += '<td>'+data.department[i]+'</td>';
 			  table += '<td>'+data.code[i]+'</td>';
 			  table += '<td>'+data.room[i]+'</td>';
-			  table += '<td>'+'none'+'</td>';
-			  table += '<td> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableRepair.png" style="vertical-align: middle"></img></button> </td>';//Удаление записи
+			  
+			  
+			  table += '<td>';
+			  for(var j = 0; j < parseInt(data.size); j++){
+				  if(j != 0) table += ', ';
+				  table += data.kross[i].kross[j];				  
+			  }
+			  table += '</td>';
+			  
+			  
+			  table += '<td  width="40px"> <button id = "'+data.number[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableRepair.png" style="vertical-align: middle"></img></button> </td>';//Удаление записи
 			  table += '</tr><tr>';
 		  }
 	  }
@@ -126,13 +141,13 @@ function createCalendar(id,id1,id2, data) {
 //Обработка нажатия кнопки корзина
 $(document).on("click", "#kartotekaT", function() {
 	isDel = 1;
-	getDataInitial('','','','','','','','','');
+	getDataInitial('','','','','','','','','','');
 });
 
 //Обработка нажатия кнопки Картотека
 $(document).on("click", "#kartotekaF", function() {
 	isDel = 0;
-	getDataInitial('','','','','','','','','');
+	getDataInitial('','','','','','','','','','');
 });
 
 //Обработка нажатия кнопки фильтр
@@ -147,7 +162,8 @@ $(document).on("click", "#poisk", function() {
 			'',
 			document.getElementById("subdivision").value,
 			document.getElementById("subdivision_code").value,
-			''
+			'',
+			document.getElementById("kross_selem").value
 			);
 });
 
@@ -274,7 +290,7 @@ $(document).ready(function() {
 	
 	
 	//Инициализация таблицы при открытии страницы
-	getDataInitial('','','','','','','','','');
+	getDataInitial('','','','','','','','','','');
 	
 	//Скроем лишние колонки в таблице
 //	viewColumn();
@@ -331,7 +347,8 @@ $(document).ready(function() {
 				'',
 				document.getElementById("subdivision").value,
 				document.getElementById("subdivision_code").value,
-				'1'
+				'1',
+				document.getElementById("kross_selem").value
 				);
 	});
 	
@@ -399,11 +416,11 @@ $(document).on("click", "#vvod", function() {
   			//createCalendar("content","count_elem","button_page", result);
   			alert(result);
   			//Обновление таблицы при открытии страницы
-  			getDataInitial('','','','','','','','','');
+  			getDataInitial('','','','','','','','','','');
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert(jqXHR.status + ' ' + jqXHR.responseText);
-            getDataInitial('','','','','','','','','');
+            getDataInitial('','','','','','','','','','');
         }
     });
 	
@@ -461,11 +478,11 @@ $(document).on("click", "#_vvod", function() {
         success: function(result) {
   			alert(result);
   			//Обновление таблицы при открытии страницы
-  			getDataInitial('','','','','','','','','');
+  			getDataInitial('','','','','','','','','','');
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert(jqXHR.status + ' ' + jqXHR.responseText);
-            getDataInitial('','','','','','','','','');
+            getDataInitial('','','','','','','','','','');
         }
     });
 		
@@ -607,7 +624,7 @@ function viewColumn(){
 //Обработка нажатия кнопки при выборе состава таблицы
 $(document).on("click", "#accept", function() {
 	//Обновим талицу
-	getDataInitialSync('','','','','','','','',document.getElementById("current-page").value);
+	getDataInitialSync('','','','','','','','',document.getElementById("current-page").value,'','');
 	
 });
 
