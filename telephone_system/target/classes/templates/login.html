@@ -1,14 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+	<title>Login</title>
+  	<meta charset="UTF-8"/>
+  	<style>
+		fieldset{
+	  		font-size:1em;
+	  		border: solid 0.1em black;
+	  		position: absolute;
+	  		width: 180px;
+	  		height: 120px;
+	  		left: 50%;
+	  		top: 50%;
+	  		margin-left: -120px;
+	  		margin-top: -80px;
+			background: #c0c0c0;
+		}
+		fieldset legend{
+			padding: 0 1em;
+		}
+  	</style>
+</head>
+<body bgcolor="#c0c0c0">
+	<fieldset>
+		<legend align="left">Вход</legend>
+		<form th:action="@{/login}" method="post">
+			<input id="first-input-1" width="260px" name="username" type="text" placeholder="Логин"/><br/><br/>
+			<input id="second-input-1" width="260px" name="password" type="password" placeholder="Пароль" /><br/><br/>
+			<button type="submit" align="middle">Войти</button>
+		</form>
+	</fieldset>		
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+<!DOCTYPE html>
+<html lang="en">
     <head> 
     <title>Login</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     
-    <!-- Есть вероятность что надо так для apatchTomcat может понадобится-->
-    <!--
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles/bootstrap.min.css"/>
-    -->
     <link rel="shortcut icon" type="image/x-icon" href="styles/static/img/favicon.ico"/>
 
     <link rel="stylesheet" type="text/css" href="styles/static/css/bootstrap.min.css"/>
@@ -16,7 +68,6 @@
     <link rel="stylesheet" type="text/css" href="styles/static/css/prism.css"/>
     <link rel="stylesheet" type="text/css" href="styles/src/foxholder-styles.css"/>
 
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
     <script src="styles/static/scripts/jquery.min.js"></script>
     <script src="styles/static/scripts/bootstrap.min.js"></script>
     <script src="styles/static/scripts/prism.js"></script>
@@ -38,3 +89,4 @@
       </div>
     </body>
 </html>
+-->
