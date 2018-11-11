@@ -21,52 +21,27 @@ function loadADSLTable(elem){
 		var adslList='<table border="1" id="usersTable">'+
 			'<thead>'+
 				'<tr>'+
+					'<th width="20px">#</th>'+
 					'<th id="column-header-1">Код&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
 					'<th id="column-header-2">отдел&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
 				'</tr>'+
 			'</thead>';
 			for(var i=0;i < parseInt(data.roleList.length); i++){
 				if(data.roleList[i]!=zap.toString()){
-					adslList+='<tbody>'+
-					'<tr><td class="info">'+data.codeList[i]+'</td><td class="info">'+data.roleList[i]+'</td></tr>'+
-					'</tbody>';
+					adslList+=
+						'<tbody>'+
+							'<tr><td class="info" width="20px">'+(i+1)+'</td><td class="info">'+data.codeList[i]+'</td><td class="info">'+data.roleList[i]+'</td></tr>'+
+						'</tbody>';
 				}
 				else{
 					loadInfo(data.roleList[i],data.codeList[i]);//Запоним данными поля ввода
 					adslList+='<tbody>'+
-					'<tr><td id="currentCode" class="info" style="background: #cc0;">'+data.codeList[i]+'</td><td id="currentRole" class="info" style="background: #cc0;">'+data.roleList[i]+'</td></tr>'+
+					'<tr><td class="info" style="background: #cc0;" width="20px">'+(i+1)+'</td><td id="currentCode" class="info" style="background: #cc0;">'+data.codeList[i]+'</td><td id="currentRole" class="info" style="background: #cc0;">'+data.roleList[i]+'</td></tr>'+
 					'</tbody>';
 				}
 			}
 			adslList+='</table>';
 			elem2.innerHTML = adslList;
-			
-			
-			
-			
-			/*
-			var button_p = document.getElementById("buttonList");
-			var button='';
-			if((data.page - 3) > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 3)+'>&lt;</button>&nbsp';
-			else
-				if((data.page - 2) > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 2)+'>&lt;</button>&nbsp';
-				else
-					if((data.page - 1) > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 1)+'>&lt;</button>&nbsp';
-					else button += '<button class="page-с" style="cursor:pointer" value='+(data.page)+'>&lt;</button>&nbsp';
-			if(data.page - 2 > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 2)+'>'+(data.page - 2)+'</button>&nbsp';
-			if(data.page - 1 > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 1)+'>'+(data.page - 1)+'</button>&nbsp';
-			if(data.page > 0) button += '<button class="page-с" style="cursor:pointer; background: #0c0;" value='+(data.page)+'>'+(data.page)+'</button>&nbsp';
-			if(data.page + 1 <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 1)+'>'+(data.page + 1)+'</button>&nbsp';
-			if(data.page + 2 <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 2)+'>'+(data.page + 2)+'</button>&nbsp';
-			if((data.page + 3) <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 3)+'>&gt;</button>&nbsp';
-			else
-				if((data.page + 2) <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 2)+'>&gt;</button>&nbsp';
-				else
-					if((data.page + 1) <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 1)+'>&gt;</button>&nbsp';
-					else button += '<button class="page-с" style="cursor:pointer" value='+(data.page)+'>&gt;</button>&nbsp';	
-			page=data.page;
-			button_p.innerHTML = button;
-			*/
 			
 			//Создадим кнопки
 			var button = document.getElementById("buttonList");
@@ -104,43 +79,19 @@ function loadADSLTableDel(elem){
 		var adslList='<table border="1" id="usersTable">'+
 			'<thead>'+	
 				'<tr>'+
+					'<th width="20px">#</th>'+
 					'<th>Код&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
 					'<th>отдел&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
-					'<th>&nbsp&nbsp</th>'+
+					'<th></th>'+
 				'</tr>'+
 			'</thead>';
 			for(var i=0;i < parseInt(data.roleList.length); i++){
 				adslList+='<tbody>'+
-					'<tr><td class="info">'+data.codeList[i]+'</td><td class="info">'+data.roleList[i]+'</td><td class="del"></td></tr>'+
+					'<tr><td class="info" width="20px">'+(i+1)+'</td><td class="info">'+data.codeList[i]+'</td><td class="info">'+data.roleList[i]+'</td><td><button id = "'+(data.roleList[i]+'('+data.codeList[i]+')')+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button></td></tr>'+
 				'</tbody>';
 			}
 			adslList+='</table>';
 			elem2.innerHTML=adslList;
-			
-			
-			
-			/*
-			var button_p = document.getElementById("buttonList");
-			var button='';
-			if((data.page - 3) > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 3)+'>&lt;</button>&nbsp';
-			else
-				if((data.page - 2) > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 2)+'>&lt;</button>&nbsp';
-				else
-					if((data.page - 1) > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 1)+'>&lt;</button>&nbsp';
-					else button += '<button class="page-с" style="cursor:pointer" value='+(data.page)+'>&lt;</button>&nbsp';
-			if(data.page - 2 > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 2)+'>'+(data.page - 2)+'</button>&nbsp';
-			if(data.page - 1 > 0) button += '<button class="page-с" style="cursor:pointer" value='+(data.page - 1)+'>'+(data.page - 1)+'</button>&nbsp';
-			if(data.page > 0) button += '<button class="page-с" style="cursor:pointer; background: #0c0;" value='+(data.page)+'>'+(data.page)+'</button>&nbsp';
-			if(data.page + 1 <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 1)+'>'+(data.page + 1)+'</button>&nbsp';
-			if(data.page + 2 <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 2)+'>'+(data.page + 2)+'</button>&nbsp';
-			if((data.page + 3) <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 3)+'>&gt;</button>&nbsp';
-			else
-				if((data.page + 2) <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 2)+'>&gt;</button>&nbsp';
-				else
-					if((data.page + 1) <= Math.ceil(parseInt(data.count_elements)/20)) button += '<button class="page-с" style="cursor:pointer" value='+(data.page + 1)+'>&gt;</button>&nbsp';
-					else button += '<button class="page-с" style="cursor:pointer" value='+(data.page)+'>&gt;</button>&nbsp';	
-			page=data.page;
-			button_p.innerHTML = button;*/
 			
 			//Создадим кнопки
 			var button = document.getElementById("buttonList");
@@ -218,6 +169,31 @@ $(document).ready(function() {
 	loadADSLTable(1);
 });
 
+//Обработка нажатия кнопки удалеия
+function getdetails(obj) {
+	var param = obj.id;
+	if(param!=''){
+		$.ajax({
+			type: 'DELETE',
+			url:  mainURL + '/subdivisionList',
+			contentType: 'application/json; charset=utf-8',
+			data: JSON.stringify(param),
+			dataType: 'json',
+			async: true,
+			success: function(result) {
+				alert('Статус: ' + result);
+				loadADSLTable(1);
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				alert('Статус: ' + jqXHR.responseText);
+				loadADSLTable(1);
+			}
+		});
+		blockInput();
+		loadADSLTable(page);
+	}
+}
+
 //Обработка нажатия на кнопку удалить
 $(document).on('click','#btn',function(){
 	var elem = document.getElementById("menu_knopki");//Кнопка
@@ -228,7 +204,7 @@ $(document).on('click','#btn',function(){
 			elem.innerHTML ='&nbsp;'+
 			'<button  id="create" style="cursor:pointer"><img src="styles/kartoteka/img/plus.png" style="vertical-align: middle"></img>Создать</button>'+
 			'&nbsp;'+
-			'<button id="btn" style="cursor:pointer"><img src="styles/kartoteka/img/krest.png" style="vertical-align: middle"></img>Подтвердить удаление</button>';
+			'<button id="btn" style="cursor:pointer"><img src="styles/kartoteka/img/krest.png" style="vertical-align: middle"></img>Просмотр</button>';
 			loadADSLTableDel(page);
 	}
 	else{
@@ -239,8 +215,10 @@ $(document).on('click','#btn',function(){
 			elem.innerHTML ='&nbsp;'+
 			'<button id="create" style="cursor:pointer"><img src="styles/kartoteka/img/plus.png" style="vertical-align: middle"></img>Создать</button>'+
 			'&nbsp;'+
-			'<button id="btn" style="cursor:pointer"><img src="styles/kartoteka/img/krest.png" style="vertical-align: middle"></img>Удалить</button>';
+			'<button id="btn" style="cursor:pointer"><img src="styles/kartoteka/img/krest.png" style="vertical-align: middle"></img>Удаление</button>';
 		
+			
+			/*
 			//Инициализируем удаление выделенных строк
 			//Подготовим данные
 			var event = {
@@ -293,7 +271,7 @@ $(document).on('click','#btn',function(){
 				loadADSLTable(page);
 			});
 		}
-		else
+		else*/
 			loadADSLTable(page);
 	}
 });

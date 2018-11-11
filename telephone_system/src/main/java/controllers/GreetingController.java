@@ -417,14 +417,17 @@ public class GreetingController {
 			}
 		}
 		
+		/*
 		@Secured(value = { "ROLE_ADMIN" })
 		@RequestMapping(value = "/subdivision/subdivision_del")
 		@ResponseBody
+		*/
 		/**
 		 * Удаление подразделения
 		 * @param name Наименование подразделения(Уникальное значение)
 		 * @return
 		 */
+		/*
 		public String get_department_del(@RequestParam(value = "name") List<String> name) {
 			//Обновим данные
 			for(int i = 0; i < name.size(); i++) {
@@ -436,7 +439,24 @@ public class GreetingController {
 				}
 			}
 				return "Delete success";
-		}
+		}*/
+		
+		
+		
+
+		@Secured(value = { "ROLE_ADMIN" })
+	    @RequestMapping(value = "/subdivisionList", method = RequestMethod.DELETE)
+	    @ResponseBody
+	    /**
+	     * Удаление данных
+	     * @return статус операции
+	     */
+	    public String subdivisionDELETE(@RequestBody String param) {
+				return "Delete successful";
+	    }
+
+		
+		
 		
 		@Secured(value = { "ROLE_ADMIN" })
 		@RequestMapping(value = "/subdivision/subdivision_update")
@@ -1221,7 +1241,8 @@ public class GreetingController {
     	//Сформируем списки на обновление и удаление из бд
     	List<String> listAdd = new ArrayList();
     	List<String> listDel = new ArrayList();
-    	
+    	List<String> listAddN = new ArrayList();
+    	List<String> listDelN = new ArrayList();
     	
     	//Найдём подразделения которые необходимо добавить в бд
     	for(int i = 0; i < cdo.getSubdivisionName().length; i++) {
@@ -1233,8 +1254,10 @@ public class GreetingController {
     				break;
     			}
     		}
-    		if( ch == 0 )//Получим код подразделения
+    		if( ch == 0 ) {//Получим код подразделения
     			listAdd.add(cdo.getSubdivisionName()[i].substring(cdo.getSubdivisionName()[i].indexOf("(") + 1, cdo.getSubdivisionName()[i].lastIndexOf(")")));
+    			listAddN.add(cdo.getSubdivisionName()[i].substring(0, cdo.getSubdivisionName()[i].indexOf("(")));
+    		}
     	}
     	
     	//Найдём подразделения с которыми необходимо разорвать связь
@@ -1247,23 +1270,25 @@ public class GreetingController {
     				break;
     			}
     		}
-    		if( ch == 0 )//Получим код подразделения
+    		if( ch == 0 ) {//Получим код подразделения
     			listDel.add(arr[j][1]);
+    			listDelN.add(arr[j][0]);
+    		}
     	}
 
     	Department dep = departmentRepository.findOne(cdo.getDepartmentName());
     	//Выполним добавление связей
     	for(int i = 0; i < listAdd.size(); i++) {
     		//Получим объект подразделения
-    		Subdivision sub = subdivisionRepository.findObjectByCode(listAdd.get(i));
+    		Subdivision sub = subdivisionRepository.findObjectByCodeName(listAddN.get(i), listAdd.get(i));
     		sub.setDepartment(dep);//Сохраним связь
     	}
     	//Выполним удаление связей
     	for(int i = 0; i < listDel.size(); i++) {
     		//Получим объект подразделения
-    		Subdivision sub = subdivisionRepository.findObjectByCode(listDel.get(i));
+    		Subdivision sub = subdivisionRepository.findObjectByCodeName(listDelN.get(i), listDel.get(i));
+    		//Subdivision sub = subdivisionRepository.findObjectByCode(listDel.get(i));
     		sub.setDepartment(null);
-    		//dep.delInSubdivision(listDel.get(i));
     	}
     	departmentRepository.save(dep);
     	

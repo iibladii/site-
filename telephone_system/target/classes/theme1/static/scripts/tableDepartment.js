@@ -26,27 +26,21 @@ function loadADSLTable(elem){
         		var adslList='<table border="1" id="usersTable" width="600px">'+
         			'<thead>'+
         				'<tr>'+
+        					'<th>#</th>'+
         					'<th>Подразделение</th>'+
         				'</tr>'+
         			'</thead>';
         			for(var i=0;i < parseInt(data.name.length); i++){
         				if(data.name[i]!=zap.toString()){
-        					
-        					//Если в ячейку таблицы не влезают символы делаем перенос
-        					var longelem;
-        					//if(data.name[i].length>20){longelem = data.name[i].substring(0,20)+'\r\n'+data.name[i].substring(20,data.name[i].length);}
-        					//else
-        						longelem = data.name[i];
-        					
-        					//Вставка с учётом переноса
+        					//Вставка
         					adslList+='<tbody>'+
-        					'<tr><td class="info">'+longelem+'</td></tr>'+
+        					'<tr><td width="20px">' + (i+1) + '</td><td class="info">' + data.name[i] + '</td></tr>'+
         					'</tbody>';
         				}
         				else{
         					loadInfo(data.name[i]);//Запоним данными поля ввода
         					adslList+='<tbody>'+
-        					'<tr><td id="currentCode" class="info" style="background: #cc0;">'+data.name[i]+'</td></tr>'+
+        					'<tr><td width="20px" style="background: #cc0;">' + (i+1) + '</td><td id="currentCode" class="info" style="background: #cc0;">'+data.name[i]+'</td></tr>'+
         					'</tbody>';
         				}
         			}
@@ -81,16 +75,15 @@ function loadADSLTableDel(elem){
     		var adslList='<table border="1" id="usersTable">'+
     			'<thead>'+
     				'<tr>'+
+    					'<th width="20px">#</th>'+
     					'<th>Подразделение</th>'+
-    					'<th>&nbsp&nbsp</th>'+
+    					'<th width="20px"></th>'+
     				'</tr>'+
     			'</thead>';
     			for(var i=0;i < parseInt(data.name.length); i++){
-    				//if(data.name[i]!=zap.toString()){
     					adslList += '<tbody>'+
-    									'<tr><td class="info">'+data.name[i]+'</td><td class="del"></td></tr>'+
+    									'<tr><td>' + (i+1) + '</td><td class="info">'+data.name[i]+'</td><td width="20px">      <button id = "'+data.name[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button>        </td></tr>'+
     								'</tbody>';
-    				//}
     			}
     			adslList+='</table>';
     			elem2.innerHTML = adslList;
@@ -130,7 +123,6 @@ function reloadSelect2(str){
 			}
 		});
 	else
-		//$('.js-example-basic-single').val([]);
 		$('.js-example-basic-single').select2({
 			data: ''
 		});
@@ -160,7 +152,6 @@ function initSelect2Set(){
         }
     });
 }
-
 
 //Загрузка данных
 function loadInfo(str){
@@ -208,6 +199,33 @@ $(document).ready(function() {
 	loadADSLTable(1);	
 });
 
+//Обработка нажатия кнопки удалеия
+function getdetails(obj) {
+	var param = obj.id;
+	var param_ = [];
+	param_.push(param);
+	if(param!=''){
+		$.ajax({
+			type: 'DELETE',
+			url:  mainURL + '/departmentList',
+			contentType: 'application/json; charset=utf-8',
+			data: JSON.stringify(param_),
+			dataType: 'json',
+			async: true,
+			success: function(result) {
+				alert('Статус: ' + result);
+				loadADSLTable(1);
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				alert('Статус: ' + jqXHR.responseText);
+				loadADSLTable(1);
+			}
+		});
+		blockInput();
+		loadADSLTable(page);
+	}
+}
+
 //Обработка нажатия на кнопку удалить
 $(document).on('click','#btn',function(){
 	var elem = document.getElementById("menu_knopki");//Кнопка
@@ -218,7 +236,7 @@ $(document).on('click','#btn',function(){
 			elem.innerHTML ='&nbsp;'+
 			'<button  id="create" style="cursor:pointer"><img src="styles/kartoteka/img/plus.png" style="vertical-align: middle"></img>Создать</button>'+
 			'&nbsp;'+
-			'<button id="btn" style="cursor:pointer"><img src="styles/kartoteka/img/krest.png" style="vertical-align: middle"></img>Подтвердить удаление</button>';
+			'<button id="btn" style="cursor:pointer"><img src="styles/kartoteka/img/krest.png" style="vertical-align: middle"></img>Просмотр</button>';
 			loadADSLTableDel(page);
 	}
 	else{
@@ -229,59 +247,7 @@ $(document).on('click','#btn',function(){
 			elem.innerHTML ='&nbsp;'+
 			'<button id="create" style="cursor:pointer"><img src="styles/kartoteka/img/plus.png" style="vertical-align: middle"></img>Создать</button>'+
 			'&nbsp;'+
-			'<button id="btn" style="cursor:pointer"><img src="styles/kartoteka/img/krest.png" style="vertical-align: middle"></img>Удалить</button>';
-		
-			//Инициализируем удаление выделенных строк
-			//Подготовим данные
-			var event = {
-					// Получаем текст из всех указанных элементов в виде массива выборкой
-					zp : [].map.call(document.getElementsByClassName("info"), function(el){
-					    return el.textContent;
-					}),
-					sv : [].map.call(document.getElementsByClassName("del"), function(el){
-					    return el.textContent;
-					})
-			};
-			
-			/*
-			//Сформируем список параметров для запроса с учётом записей отмченных пользователем
-			var param = "";
-			for(var i=0; i<event.zp.length; i++) {
-				if(event.sv[i] == "x")
-					if(param!="")
-						param+="," + event.zp[i]
-					else
-						param+=event.zp[i]
-			*/
-			var param = [];
-			for(var i=0; i<event.zp.length; i++) {
-				if(event.sv[i] == "x")
-						param.push(event.zp[i]);
-				
-			}
-			if(param!=''){
-				$.ajax({
-	    			type: 'DELETE',
-	    			url:  mainURL + '/departmentList',
-	    			contentType: 'application/json; charset=utf-8',
-	    			data: JSON.stringify(param),
-	    			dataType: 'json',
-	    			async: true,
-	    			success: function(result) {
-	    				alert('Статус: ' + result);
-	    				loadADSLTable(1);
-	    			},
-	    			error: function(jqXHR, textStatus, errorThrown) {
-	    				alert('Статус: ' + jqXHR.responseText);
-	    				loadADSLTable(1);
-	    			}
-	    		});
-				blockInput();
-				loadADSLTable(page);
-				
-			
-		}
-		else
+			'<button id="btn" style="cursor:pointer"><img src="styles/kartoteka/img/krest.png" style="vertical-align: middle"></img>Удаление</button>';
 			loadADSLTable(page);
 	}
 });
