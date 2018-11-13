@@ -27,6 +27,7 @@ function loadADSLTable(elem){
         			'<thead>'+
         				'<tr>'+
         					'<th>#</th>'+
+        					'<th>Код</th>'+
         					'<th>Подразделение</th>'+
         				'</tr>'+
         			'</thead>';
@@ -34,13 +35,13 @@ function loadADSLTable(elem){
         				if(data.name[i]!=zap.toString()){
         					//Вставка
         					adslList+='<tbody>'+
-        					'<tr><td width="20px">' + (i+1) + '</td><td class="info">' + data.name[i] + '</td></tr>'+
+        					'<tr><td width="20px">' + (i+1) + '</td>   <td class="info">' + '????????' + '</td>   <td class="info">' + data.name[i] + '</td></tr>'+
         					'</tbody>';
         				}
         				else{
         					loadInfo(data.name[i]);//Запоним данными поля ввода
         					adslList+='<tbody>'+
-        					'<tr><td width="20px" style="background: #cc0;">' + (i+1) + '</td><td id="currentCode" class="info" style="background: #cc0;">'+data.name[i]+'</td></tr>'+
+        					'<tr><td width="20px" style="background: #cc0;">' + (i+1) + '</td>    <td class="info" style="background: #cc0;">' + '????????' + '</td>    <td id="currentCode" class="info" style="background: #cc0;">'+data.name[i]+'</td></tr>'+
         					'</tbody>';
         				}
         			}
@@ -82,7 +83,7 @@ function loadADSLTableDel(elem){
     			'</thead>';
     			for(var i=0;i < parseInt(data.name.length); i++){
     					adslList += '<tbody>'+
-    									'<tr><td width="20px">' + (i+1) + '</td><td class="info">'+data.name[i]+'</td><td width="20px">      <button id = "'+data.name[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button>        </td></tr>'+
+    									'<tr><td width="20px">' + (i+1) + '</td>      <td class="info">' + '????????' + '</td>      <td class="info">'+data.name[i]+'</td><td width="20px">      <button id = "'+data.name[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button>        </td></tr>'+
     								'</tbody>';
     			}
     			adslList+='</table>';
@@ -159,6 +160,11 @@ function loadInfo(str){
 	elem6.innerHTML=''+
 	'<div>Выбранный отдел:</div>'+
 	'<div>'+
+		'&nbsp;'+
+		'<div>'+
+			'<div>Код подразделения:</div><br/>'+
+			'<div><input style=" width:400px" type="text" id="adsl_Code" value="'+'????????'+'" readonly="readonly"></input></div>'+
+		'</div>'+
 		'&nbsp;'+
 		'<div>'+
 			'<div>Наименование подразделения:</div><br/>'+

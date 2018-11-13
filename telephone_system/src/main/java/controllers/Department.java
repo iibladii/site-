@@ -21,6 +21,8 @@ public class Department {
     private Integer id;
 
     private String name;
+    
+    private String code;
 
     @OneToMany(mappedBy="department")
     private List<Subdivision> subdivision;
@@ -46,6 +48,14 @@ public class Department {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getCode() {
+		return name;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 	
 	public List<Subdivision> getSubdivision() {

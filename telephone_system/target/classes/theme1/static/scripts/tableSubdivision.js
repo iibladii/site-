@@ -22,8 +22,8 @@ function loadADSLTable(elem){
 			'<thead>'+
 				'<tr>'+
 					'<th width="20px">#</th>'+
-					'<th id="column-header-1">Код&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
-					'<th id="column-header-2">отдел&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
+					'<th id="column-header-1">Код</th>'+
+					'<th id="column-header-2">Отдел</th>'+
 				'</tr>'+
 			'</thead>';
 			for(var i=0;i < parseInt(data.roleList.length); i++){
