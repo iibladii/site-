@@ -417,33 +417,6 @@ public class GreetingController {
 			}
 		}
 		
-		/*
-		@Secured(value = { "ROLE_ADMIN" })
-		@RequestMapping(value = "/subdivision/subdivision_del")
-		@ResponseBody
-		*/
-		/**
-		 * Удаление подразделения
-		 * @param name Наименование подразделения(Уникальное значение)
-		 * @return
-		 */
-		/*
-		public String get_department_del(@RequestParam(value = "name") List<String> name) {
-			//Обновим данные
-			for(int i = 0; i < name.size(); i++) {
-				List<Subdivision> adsl = subdivisionRepository.findAll(name.get(i));
-				Iterator<Subdivision> iter2 = adsl.iterator();
-				while (iter2.hasNext()) {
-					Subdivision ad = ((Subdivision) iter2.next());
-					subdivisionRepository.delete(ad);
-				}
-			}
-				return "Delete success";
-		}*/
-		
-		
-		
-
 		@Secured(value = { "ROLE_ADMIN" })
 	    @RequestMapping(value = "/subdivisionList", method = RequestMethod.DELETE)
 	    @ResponseBody
@@ -452,12 +425,13 @@ public class GreetingController {
 	     * @return статус операции
 	     */
 	    public String subdivisionDELETE(@RequestBody String param) {
-				return "Delete successful";
+			String code = param.substring((param.indexOf("(") + 1), param.indexOf(")"));
+			String name = param.substring(1, param.indexOf("("));
+			Subdivision subdiv = subdivisionRepository.findObjectByCodeName(name, code);
+			subdivisionRepository.delete(subdiv);
+			return "Delete successful";
 	    }
 
-		
-		
-		
 		@Secured(value = { "ROLE_ADMIN" })
 		@RequestMapping(value = "/subdivision/subdivision_update")
 		@ResponseBody

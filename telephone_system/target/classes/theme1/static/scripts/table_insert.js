@@ -40,25 +40,25 @@ function getDataInitial(number, att1, att2, room, department, adsl, subdivision,
 
 //Обработка нажатия кнопки удалеия
 function getdetails(obj) {
-	var param = obj.id;
-	//alert(param);
-	$.ajax({
-		type: 'DELETE',
-		url:  mainURL + '/kartoteka',
-		contentType: 'application/json; charset=utf-8',
-		data: JSON.stringify(param),
-		dataType: 'json',
-		async: true,
-		success: function(result) {
-			alert('Статус: ' + result);
-			getDataInitial('','','','','','','','','','');
-		},
-		error: function(jqXHR, textStatus, errorThrown) {
-			alert('Статус: ' + jqXHR.responseText);
-			getDataInitial('','','','','','','','','','');
-		}
-	});
-    //alert(obj.id);
+	if (confirm("Вы точно хотите удалить номер?")) {
+		var param = obj.id;
+		$.ajax({
+			type: 'DELETE',
+			url:  mainURL + '/kartoteka',
+			contentType: 'application/json; charset=utf-8',
+			data: JSON.stringify(param),
+			dataType: 'json',
+			async: true,
+			success: function(result) {
+				alert('Статус: ' + result);
+				getDataInitial('','','','','','','','','','');
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				alert('Статус: ' + jqXHR.responseText);
+				getDataInitial('','','','','','','','','','');
+			}
+		});
+	}
 }
 
 function createCalendar(id,id1,id2, data) {
@@ -233,38 +233,6 @@ function departmentListInit(){
 	
 }
 
-/*
-//Выбор
-$('#DepartmentList_').on('select2:select', function (e) {
-    var data = e.params.data;
-    console.log(data);
-});
-*/
-/*
-//Событие выбора элемента отдела из списка
-$('#DepartmentList_').on('select2:select', function (e) {
-
-	$('#DepartmentList_ option:selected').each(function() {
-		dep = $(this).text();
-	});
-	
-	$.ajax({
-        type: 'GET',
-        url:   '/Select2kartotekaList_department?depName=',
-        dataType: 'json',
-        async: true,
-        success: function(result) {
-        	$('#SubdivisionList_').select2({
-        		data: result
-        	});
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert(jqXHR.status + ' ' + jqXHR.responseText);
-        }
-    });
-});
-*/
-
 $(document).ready(function() {
 	
 	
@@ -272,39 +240,15 @@ $(document).ready(function() {
 	var ch = 0;
 	var ref = window.location.href;
 	var path = window.location.pathname;
-	//console.log(ref);
-	//console.log(path);
 	for(var i = ref.length - 1; i > 0; i--){
 		if(ref[i] == '/') { ch = i; break;}
 	}
-	//console.log(ch);
 	mainURL = ref.substring(0, ch)
-	//console.log(mainURL);
-	
-	
-	
-	
-	
-	
-	//console.log('Поддомен: '  + res[1]);
-	
-	
 	//Инициализация таблицы при открытии страницы
 	getDataInitial('','','','','','','','','','');
 	
-	//Скроем лишние колонки в таблице
-//	viewColumn();
-	
 	//Инициализация списка подразделений
 	departmentListInit();
-	
-	/*
-	//init
-	var dut = [1,2];
-	$('.js-example-basic-multiple_').select2({
-		data: dut
-	});
-	*/
 	
 	//Обрабатывает нажатие кнопки с классом page-p кнопки с номерами страниц
 	$("body").on("click", ".page-l", function () {
@@ -355,26 +299,12 @@ $(document).ready(function() {
 	
 });
 
-
-
-
-/*
-$(document).on("click", "#vvod", function() {
-	var arr = [];//Массив содержащий список ролей данного пользователя
-	var values = $('#roles_').val();//Вернём все значения списком
-	//Получим позиции всех выбранных значений в списке
-	$('#roles_ option:selected').each(function() {
-		arr.push($(this).text());
-	});
-});*/
 $(document).on("click", "#vvod", function() {
 	var dep;//Выбранный отдел
 	//Получим позиции всех выбранных значений в списке
 	$('#roles_ option:selected').each(function() {
 		dep = $(this).text();
 	});
-	
-	
 	
 	var arr =
 		[

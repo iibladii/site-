@@ -87,7 +87,7 @@ function loadADSLTableDel(elem){
 			'</thead>';
 			for(var i=0;i < parseInt(data.roleList.length); i++){
 				adslList+='<tbody>'+
-					'<tr><td class="info" width="20px">'+(i+1)+'</td><td class="info">'+data.codeList[i]+'</td><td class="info">'+data.roleList[i]+'</td><td><button id = "'+(data.roleList[i]+'('+data.codeList[i]+')')+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button></td></tr>'+
+					'<tr><td class="info" width="20px">'+(i+1)+'</td><td class="info">'+data.codeList[i]+'</td><td class="info">'+data.roleList[i]+'</td><td width="20px"><button id = "'+(data.roleList[i]+'('+data.codeList[i]+')')+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button></td></tr>'+
 				'</tbody>';
 			}
 			adslList+='</table>';
@@ -171,26 +171,28 @@ $(document).ready(function() {
 
 //Обработка нажатия кнопки удалеия
 function getdetails(obj) {
-	var param = obj.id;
-	if(param!=''){
-		$.ajax({
-			type: 'DELETE',
-			url:  mainURL + '/subdivisionList',
-			contentType: 'application/json; charset=utf-8',
-			data: JSON.stringify(param),
-			dataType: 'json',
-			async: true,
-			success: function(result) {
-				alert('Статус: ' + result);
-				loadADSLTable(1);
-			},
-			error: function(jqXHR, textStatus, errorThrown) {
-				alert('Статус: ' + jqXHR.responseText);
-				loadADSLTable(1);
-			}
-		});
-		blockInput();
-		loadADSLTable(page);
+	if (confirm("Вы точно эотите удалить отдел?")) {
+		var param = obj.id;
+		if(param!=''){
+			$.ajax({
+				type: 'DELETE',
+				url:  mainURL + '/subdivisionList',
+				contentType: 'application/json; charset=utf-8',
+				data: JSON.stringify(param),
+				dataType: 'json',
+				async: true,
+				success: function(result) {
+					alert('Статус: ' + result);
+					loadADSLTable(1);
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					alert('Статус: ' + jqXHR.responseText);
+					loadADSLTable(1);
+				}
+			});
+			blockInput();
+			loadADSLTable(page);
+		}
 	}
 }
 
