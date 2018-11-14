@@ -55,10 +55,10 @@ public interface TelephoneRepository extends CrudRepository<Telephone, Long> {
 	/**
 	 * Поиск отдела связанного с телефоном
 	 * @param number номер телефона
-	 * @return наименование отдела
+	 * @return (наименование, код) отдела
 	 */
-	@Query("SELECT d.name FROM Telephone p, in(p.department) d WHERE p.number like :number")
-    public String findDepartmentName(@Param("number") String number);
+	@Query("SELECT d.name, d.code FROM Telephone p, in(p.department) d WHERE p.number like :number")
+    public String[] findDepartmentName(@Param("number") String number);
 	
 	/**
 	 * Поиск подразделения связанного с телефоном

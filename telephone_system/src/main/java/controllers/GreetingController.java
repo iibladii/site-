@@ -1100,19 +1100,25 @@ public class GreetingController {
 	 * @param name название отдела (если указано в фильтре)
 	 * @return список отделов
 	 */
-	public departmentInfo department(@RequestParam Integer page, @RequestParam Integer sizePage, @RequestParam(required = false, defaultValue = "") String name) {
+	public departmentInfo department(@RequestParam Integer page, @RequestParam Integer sizePage, @RequestParam(required = false, defaultValue = "") String name, @RequestParam(required = false, defaultValue = "") String code) {
     	name = "%" + name + "%";
+    	code = "%" + code + "%";
     	departmentInfo di = new departmentInfo(page);
     	//Сохраним размер страницы
     	di.setSizePage(sizePage);
     	//Сохраним число страниц полученное на основе шаблона
-    	Double countPage = Math.ceil((double)departmentRepository.findAllcount(name)/(double)sizePage);
+    	//Double countPage = Math.ceil((double)departmentRepository.findAllcount(name)/(double)sizePage);
+    	Double countPage = Math.ceil((double)departmentRepository.findAllcountNameCode(name, code)/(double)sizePage);
     	di.setCountPAge(countPage.intValue());
     	//Составим список наименований подразделений
-    	Iterable<Department> dList = departmentRepository.findAll(name);//Найдём все подразделения
+    	//Iterable<Department> dList = departmentRepository.findAll(name);//Найдём все подразделения
+    	Iterable<Department> dList = departmentRepository.findAllCodeName(name, code);//Найдём все подразделения
     	int ch = 0;
     	for(Department department:dList) {//Сформируем список наименований всех подразделений
-    		if(ch <= sizePage) di.addName(department.getName());
+    		if(ch <= sizePage) {
+    			di.addName(department.getName());
+    			di.setCode(department.getCode());
+    		}
     		ch++;
     		if(ch == sizePage) return di;
     	}
@@ -1133,6 +1139,7 @@ public class GreetingController {
     	//Создадим новый отдел
     	Department department = new Department();
     	department.setName(cdo.getDepartmentName());
+    	department.setCode(cdo.getDepartmentCode());
     	departmentRepository.save(department);
     	
     	//Сопоставим отдел с подразделениями
@@ -1156,9 +1163,9 @@ public class GreetingController {
 	 * @param name наименования отделов
 	 * @return данны в виде ('подразделение(код)')
 	 */
-	public List<DataListSelect2Groups> getSubdivisionList(@RequestParam(required = false, defaultValue = "") String name) {
-    	String[][] arr = subdivisionRepository.findAllCodeName(name);//Выберем все наименования и коды подразделений
-    	String[][] arrN = subdivisionRepository.findAllCodeNameNot(name);//Выберем все оставшиеся наименования и коды подразделений
+	public List<DataListSelect2Groups> getSubdivisionList(@RequestParam(required = false, defaultValue = "") String name, @RequestParam(required = false, defaultValue = "") String code) {
+    	String[][] arr = subdivisionRepository.findAllCodeName(name, code);//Выберем все наименования и коды подразделений
+    	String[][] arrN = subdivisionRepository.findAllCodeNameNot(name, code);//Выберем все оставшиеся наименования и коды подразделений
     	String[][] arrND = subdivisionRepository.findAllCodeNameNotDepartment();//Выберем все оставшиеся наименования и коды подразделений не связанные с отделом
     	//Структура данных содержащая информацию из выпадающего списка
     	List<DataListSelect2Groups> list = new ArrayList<DataListSelect2Groups>();
@@ -1300,8 +1307,8 @@ public class GreetingController {
 	 * @param name наименования отделов
 	 * @return данны в виде ('подразделение(код)')
 	 */
-    public List<DataListSelect2> select2KartotekaListSubdivision(@RequestParam(value = "name", required = false, defaultValue = "") String name) {
-    	String[][] arr = subdivisionRepository.findAllCodeName(name);//Выберем все наименования и коды подразделений
+    public List<DataListSelect2> select2KartotekaListSubdivision(@RequestParam(value = "name", required = false, defaultValue = "") String name, @RequestParam(value = "name", required = false, defaultValue = "") String code) {
+    	String[][] arr = subdivisionRepository.findAllCodeName(name, code);//Выберем все наименования и коды подразделений
     	//Структура данных содержащая информацию из выпадающего списка
     	List<DataListSelect2> list = new ArrayList<DataListSelect2>();
     	//Заполним данными список
@@ -1519,9 +1526,9 @@ public class GreetingController {
 	 */
     public List<DataListSelect2> select2KartotekaListSubdivisionModify(@RequestParam(value = "telephone", required = false, defaultValue = "") String telephone) {
     	//Department dep = subdivisionRepository.findDepListFromTelephone(telephone);//Получим отдела подразделения по номеру телефона
-    	String dep = telephoneRepository.findDepartmentName(telephone);
+    	String[] dep = telephoneRepository.findDepartmentName(telephone);//Возвращает (наименование, код) подразделения
     	String[][] sName = telephoneRepository.findSubdivisionCodeName(telephone);//Получим наименование подразделения по номеру телефона
-    	String[][] arr = subdivisionRepository.findAllCodeName(dep);//Выберем все наименования и коды подразделений
+    	String[][] arr = subdivisionRepository.findAllCodeName(dep[0], dep[1]);//Выберем все наименования и коды подразделений
     	//Структура данных содержащая информацию из выпадающего списка
     	List<DataListSelect2> list = new ArrayList<DataListSelect2>();
     	//Заполним данными список
@@ -1553,7 +1560,7 @@ public class GreetingController {
     	List<String> departmentList = departmentRepository.findAllDepartment();//Выберем все наименования и коды подразделений
     	
     	//Получим подразделение связанное с номером
-    	String name = telephoneRepository.findDepartmentName(number);
+    	String[] dep = telephoneRepository.findDepartmentName(number);
     	
     	//Подготовим данные для передачи
     	List<DataListSelect2> list = new ArrayList<DataListSelect2>();
@@ -1561,7 +1568,7 @@ public class GreetingController {
     		DataListSelect2 ds2 = new DataListSelect2();
     		ds2.setId(i);
     		ds2.setText(departmentList.get(i));
-    		if(departmentList.get(i).equals(name))
+    		if(departmentList.get(i).equals(dep[0]))
     			ds2.setSelected(true);
     		else
     			ds2.setSelected(false);

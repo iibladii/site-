@@ -9,6 +9,7 @@ import java.util.ArrayList;
  */
 public class departmentInfo {
 	    private ArrayList<String> name;//Наименование отделов
+	    private ArrayList<String> code;//Коды отделов
 	    private Integer sizePage;//Размер передаваемой страницы
 	    private Integer page;//Номер страницы
 	    private Integer countPage;//Число страниц заданного размера в бд
@@ -19,6 +20,7 @@ public class departmentInfo {
 	     */
 	    public departmentInfo(Integer page) {
 	    	this.name = new ArrayList<String>();
+	    	this.code = new ArrayList<String>();
 	    	this.page=page;
 	    }
 
@@ -28,6 +30,14 @@ public class departmentInfo {
 	    
 	    public ArrayList<String> getName() {
 	        return name;
+	    }
+	    
+	    public ArrayList<String> getCode() {
+	        return code;
+	    }
+	    
+	    public void setCode(String code) {
+	    	this.code.add(code);
 	    }
 	    
 	    public Integer getSizePage() {

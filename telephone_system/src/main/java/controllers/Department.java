@@ -51,7 +51,7 @@ public class Department {
 	}
 	
 	public String getCode() {
-		return name;
+		return code;
 	}
 
 	public void setCode(String code) {

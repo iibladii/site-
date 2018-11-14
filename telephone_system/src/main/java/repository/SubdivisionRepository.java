@@ -106,15 +106,15 @@ public interface SubdivisionRepository extends CrudRepository<Subdivision, Long>
 	 * Поиск всех наименований и кодов подразделений связанных с отделом с заданным наименованием
 	 * @return массив наименований и кодов array[][]
 	 */
-	@Query(value = "select a.name, a.code from Subdivision a, in(a.department) d WHERE d.name like :name ORDER BY a.name")
-	String[][] findAllCodeName(@Param("name") String name);
+	@Query(value = "select a.name, a.code from Subdivision a, in(a.department) d WHERE d.name like :name and d.code like :code ORDER BY a.name")
+	String[][] findAllCodeName(@Param("name") String name, @Param("code") String code);
 	
 	/**
 	 * Поиск всех наименований и кодов подразделений всех кроме подразделений связанных с отделом с заданным наименованием
 	 * @return массив наименований и кодов array[][]
 	 */
-	@Query(value = "select a.name, a.code from Subdivision a, in(a.department) d WHERE d.name not like :name ORDER BY a.name")
-	String[][] findAllCodeNameNot(@Param("name") String name);
+	@Query(value = "select a.name, a.code from Subdivision a, in(a.department) d WHERE d.name not like :name and d.code like :code ORDER BY a.name")
+	String[][] findAllCodeNameNot(@Param("name") String name, @Param("code") String code);
 	
 	/**
 	 * Поиск всех наименований и кодов подразделений не связанных с отделами

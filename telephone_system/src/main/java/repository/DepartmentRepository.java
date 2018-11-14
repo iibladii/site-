@@ -30,12 +30,30 @@ public interface DepartmentRepository extends CrudRepository<Department, Long> {
     List<Department> findAll(@Param("name") String name);
 	
 	/**
+	 * Поиск подразделения по коду и наименованию
+	 * @param name наименование
+	 * @param code код
+	 * @return список подраздеелний
+	 */
+	@Query(value = "select a from Department a WHERE a.name like :name and a.code like :code")
+    List<Department> findAllCodeName(@Param("name") String name, @Param("code") String code);
+	
+	/**
 	 * Поиск числа различных подразделений согласно фильтру
 	 * @param name шаблон наименования подразделения
 	 * @return число различных подразделений
 	 */
 	@Query(value = "select count(a) from Department a WHERE a.name like :name")
     Integer findAllcount(@Param("name") String name);
+	
+	/**
+	 * Поиск числа различных подразделений согласно фильтру
+	 * @param name наименование подразделения
+	 * @param code код подразделения
+	 * @return число различных подразделений
+	 */
+	@Query(value = "select count(a) from Department a WHERE a.name like :name and a.code like :code")
+    Integer findAllcountNameCode(@Param("name") String name, @Param("code") String code);
 	
 	/**
 	 * Подразделения связанные с конкретным отделом

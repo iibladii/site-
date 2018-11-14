@@ -1,5 +1,5 @@
 var flag=0;//Если 0-Режим просмотра 1-режим удаления
-var zap="";//Выделенная запись в таблице ADSL
+var zap=-1;//Выделенная запись в таблице ADSL
 var page=1;//Текущая страница
 var mainURL;//Поддомен
 function UNblockInput(){
@@ -14,6 +14,17 @@ function blockInput(){
 	$('#UserInfo select').attr('disabled', 'disabled');//Заблокируем
 }
 
+//Клик по строке таблицы
+function viewclick(obj){
+	if(flag==0){    		
+		//zap=$(this).text();
+		zap = obj.id;
+		loadADSLTable(page);
+		UNblockInput();    		
+	}
+}
+
+
 //Отправка запроса на получение данных-> получение результата запровс -> отображение полученных данных
 function loadADSLTable(elem){
 	$.get(mainURL + "/subdivision/subdivision_info?name="+encodeURIComponent(document.getElementById("ads_name_").value)+'&elem='+encodeURIComponent(elem)+"&code="+encodeURIComponent(document.getElementById("subdiv_code_").value),function(data,status){
@@ -27,16 +38,16 @@ function loadADSLTable(elem){
 				'</tr>'+
 			'</thead>';
 			for(var i=0;i < parseInt(data.roleList.length); i++){
-				if(data.roleList[i]!=zap.toString()){
+				if(i != zap.toString()){
 					adslList+=
 						'<tbody>'+
-							'<tr><td class="info" width="20px">'+(i+1)+'</td><td class="info">'+data.codeList[i]+'</td><td class="info">'+data.roleList[i]+'</td></tr>'+
+							'<tr onClick = "viewclick(this)" id="' + i + '"><td id="id' + i + '" width="20px">'+(i+1)+'</td><td id="code' + i + '" >'+data.codeList[i]+'</td><td id="role' + i + '" >'+data.roleList[i]+'</td></tr>'+
 						'</tbody>';
 				}
 				else{
 					loadInfo(data.roleList[i],data.codeList[i]);//Запоним данными поля ввода
 					adslList+='<tbody>'+
-					'<tr><td class="info" style="background: #cc0;" width="20px">'+(i+1)+'</td><td id="currentCode" class="info" style="background: #cc0;">'+data.codeList[i]+'</td><td id="currentRole" class="info" style="background: #cc0;">'+data.roleList[i]+'</td></tr>'+
+					'<tr onClick = "viewclick(this)" id="' + i + '"><td id="id' + i + '" style="background: #cc0;" width="20px">'+(i+1)+'</td><td id="code' + i + '"  style="background: #cc0;">'+data.codeList[i]+'</td><td id="role' + i + '"  style="background: #cc0;">'+data.roleList[i]+'</td></tr>'+
 					'</tbody>';
 				}
 			}
@@ -87,7 +98,7 @@ function loadADSLTableDel(elem){
 			'</thead>';
 			for(var i=0;i < parseInt(data.roleList.length); i++){
 				adslList+='<tbody>'+
-					'<tr><td class="info" width="20px">'+(i+1)+'</td><td class="info">'+data.codeList[i]+'</td><td class="info">'+data.roleList[i]+'</td><td width="20px"><button id = "'+(data.roleList[i]+'('+data.codeList[i]+')')+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button></td></tr>'+
+					'<tr><td  id="id' + i + '" width="20px">'+(i+1)+'</td><td id="code' + i + '">'+data.codeList[i]+'</td><td id="role' + i + '">'+data.roleList[i]+'</td><td width="20px"><button id = "'+(data.roleList[i]+'('+data.codeList[i]+')')+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button></td></tr>'+
 				'</tbody>';
 			}
 			adslList+='</table>';
@@ -286,6 +297,8 @@ $(document).on("click", ".page-с", function (){
 		loadADSLTableDel($(this).attr("value"));
 });
 
+
+/*
 	//Обработка кликов по таблице->колонка удаления
     $(document).on("click", "#usersTable tbody tr td.del", function() {
     	//Если кликнули в режиме удаления
@@ -302,12 +315,14 @@ $(document).on("click", ".page-с", function (){
         		});
     	}
     });
+*/    
+    
     
     //Обработка нажатия кнопки поиск
     $(document).on("click", "#poisk", function() {
     	loadInfo("","");
     	blockInput();
-    	zap="";
+    	zap=-1;
     	if(flag==0)
     		loadADSLTable(1);
     	else
@@ -349,13 +364,16 @@ $(document).on("click", ".page-с", function (){
     			  alert('Запись уже существует');
     		  }
     		}
-    	zap=document.getElementById("adsl_Name").value;
+    	//zap=document.getElementById("adsl_Name").value;
+    	zap = -1;
     	if(flag==0)
     		loadADSLTable(page);
     	else
     		loadADSLTableDel(page);
     });
     
+    
+    /*
     $(document).on("click", "#usersTable tbody tr td.info", function() {
     	if(flag==0){    		
     		zap=$(this).text();
@@ -365,6 +383,7 @@ $(document).on("click", ".page-с", function (){
     		UNblockInput();    		
     	}
     });
+    */
       
   //Обработка нажатия кнопки создать
     $(document).on("click", "#create", function() {

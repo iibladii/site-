@@ -1,5 +1,5 @@
 var flag=0;//Если 0-Режим просмотра 1-режим удаления
-var zap="";//Выделенная запись в таблице ADSL
+var zap=-1;//Выделенная запись в таблице ADSL
 var page=1;//Текущая страница
 var mainURL;//URL
 function UNblockInput(){
@@ -14,11 +14,20 @@ function blockInput(){
 	$('#UserInfo select').attr('disabled', 'disabled');//Заблокируем
 }
 
+//Клик по строке таблицы
+function viewclick(obj){
+	if(flag==0){
+		zap = obj.id;
+		loadADSLTable(page);
+		UNblockInput();    		
+	}
+}
+
 //Отправка запроса на получение данных-> получение результата запровс -> отображение полученных данных
 function loadADSLTable(elem){
         $.ajax({
             type: 'GET',
-            url:  mainURL + '/departmentList?page=' + elem + '&sizePage=20&name=' + encodeURIComponent(document.getElementById("ads_name_").value),
+            url:  mainURL + '/departmentList?page=' + elem + '&sizePage=20&name=' + encodeURIComponent(document.getElementById("ads_name_").value) + '&code=' + encodeURIComponent(document.getElementById("code_name_").value),
             dataType: 'json',
             async: true,
             success: function(data) {
@@ -32,16 +41,16 @@ function loadADSLTable(elem){
         				'</tr>'+
         			'</thead>';
         			for(var i=0;i < parseInt(data.name.length); i++){
-        				if(data.name[i]!=zap.toString()){
+        				if(i != zap){
         					//Вставка
         					adslList+='<tbody>'+
-        					'<tr><td width="20px">' + (i+1) + '</td>   <td class="info">' + '????????' + '</td>   <td class="info">' + data.name[i] + '</td></tr>'+
+        					'<tr onClick = "viewclick(this)" id="' + i + '"><td id="id' + i + '" width="20px">' + (i+1) + '</td>   <td  id="code' + i + '"   >' + data.code[i] + '</td>   <td  id="name' + i + '">' + data.name[i] + '</td></tr>'+
         					'</tbody>';
         				}
         				else{
-        					loadInfo(data.name[i]);//Запоним данными поля ввода
+        					loadInfo(data.name[i], data.code[i]);//Запоним данными поля ввода
         					adslList+='<tbody>'+
-        					'<tr><td width="20px" style="background: #cc0;">' + (i+1) + '</td>    <td class="info" style="background: #cc0;">' + '????????' + '</td>    <td id="currentCode" class="info" style="background: #cc0;">'+data.name[i]+'</td></tr>'+
+        					'<tr onClick = "viewclick(this)" id="' + i + '"><td id="id' + i + '" width="20px" style="background: #cc0;">' + (i+1) + '</td>    <td id="code' + i + '"  style="background: #cc0;">' + data.code[i] + '</td>    <td id="name' + i + '" style="background: #cc0;">'+data.name[i]+'</td></tr>'+
         					'</tbody>';
         				}
         			}
@@ -68,7 +77,7 @@ function loadADSLTable(elem){
 function loadADSLTableDel(elem){
 	$.ajax({
         type: 'GET',
-        url:  mainURL + '/departmentList?page=' + elem + '&sizePage=20&name=' + encodeURIComponent(document.getElementById("ads_name_").value),
+        url:  mainURL + '/departmentList?page=' + elem + '&sizePage=20&name=' + encodeURIComponent(document.getElementById("ads_name_").value) + '&code=' + encodeURIComponent(document.getElementById("code_name_").value),
         dataType: 'json',
         async: true,
         success: function(data) {
@@ -77,13 +86,14 @@ function loadADSLTableDel(elem){
     			'<thead>'+
     				'<tr>'+
     					'<th width="20px">#</th>'+
+    					'<th>Код</th>'+
     					'<th>Подразделение</th>'+
     					'<th width="20px"></th>'+
     				'</tr>'+
     			'</thead>';
     			for(var i=0;i < parseInt(data.name.length); i++){
     					adslList += '<tbody>'+
-    									'<tr><td width="20px">' + (i+1) + '</td>      <td class="info">' + '????????' + '</td>      <td class="info">'+data.name[i]+'</td><td width="20px">      <button id = "'+data.name[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button>        </td></tr>'+
+    									'<tr><td class="' + i + '" id="id' + i + '" width="20px">' + (i+1) + '</td>      <td  id="code' + i + '" class="' + i + '">' + data.code[i] + '</td>      <td  id="name' + i + '" class="' + i + '">' + data.name[i] + '</td><td width="20px">      <button id = "'+data.name[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button>        </td></tr>'+
     								'</tbody>';
     			}
     			adslList+='</table>';
@@ -107,11 +117,11 @@ function loadADSLTableDel(elem){
 }
 
 //Загрузка списка отделов в формате наименование/код в select2 в всплывающем окне
-function reloadSelect2(str){
-	if(str!='')
+function reloadSelect2(name, code){
+	if(name!='')
 		$.ajax({
 			type: 'GET',
-			url:   mainURL + '/getSubdivisionList?name='+encodeURIComponent(str),
+			url:   mainURL + '/getSubdivisionList?name=' + encodeURIComponent(name) + '&code=' + encodeURIComponent(code),
 			dataType: 'json',
 			async: true,
 			success: function(data) {
@@ -155,7 +165,7 @@ function initSelect2Set(){
 }
 
 //Загрузка данных
-function loadInfo(str){
+function loadInfo(name, code){
 	var elem6 = document.getElementById("UserInfo");//Таблица
 	elem6.innerHTML=''+
 	'<div>Выбранный отдел:</div>'+
@@ -163,12 +173,12 @@ function loadInfo(str){
 		'&nbsp;'+
 		'<div>'+
 			'<div>Код подразделения:</div><br/>'+
-			'<div><input style=" width:400px" type="text" id="adsl_Code" value="'+'????????'+'" readonly="readonly"></input></div>'+
+			'<div><input style=" width:400px" type="text" id="adsl_Code" value="' + code + '" readonly="readonly"></input></div>'+
 		'</div>'+
 		'&nbsp;'+
 		'<div>'+
 			'<div>Наименование подразделения:</div><br/>'+
-			'<div><input style=" width:400px" type="text" id="adsl_Name" value="'+str+'" readonly="readonly"></input></div>'+
+			'<div><input style=" width:400px" type="text" id="adsl_Name" value="' + name + '" readonly="readonly"></input></div>'+
 		'</div>'+
 		'&nbsp;'+
 		'<div>'+
@@ -185,7 +195,7 @@ function loadInfo(str){
 	var dat = '<select id="subdivisionList_" class="js-example-basic-single" name="state" style="width: 100%;" multiple="multiple"></select>';
 	elem.innerHTML = dat;
 	
-	reloadSelect2(str);
+	reloadSelect2(name, code);
 }
 
 //При загрузке документа заполним таблицу
@@ -200,7 +210,7 @@ $(document).ready(function() {
 	}
 	mainURL = ref.substring(0, ch);
 	
-	loadInfo("");
+	loadInfo("","");
 	blockInput();
 	loadADSLTable(1);	
 });
@@ -268,6 +278,8 @@ $(document).on("click", ".page-с", function (){
 		loadADSLTableDel($(this).attr("value"));
 });
 
+
+/*
 	//Обработка кликов по таблице->колонка удаления
     $(document).on("click", "#usersTable tbody tr td.del", function() {
     	//Если кликнули в режиме удаления
@@ -284,25 +296,33 @@ $(document).on("click", ".page-с", function (){
         		});
     	}
     });
-    
+ */
+
+
     //Обработка нажатия кнопки поиск
     $(document).on("click", "#poisk", function() {
-    	loadInfo("");
+    	loadInfo("","");
     	blockInput();
-    	zap="";
+    	zap=-1;
     	if(flag==0)
     		loadADSLTable(1);
     	else
     		loadADSLTableDel(1);
     });
     
+    
+    /*
+    //Клик по строке таблицы
     $(document).on("click", "#usersTable tbody tr td.info", function() {
-    	if(flag==0){    		
-    		zap=$(this).text();
+    	if(flag==0){
+    		//console.log($(this).attr("class"));
+    		//console.log($(this).attr("id"));
+    		zap = $(this).attr("id");
+    		//zap=$(this).text();
     		loadADSLTable(page);
     		UNblockInput();    		
     	}
-    });
+    });*/
       
   //Обработка нажатия кнопки создать
     $(document).on("click", "#create", function() {
@@ -331,6 +351,7 @@ $(document).on("click", ".page-с", function (){
     	
     		var DepartmentDataObject= {
     				'departmentName': document.getElementById("department_").value,
+    				'departmentCode': document.getElementById("departmentCode_").value,
     				'subdivisionName': arr
     		};    		
     		$.ajax({

@@ -7,10 +7,12 @@ package object;
  */
 public class DepartmentDataObject {
 	private String departmentName;
+	private String departmentCode;
     private String[] subdivisionName;
 
-    public DepartmentDataObject(String departmentName, String[] subdivisionName) {
+    public DepartmentDataObject(String departmentName, String departmentCode, String[] subdivisionName) {
         this.departmentName = departmentName;
+        this.departmentCode = departmentCode;
         this.subdivisionName = subdivisionName;
     }
 
@@ -23,6 +25,14 @@ public class DepartmentDataObject {
 
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
+    }
+    
+    public String getDepartmentCode() {
+        return departmentCode;
+    }
+
+    public void setDepartmentCode(String departmentCode) {
+        this.departmentCode = departmentCode;
     }
 
     public String[] getSubdivisionName() {
