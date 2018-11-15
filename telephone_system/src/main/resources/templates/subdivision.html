@@ -27,9 +27,19 @@
     	        width: 650,
     	        height: 220,
     	        autoOpen: false
-    			});
+    		});
     		//http://jquery.page2page.ru/index.php5/%D0%94%D0%B8%D0%B0%D0%BB%D0%BE%D0%B3%D0%BE%D0%B2%D0%BE%D0%B5_%D0%BE%D0%BA%D0%BD%D0%BE_UI
   		});
+  		
+  		$(function() {
+    		$( "#view" ).dialog({
+    			maxWidth:650,
+    	        maxHeight: 500,
+    	        width: 650,
+    	        height: 220,
+    	        autoOpen: false
+    		});
+    	});
   	</script>
 </head>
 <body>
@@ -44,6 +54,18 @@
 		<br/>
     	<button class="page-p" id="vvod" style="cursor:pointer">Ввод</button>
     	<div id="response_vvod"></div>
+	</div>
+	<div id="view" title="Изменение элементов">
+		Введите код отдела:<br/>
+		<input id="_code_" name="_code" type="text" size="30" style="width: 600px;" placeholder="Код отдела"></input>
+		<br/>
+		<br/>
+		Введите наименование отдела :<br/>
+		<input id="_adsl_" name="_adsl" type="text" size="30" style="width: 600px;" placeholder="Наименование отдела"></input>
+		<br/>
+		<br/>
+    	<button class="page-p" id="vvod" style="cursor:pointer">Ввод</button>
+    	<div id="_response_vvod"></div>
 	</div>
 	
 	<!--Шапка основной страницы-->
@@ -83,9 +105,10 @@
   		<div class="block5_splitter"></div>
   		<div class="block4" id="buttonList">Connection failed...</div>
    	</div>
-   	
+   	<!--
   	<div class="block2" id="UserInfo">
-  	</div> 	
+  	</div>
+  	-->
    </div>
 </body>
 </html>

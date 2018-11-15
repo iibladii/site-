@@ -59,8 +59,8 @@ public interface DepartmentRepository extends CrudRepository<Department, Long> {
 	 * Подразделения связанные с конкретным отделом
 	 * @return список подразделений
 	 */
-	@Query(value = "select s.name, s.code from Department a, in(a.subdivision) s WHERE a.name like :name")
-    String[][] findAllrole(@Param("name") String name);
+	@Query(value = "select s.name, s.code from Department a, in(a.subdivision) s WHERE a.name like :name and a.code like :code")
+    String[][] findAllrole(@Param("name") String name, @Param("code") String code);
 	
 	/**
 	 * Поиск количества подразделений в бд

@@ -2,6 +2,7 @@ var flag=0;//Если 0-Режим просмотра 1-режим удален�
 var zap=-1;//Выделенная запись в таблице ADSL
 var page=1;//Текущая страница
 var mainURL;//URL
+/*
 function UNblockInput(){
 	$('#save').prop("disabled", false);//Разблокируем кнопку
 	$('#UserInfo input').prop("disabled", false);//Разблокируем
@@ -13,13 +14,22 @@ function blockInput(){
 	$('#UserInfo input').attr('disabled', 'disabled');//Заблокируем
 	$('#UserInfo select').attr('disabled', 'disabled');//Заблокируем
 }
-
+*/
 //Клик по строке таблицы
 function viewclick(obj){
 	if(flag==0){
 		zap = obj.id;
 		loadADSLTable(page);
-		UNblockInput();    		
+		//UNblockInput();    		
+	}
+}
+
+function viewDepartment(obj){
+	$("#view").dialog('open');
+	if(flag==0){
+		zap = obj.id;
+	//	loadADSLTable(page);
+		//UNblockInput();    		
 	}
 }
 
@@ -35,22 +45,29 @@ function loadADSLTable(elem){
         		var adslList='<table border="1" id="usersTable" width="600px">'+
         			'<thead>'+
         				'<tr>'+
-        					'<th>#</th>'+
+        					'<th width="10px">#</th>'+
         					'<th>Код</th>'+
         					'<th>Подразделение</th>'+
+        					'<th width="10px"></th>'+
         				'</tr>'+
         			'</thead>';
         			for(var i=0;i < parseInt(data.name.length); i++){
         				if(i != zap){
         					//Вставка
         					adslList+='<tbody>'+
-        					'<tr onClick = "viewclick(this)" id="' + i + '"><td id="id' + i + '" width="20px">' + (i+1) + '</td>   <td  id="code' + i + '"   >' + data.code[i] + '</td>   <td  id="name' + i + '">' + data.name[i] + '</td></tr>'+
+        					'<tr onClick = "viewclick(this)" id="' + i + '">'+
+        						'<td id="id' + i + '" width="20px">' + (i+1) + '</td>   <td width="20px" id="code' + i + '"   >' + data.code[i] + '</td>   <td  id="name' + i + '">' + data.name[i] + '</td>'+
+        						'<td  width="10px"> <button id = "'+data.name[i] + '(' + data.code[i] + ')' +'" class="del" style="cursor:pointer" onClick = "viewDepartment(this)"><img src="styles/kartoteka/img/tableView.png" style="vertical-align: middle"></img></button> </td>'+
+        					'</tr>'+
         					'</tbody>';
         				}
         				else{
-        					loadInfo(data.name[i], data.code[i]);//Запоним данными поля ввода
+        					loadInfo1(data.name[i], data.code[i]);//Запоним данными поля ввода
         					adslList+='<tbody>'+
-        					'<tr onClick = "viewclick(this)" id="' + i + '"><td id="id' + i + '" width="20px" style="background: #cc0;">' + (i+1) + '</td>    <td id="code' + i + '"  style="background: #cc0;">' + data.code[i] + '</td>    <td id="name' + i + '" style="background: #cc0;">'+data.name[i]+'</td></tr>'+
+        					'<tr onClick = "viewclick(this)" id="' + i + '">'+
+        						'<td id="id' + i + '" width="20px" style="background: #cc0;">' + (i+1) + '</td>    <td width="20px" id="code' + i + '"  style="background: #cc0;">' + data.code[i] + '</td>    <td id="name' + i + '" style="background: #cc0;">'+data.name[i]+'</td>'+
+        						'<td  width="10px"> <button id = "'+data.name[i] + '(' + data.code[i] + ')' +'" class="del" style="cursor:pointer" onClick = "viewDepartment(this)"><img src="styles/kartoteka/img/tableView.png" style="vertical-align: middle"></img></button> </td>'+
+        					'</tr>'+
         					'</tbody>';
         				}
         			}
@@ -85,15 +102,15 @@ function loadADSLTableDel(elem){
     		var adslList='<table border="1" id="usersTable">'+
     			'<thead>'+
     				'<tr>'+
-    					'<th width="20px">#</th>'+
+    					'<th width="10px">#</th>'+
     					'<th>Код</th>'+
     					'<th>Подразделение</th>'+
-    					'<th width="20px"></th>'+
+    					'<th width="10px"></th>'+
     				'</tr>'+
     			'</thead>';
     			for(var i=0;i < parseInt(data.name.length); i++){
     					adslList += '<tbody>'+
-    									'<tr><td class="' + i + '" id="id' + i + '" width="20px">' + (i+1) + '</td>      <td  id="code' + i + '" class="' + i + '">' + data.code[i] + '</td>      <td  id="name' + i + '" class="' + i + '">' + data.name[i] + '</td><td width="20px">      <button id = "'+data.name[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button>        </td></tr>'+
+    									'<tr><td class="' + i + '" id="id' + i + '" width="20px">' + (i+1) + '</td>      <td width="20px" id="code' + i + '" class="' + i + '">' + data.code[i] + '</td>      <td  id="name' + i + '" class="' + i + '">' + data.name[i] + '</td><td width="10px">      <button id = "'+data.name[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button>        </td></tr>'+
     								'</tbody>';
     			}
     			adslList+='</table>';
@@ -115,7 +132,7 @@ function loadADSLTableDel(elem){
         }
     });
 }
-
+/*
 //Загрузка списка отделов в формате наименование/код в select2 в всплывающем окне
 function reloadSelect2(name, code){
 	if(name!='')
@@ -137,11 +154,11 @@ function reloadSelect2(name, code){
 		$('.js-example-basic-single').select2({
 			data: ''
 		});
-}
+}*/
 
 //Заполним выподающий список списком подразделений
 function initSelect2Set(){
-	var elem = document.getElementById("selectSubdivision");
+	var elem = document.getElementById("subdivisions_");
 	var dat = '<select id="subdivisionList_" class="js-example-basic-single" name="state" style="width: 200px;" multiple="multiple"></select>';
 	elem.innerHTML = dat;
 
@@ -153,7 +170,7 @@ function initSelect2Set(){
         success: function(result) {
         	//Очистка поля
         	$('#subdivisions_').html('').select2();
-        	console.log('fdfd');
+        	//console.log('fdfd');
         	$('.js-example-basic-single_').select2({
         		data: result
         	});
@@ -164,6 +181,44 @@ function initSelect2Set(){
     });
 }
 
+//Загрузка списка отделов в формате наименование/код в select2 в всплывающем окне
+function reloadSelect21(name, code){
+	if(name!='')
+		$.ajax({
+			type: 'GET',
+			url:   mainURL + '/getSubdivisionList?name=' + encodeURIComponent(name) + '&code=' + encodeURIComponent(code),
+			dataType: 'json',
+			async: true,
+			success: function(data) {
+				$('._js-example-basic-single_').select2({
+					data: data
+				});
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				alert(jqXHR.status + ' ' + jqXHR.responseText);
+			}
+		});
+	else
+		$('._js-example-basic-single_').select2({
+			data: ''
+		});
+}
+
+//Загрузка данных в форму изменения
+function loadInfo1(name, code){
+	document.getElementById("_departmentCode_").value = code;
+	document.getElementById("_department_").value = name;
+	
+	$('#_subdivisions_').html('').select2();
+	var elem = document.getElementById("_subdivisions_");
+	var dat = '<select id="_subdivisionList_" class="js-example-basic-single" name="state" style="width: 100%;" multiple="multiple"></select>';
+	elem.innerHTML = dat;
+	
+	reloadSelect21(name, code);
+}
+
+
+/*
 //Загрузка данных
 function loadInfo(name, code){
 	var elem6 = document.getElementById("UserInfo");//Таблица
@@ -196,7 +251,7 @@ function loadInfo(name, code){
 	elem.innerHTML = dat;
 	
 	reloadSelect2(name, code);
-}
+}*/
 
 //При загрузке документа заполним таблицу
 $(document).ready(function() {
@@ -210,8 +265,8 @@ $(document).ready(function() {
 	}
 	mainURL = ref.substring(0, ch);
 	
-	loadInfo("","");
-	blockInput();
+	loadInfo1("","");
+	//blockInput();
 	loadADSLTable(1);	
 });
 
@@ -238,7 +293,7 @@ function getdetails(obj) {
 					loadADSLTable(1);
 				}
 			});
-			blockInput();
+			//blockInput();
 			loadADSLTable(page);
 		}
 	}
@@ -249,7 +304,7 @@ $(document).on('click','#btn',function(){
 	var elem = document.getElementById("menu_knopki");//Кнопка
 	var elem3 = document.getElementById("ADSLList");//Таблица
 	if(flag==0){
-		blockInput();
+		//blockInput();
 		flag=1;
 			elem.innerHTML ='&nbsp;'+
 			'<button  id="create" style="cursor:pointer"><img src="styles/kartoteka/img/plus.png" style="vertical-align: middle"></img>Создать</button>'+
@@ -258,9 +313,9 @@ $(document).on('click','#btn',function(){
 			loadADSLTableDel(page);
 	}
 	else{
-		if(document.getElementById("adsl_Name").value!=''){
-			blockInput();
-		}
+		//if(document.getElementById("adsl_Name").value!=''){
+		//	blockInput();
+		//}
 		flag=0;
 			elem.innerHTML ='&nbsp;'+
 			'<button id="create" style="cursor:pointer"><img src="styles/kartoteka/img/plus.png" style="vertical-align: middle"></img>Создать</button>'+
@@ -301,8 +356,8 @@ $(document).on("click", ".page-с", function (){
 
     //Обработка нажатия кнопки поиск
     $(document).on("click", "#poisk", function() {
-    	loadInfo("","");
-    	blockInput();
+    	loadInfo1("","");
+    	//blockInput();
     	zap=-1;
     	if(flag==0)
     		loadADSLTable(1);
@@ -334,7 +389,7 @@ $(document).on("click", ".page-с", function (){
     	else
     		$("#dialog").dialog('close');
     });
-    
+/*    
   //Обработка нажатия кнопки ввод во всплывающем окне
     $(document).on("click", "#vvod", function() {
     	//Проверим заполнение обязательных полей и сформируем сообщение с требованием заполнить поля
@@ -375,23 +430,24 @@ $(document).on("click", ".page-с", function (){
     		alert(msg);
     	}
     });
-    
+*/    
   //Обработка нажатия кнопки сохранить
-    $(document).on("click", "#save", function() {
+    $(document).on("click", "#_vvod", function() {
     	var msg =[];
-    	if(document.getElementById("adsl_Name").value == '')
+    	if(document.getElementById("_department_").value == '')
     		msg.push("\r\nВведите наименование отдела")
     	if(msg.length == 0) {
     		var arr = [];//Массив содержащий список ролей данного пользователя
-    		var values = $('#subdivisionList_').val();//Вернём все значения списком
+    		var values = $('#_subdivisions_').val();//Вернём все значения списком
     		
     		//Получим позиции всех выбранных значений в списке
-    		$('#subdivisionList_ option:selected').each(function() {
+    		$('#_subdivisions_ option:selected').each(function() {
     			arr.push($(this).text());
     		});
 
     		var DepartmentDataObject= {
-    				'departmentName': document.getElementById("adsl_Name").value,
+    				'departmentName': document.getElementById("_department_").value,
+    				'departmentCode': document.getElementById("_departmentCode_").value,
     				'subdivisionName': arr
     		};
     		$.ajax({

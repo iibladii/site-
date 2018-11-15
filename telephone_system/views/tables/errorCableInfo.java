@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 //Класс
 public class errorCableInfo {
-	    private ArrayList<String> adsl;
+	    private ArrayList<String> errorcable;
 	    private Integer count_elements;
 	    private Integer page;
 	    
@@ -13,17 +13,17 @@ public class errorCableInfo {
 	     * page - номер текущей страницы
 	     */
 	    public errorCableInfo(Integer count_elements, Integer page) {
-	    	this.adsl = new ArrayList<String>();
+	    	this.errorcable = new ArrayList<String>();
 	    	this.count_elements=count_elements;
 	    	this.page=page;
 	    }
 
-	    public void add(String adsl) {
-	    	this.adsl.add(adsl);
+	    public void add(String errorcable) {
+	    	this.errorcable.add(errorcable);
 	    }
 	    
 	    public ArrayList<String> getRoleList() {
-	        return adsl;
+	        return errorcable;
 	    }
 	    
 	    public Integer getCount_elements() {
@@ -35,6 +35,6 @@ public class errorCableInfo {
 	    }
 	    
 	    public Integer getSize() {
-	        return adsl.size();
+	        return errorcable.size();
 	    }
 }

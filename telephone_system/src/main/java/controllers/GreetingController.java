@@ -1218,7 +1218,7 @@ public class GreetingController {
      */
     public String departmentPOST(@RequestBody DepartmentDataObject cdo) {
     	//Получим список отделов
-    	String arr[][] = departmentRepository.findAllrole(cdo.getDepartmentName());
+    	String arr[][] = departmentRepository.findAllrole(cdo.getDepartmentName(), cdo.getDepartmentCode());
     	//Сформируем списки на обновление и удаление из бд
     	List<String> listAdd = new ArrayList();
     	List<String> listDel = new ArrayList();
@@ -1526,9 +1526,9 @@ public class GreetingController {
 	 */
     public List<DataListSelect2> select2KartotekaListSubdivisionModify(@RequestParam(value = "telephone", required = false, defaultValue = "") String telephone) {
     	//Department dep = subdivisionRepository.findDepListFromTelephone(telephone);//Получим отдела подразделения по номеру телефона
-    	String[] dep = telephoneRepository.findDepartmentName(telephone);//Возвращает (наименование, код) подразделения
+    	String[][] dep = telephoneRepository.findDepartmentName(telephone);//Возвращает (наименование, код) подразделения
     	String[][] sName = telephoneRepository.findSubdivisionCodeName(telephone);//Получим наименование подразделения по номеру телефона
-    	String[][] arr = subdivisionRepository.findAllCodeName(dep[0], dep[1]);//Выберем все наименования и коды подразделений
+    	String[][] arr = subdivisionRepository.findAllCodeName(dep[0][0], dep[0][1]);//Выберем все наименования и коды подразделений
     	//Структура данных содержащая информацию из выпадающего списка
     	List<DataListSelect2> list = new ArrayList<DataListSelect2>();
     	//Заполним данными список
@@ -1560,7 +1560,7 @@ public class GreetingController {
     	List<String> departmentList = departmentRepository.findAllDepartment();//Выберем все наименования и коды подразделений
     	
     	//Получим подразделение связанное с номером
-    	String[] dep = telephoneRepository.findDepartmentName(number);
+    	String[][] dep = telephoneRepository.findDepartmentName(number);
     	
     	//Подготовим данные для передачи
     	List<DataListSelect2> list = new ArrayList<DataListSelect2>();
@@ -1568,7 +1568,7 @@ public class GreetingController {
     		DataListSelect2 ds2 = new DataListSelect2();
     		ds2.setId(i);
     		ds2.setText(departmentList.get(i));
-    		if(departmentList.get(i).equals(dep[0]))
+    		if(departmentList.get(i).equals(dep[0][0]))
     			ds2.setSelected(true);
     		else
     			ds2.setSelected(false);

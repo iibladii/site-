@@ -21,14 +21,37 @@
   	<link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css"/>
 	<script>
   		$(function() {
-    		$( "#dialog" ).dialog({ autoOpen: false }); //Создадим окно закрытым http://jquery.page2page.ru/index.php5/%D0%94%D0%B8%D0%B0%D0%BB%D0%BE%D0%B3%D0%BE%D0%B2%D0%BE%D0%B5_%D0%BE%D0%BA%D0%BD%D0%BE_UI
+    		$( "#dialog" ).dialog({
+    			maxWidth:650,
+    	        maxHeight: 500,
+    	        width: 650,
+    	        height: 200,
+    	        autoOpen: false
+    		});
+    	});
+  		$(function() {
+    		$( "#view" ).dialog({
+    			maxWidth:650,
+    	        maxHeight: 500,
+    	        width: 650,
+    	        height: 200,
+    	        autoOpen: false
+    		});
   		});
   	</script>
 </head>
 <body>
 	<div id="dialog" title="Добавление элементов">
 		Введите наименование кабеля:<br/>
-		<input id="adsl_" name="adsl" type="text" size="30" placeholder="Кабель"></input>
+		<input id="adsl_" name="adsl" type="text" size="30" placeholder="Кабель" style="width: 600px;"></input>
+		<br/>
+		<br/>
+    	<button class="page-p" id="vvod" style="cursor:pointer">Ввод</button>
+    	<div id="response_vvod"></div>
+	</div>
+	<div id="view" title="Изменение элементов">
+		Введите наименование кабеля:<br/>
+		<input id="adsl_" name="adsl" type="text" size="30" placeholder="Кабель" style="width: 600px;"></input>
 		<br/>
 		<br/>
     	<button class="page-p" id="vvod" style="cursor:pointer">Ввод</button>

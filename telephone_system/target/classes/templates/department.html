@@ -28,7 +28,17 @@
     			maxWidth:650,
     	        maxHeight: 500,
     	        width: 650,
-    	        height: 290,
+    	        height: 320,
+    	        autoOpen: false
+    	        });
+  		});
+  		
+  		$(function() {
+    		$( "#view" ).dialog({
+    			maxWidth:650,
+    	        maxHeight: 500,
+    	        width: 650,
+    	        height: 320,
     	        autoOpen: false
     	        });
   		});
@@ -50,6 +60,23 @@
 		<br/>
     	<button class="page-p" id="vvod" style="cursor:pointer">Ввод</button>
     	<div id="response_vvod"></div>
+	</div>
+
+	<div id="view" title="Изменение элементов">
+		Введите код подразделения:<br/>
+		<input id="_departmentCode_" name="departmentCode" type="text" size="30" style="width: 600px;" placeholder="Код"></input>
+		<br/>
+		<br/>
+		Введите наименование подразделения:<br/>
+		<input id="_department_" name="department" type="text" size="30" style="width: 600px;" placeholder="Подразделение"></input>
+		<br/>
+		<br/>
+		Выберите отделы входящие в состав подразделения:<br/>
+		<select id="_subdivisions_" class="_js-example-basic-single_" name="state" style="width: 600px;" multiple="multiple"></select>
+		<br/>
+		<br/>
+    	<button class="page-p" id="_vvod" style="cursor:pointer">Ввод</button>
+    	<div id="_response_vvod"></div>
 	</div>
 
 	<!--Шапка основной страницы-->
@@ -88,9 +115,10 @@
   		<div class="block5_splitter"></div>
   		<div class="block4" id="buttonList">Connection failed...</div>
    	</div>
-   	
+   	<!--
   	<div class="block2" id="UserInfo">
-  	</div> 	
+  	</div>
+  	-->
    </div>
 </body>
 </html>

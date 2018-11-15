@@ -2,6 +2,7 @@ var flag=0;//Если 0-Режим просмотра 1-режим удален�
 var zap=-1;//Выделенная запись в таблице ADSL
 var page=1;//Текущая страница
 var mainURL;//Поддомен
+/*
 function UNblockInput(){
 	$('#save').prop("disabled", false);//Разблокируем кнопку
 	$('#UserInfo input').prop("disabled", false);//Разблокируем
@@ -13,6 +14,7 @@ function blockInput(){
 	$('#UserInfo input').attr('disabled', 'disabled');//Заблокируем
 	$('#UserInfo select').attr('disabled', 'disabled');//Заблокируем
 }
+*/
 
 //Клик по строке таблицы
 function viewclick(obj){
@@ -20,10 +22,18 @@ function viewclick(obj){
 		//zap=$(this).text();
 		zap = obj.id;
 		loadADSLTable(page);
-		UNblockInput();    		
+		//UNblockInput();    		
 	}
 }
 
+function viewSubdivision(obj){
+	$("#view").dialog('open');
+	if(flag==0){
+		zap = obj.id;
+	//	loadADSLTable(page);
+		//UNblockInput();    		
+	}
+}
 
 //Отправка запроса на получение данных-> получение результата запровс -> отображение полученных данных
 function loadADSLTable(elem){
@@ -35,19 +45,26 @@ function loadADSLTable(elem){
 					'<th width="20px">#</th>'+
 					'<th id="column-header-1">Код</th>'+
 					'<th id="column-header-2">Отдел</th>'+
+					'<th width="10px"></th>'+
 				'</tr>'+
 			'</thead>';
 			for(var i=0;i < parseInt(data.roleList.length); i++){
 				if(i != zap.toString()){
 					adslList+=
 						'<tbody>'+
-							'<tr onClick = "viewclick(this)" id="' + i + '"><td id="id' + i + '" width="20px">'+(i+1)+'</td><td id="code' + i + '" >'+data.codeList[i]+'</td><td id="role' + i + '" >'+data.roleList[i]+'</td></tr>'+
+							'<tr onClick = "viewclick(this)" id="' + i + '">'+
+								'<td id="id' + i + '" width="20px">'+(i+1)+'</td><td width="20px" id="code' + i + '" >'+data.codeList[i]+'</td><td id="role' + i + '" >'+data.roleList[i]+'</td>'+
+								'<td  width="10px"> <button id = "'+data.roleList[i] + '(' + data.codeList[i] + ')' +'" class="del" style="cursor:pointer" onClick = "viewSubdivision(this)"><img src="styles/kartoteka/img/tableView.png" style="vertical-align: middle"></img></button> </td>'+
+							'</tr>'+
 						'</tbody>';
 				}
 				else{
-					loadInfo(data.roleList[i],data.codeList[i]);//Запоним данными поля ввода
+					loadInfo1(data.roleList[i], data.codeList[i]);//Запоним данными поля ввода
 					adslList+='<tbody>'+
-					'<tr onClick = "viewclick(this)" id="' + i + '"><td id="id' + i + '" style="background: #cc0;" width="20px">'+(i+1)+'</td><td id="code' + i + '"  style="background: #cc0;">'+data.codeList[i]+'</td><td id="role' + i + '"  style="background: #cc0;">'+data.roleList[i]+'</td></tr>'+
+						'<tr onClick = "viewclick(this)" id="' + i + '">'+
+							'<td id="id' + i + '" style="background: #cc0;" width="20px">'+(i+1)+'</td><td width="20px" id="code' + i + '"  style="background: #cc0;">'+data.codeList[i]+'</td><td id="role' + i + '"  style="background: #cc0;">'+data.roleList[i]+'</td>'+
+							'<td  width="10px"> <button id = "'+data.roleList[i] + '(' + data.codeList[i] + ')' +'" class="del" style="cursor:pointer" onClick = "viewSubdivision(this)"><img src="styles/kartoteka/img/tableView.png" style="vertical-align: middle"></img></button> </td>'+
+						'</tr>'+
 					'</tbody>';
 				}
 			}
@@ -68,6 +85,7 @@ function loadADSLTable(elem){
 			
 			
 			//Изменение ширины колонок таблицы(Переделать)
+			/*
 			$(function() {
 		    	  var thHeight = $("table#usersTable th:first").height();
 		    	  $("table#usersTable th").resizable({
@@ -81,6 +99,7 @@ function loadADSLTable(elem){
 		    	      }
 		    	  });
 		    	});
+		    	*/
 	});
 }
 
@@ -90,15 +109,15 @@ function loadADSLTableDel(elem){
 		var adslList='<table border="1" id="usersTable">'+
 			'<thead>'+	
 				'<tr>'+
-					'<th width="20px">#</th>'+
-					'<th>Код&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
-					'<th>отдел&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>'+
-					'<th></th>'+
+					'<th width="10px">#</th>'+
+					'<th>Код</th>'+
+					'<th>Отдел</th>'+
+					'<th width="10px"></th>'+
 				'</tr>'+
 			'</thead>';
 			for(var i=0;i < parseInt(data.roleList.length); i++){
 				adslList+='<tbody>'+
-					'<tr><td  id="id' + i + '" width="20px">'+(i+1)+'</td><td id="code' + i + '">'+data.codeList[i]+'</td><td id="role' + i + '">'+data.roleList[i]+'</td><td width="20px"><button id = "'+(data.roleList[i]+'('+data.codeList[i]+')')+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button></td></tr>'+
+					'<tr><td  id="id' + i + '" width="20px">'+(i+1)+'</td><td width="20px" id="code' + i + '">'+data.codeList[i]+'</td><td id="role' + i + '">'+data.roleList[i]+'</td><td width="10px"><button id = "'+(data.roleList[i]+'('+data.codeList[i]+')')+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button></td></tr>'+
 				'</tbody>';
 			}
 			adslList+='</table>';
@@ -118,10 +137,10 @@ function loadADSLTableDel(elem){
 }
 
 //Загрузка данных
-function loadInfo(str,code){
-	var elem6 = document.getElementById("UserInfo");//Таблица
-	
-	
+function loadInfo1(name, code){
+	document.getElementById("_code_").value = code;
+	document.getElementById("_adsl_").value = name;
+/*
 	elem6.innerHTML=''+
 	'<div>Выбранное отдел:</div>'+
 	'<div>'+
@@ -140,27 +159,32 @@ function loadInfo(str,code){
 			'<div id="save_div"><button id="save" style="cursor:pointer">Сохранить</button></div>'+
 		'</div>'+
 	'</div>';
-	/*
+*/
+}
+/*
+//Загрузка данных
+function loadInfo(str,code){
+	var elem6 = document.getElementById("UserInfo");//Таблица
+
 	elem6.innerHTML=''+
-	'<div>Данные отдел:</div>'+
+	'<div>Выбранное отдел:</div>'+
 	'<div>'+
 		'&nbsp;'+
 		'<div>'+
-			'<div class="informationL">Код подразделения:</div>'+
-			'<div class="informationR" id="cname"><input type="text" id="c_Name" size="28" value="'+code+'"></input></div>'+
+			'<div>Код отдела:</div><br/>'+
+			'<div><input style=" width:400px" type="text" id="c_Name" value="'+code+'"></input></div>'+
 		'</div>'+
 		'&nbsp;'+
 		'<div>'+
-			'<div class="informationL">Наименование подразделения:</div>'+
-			'<div class="informationR" id="fname"><input type="text" id="adsl_Name" size="28" value="'+str+'"></input></div>'+
+			'<div">Наименование отдела:</div><br/>'+
+			'<div><input style=" width:400px" type="text" id="adsl_Name" value="'+str+'"></input></div>'+
+			'<br/>'+
 		'</div>'+
-		'&nbsp;'+
 		'<div>'+
-			'<div class="informationL"></div>'+
-			'<div class="informationR" id="save_div"><button id="save" style="cursor:pointer">Сохранить</button></div>'+
+			'<div id="save_div"><button id="save" style="cursor:pointer">Сохранить</button></div>'+
 		'</div>'+
-	'</div>';*/
-}
+	'</div>';
+}*/
 
 //При загрузке документа заполним таблицу
 $(document).ready(function() {
@@ -173,10 +197,8 @@ $(document).ready(function() {
 	}
 	mainURL = ref.substring(0, ch);
 	
-	
-	
-	loadInfo("","");
-	blockInput();
+	loadInfo1("","");
+	//blockInput();
 	loadADSLTable(1);
 });
 
@@ -201,7 +223,7 @@ function getdetails(obj) {
 					loadADSLTable(1);
 				}
 			});
-			blockInput();
+			//blockInput();
 			loadADSLTable(page);
 		}
 	}
@@ -212,7 +234,7 @@ $(document).on('click','#btn',function(){
 	var elem = document.getElementById("menu_knopki");//Кнопка
 	var elem3 = document.getElementById("ADSLList");//Таблица
 	if(flag==0){
-		blockInput();
+		//blockInput();
 		flag=1;
 			elem.innerHTML ='&nbsp;'+
 			'<button  id="create" style="cursor:pointer"><img src="styles/kartoteka/img/plus.png" style="vertical-align: middle"></img>Создать</button>'+
@@ -221,9 +243,9 @@ $(document).on('click','#btn',function(){
 			loadADSLTableDel(page);
 	}
 	else{
-		if(document.getElementById("adsl_Name").value!=''){
-			blockInput();
-		}
+		//if(document.getElementById("adsl_Name").value!=''){
+			//blockInput();
+		//}
 		flag=0;
 			elem.innerHTML ='&nbsp;'+
 			'<button id="create" style="cursor:pointer"><img src="styles/kartoteka/img/plus.png" style="vertical-align: middle"></img>Создать</button>'+
@@ -280,7 +302,7 @@ $(document).on('click','#btn',function(){
 		    			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#550000">Процесс удаления завершился ошибкой</p>';
 		    		  }
 		    		}
-				blockInput();
+				//blockInput();
 				loadADSLTable(page);
 			});
 		}
@@ -320,8 +342,8 @@ $(document).on("click", ".page-с", function (){
     
     //Обработка нажатия кнопки поиск
     $(document).on("click", "#poisk", function() {
-    	loadInfo("","");
-    	blockInput();
+    	loadInfo1("","");
+    	//blockInput();
     	zap=-1;
     	if(flag==0)
     		loadADSLTable(1);
@@ -351,14 +373,14 @@ $(document).on("click", ".page-с", function (){
     		  var rsp = xhr.responseText;
     		  if(rsp.toString() == "Save success"){
     			  //Оповестим об успехе сохранения
-    			  loadInfo(document.getElementById("adsl_Name").value,document.getElementById("c_Name").value);
+    			  loadInfo1(document.getElementById("adsl_Name").value,document.getElementById("c_Name").value);
     			  var elem6 = document.getElementById("save_div");
     			  //elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#005500">Сохранение успешно</p>';
     			  alert('Сохранение успешно');
     		  }
     		  else{
     			  //Оповестим об ошибке сохранения
-    			  loadInfo(document.getElementById("adsl_Name").value,document.getElementById("c_Name").value);
+    			  loadInfo1(document.getElementById("adsl_Name").value,document.getElementById("c_Name").value);
     			  var elem6 = document.getElementById("save_div");
     			  elem6.innerHTML='<button id="save" style="cursor:pointer">Сохранить</button><br/><br/><p style="color:#550000">Запись уже существует</p>';
     			  alert('Запись уже существует');
@@ -380,7 +402,7 @@ $(document).on("click", ".page-с", function (){
     		loadADSLTable(page);
     		//alert(document.getElementById("currentCode").innerHTML,document.getElementById("currentRole").innerHTML);  		
     		//loadInfo(code,sd);//Вызов перенесён в loadADSLTable 
-    		UNblockInput();    		
+    		//UNblockInput();    		
     	}
     });
     */
