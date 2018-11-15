@@ -1271,6 +1271,10 @@ public class GreetingController {
     		//Subdivision sub = subdivisionRepository.findObjectByCode(listDel.get(i));
     		sub.setDepartment(null);
     	}
+    	
+    	dep.setCode(cdo.getNewcod());
+    	dep.setName(cdo.getnewname());
+    	
     	departmentRepository.save(dep);
     	
         return "Data change completed successfully.";

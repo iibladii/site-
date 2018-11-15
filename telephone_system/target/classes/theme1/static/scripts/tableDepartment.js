@@ -2,6 +2,7 @@ var flag=0;//Если 0-Режим просмотра 1-режим удален�
 var zap=-1;//Выделенная запись в таблице ADSL
 var page=1;//Текущая страница
 var mainURL;//URL
+var currentLine = 0;//Выделенная пользователем строка
 /*
 function UNblockInput(){
 	$('#save').prop("disabled", false);//Разблокируем кнопку
@@ -63,6 +64,7 @@ function loadADSLTable(elem){
         				}
         				else{
         					loadInfo1(data.name[i], data.code[i]);//Запоним данными поля ввода
+        					currentLine = i;//Номер выделенной в данный момент строки
         					adslList+='<tbody>'+
         					'<tr onClick = "viewclick(this)" id="' + i + '">'+
         						'<td id="id' + i + '" width="20px" style="background: #cc0;">' + (i+1) + '</td>    <td width="20px" id="code' + i + '"  style="background: #cc0;">' + data.code[i] + '</td>    <td id="name' + i + '" style="background: #cc0;">'+data.name[i]+'</td>'+
@@ -444,12 +446,19 @@ $(document).on("click", ".page-с", function (){
     		$('#_subdivisions_ option:selected').each(function() {
     			arr.push($(this).text());
     		});
-
+    		
+    		
     		var DepartmentDataObject= {
-    				'departmentName': document.getElementById("_department_").value,
-    				'departmentCode': document.getElementById("_departmentCode_").value,
+    				'departmentName': document.getElementById("name" + currentLine).innerText,
+    				'departmentCode': document.getElementById("code" + currentLine).innerText,
+    				'newcod': document.getElementById("_departmentCode_").value,
+    				'newname': document.getElementById("_department_").value,
     				'subdivisionName': arr
     		};
+    		
+    		//console.log(document.getElementById("code0").innerText);
+    		console.log(DepartmentDataObject);
+    		
     		$.ajax({
     			type: 'POST',
     			url:  mainURL + '/departmentList',
