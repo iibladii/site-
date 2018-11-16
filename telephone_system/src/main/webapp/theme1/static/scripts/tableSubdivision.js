@@ -2,6 +2,7 @@ var flag=0;//Если 0-Режим просмотра 1-режим удален�
 var zap=-1;//Выделенная запись в таблице ADSL
 var page=1;//Текущая страница
 var mainURL;//Поддомен
+var currentLine=-1;//Строка таблицы выбранная в данный момент
 /*
 function UNblockInput(){
 	$('#save').prop("disabled", false);//Разблокируем кнопку
@@ -60,6 +61,7 @@ function loadADSLTable(elem){
 				}
 				else{
 					loadInfo1(data.roleList[i], data.codeList[i]);//Запоним данными поля ввода
+					currentLine = i;//Выбранная в данный момент строка
 					adslList+='<tbody>'+
 						'<tr onClick = "viewclick(this)" id="' + i + '">'+
 							'<td id="id' + i + '" style="background: #cc0;" width="20px">'+(i+1)+'</td><td width="20px" id="code' + i + '"  style="background: #cc0;">'+data.codeList[i]+'</td><td id="role' + i + '"  style="background: #cc0;">'+data.roleList[i]+'</td>'+
@@ -139,7 +141,7 @@ function loadADSLTableDel(elem){
 //Загрузка данных
 function loadInfo1(name, code){
 	document.getElementById("_code_").value = code;
-	document.getElementById("_adsl_").value = name;
+	document.getElementById("_name_").value = name;
 /*
 	elem6.innerHTML=''+
 	'<div>Выбранное отдел:</div>'+
@@ -351,6 +353,36 @@ $(document).on("click", ".page-с", function (){
     		loadADSLTableDel(1);
     });
 
+    //Изменение
+    $(document).on("click", "#modSubdiv", function() {
+    	
+    	var SubdivisionDataObject= {
+				'subdivisionName': document.getElementById("role" + currentLine).innerText,
+				'subdivisionCode': document.getElementById("code" + currentLine).innerText,
+				'newcod': document.getElementById("_code_").value,
+				'newname': document.getElementById("_name_").value
+		};
+    	
+    	//console.log(SubdivisionDataObject);
+    	$.ajax({
+			type: 'POST',
+			url:  mainURL + '/subdivisionList',
+			contentType: 'application/json; charset=utf-8',
+			data: JSON.stringify(SubdivisionDataObject),
+			dataType: 'json',
+			async: true,
+			success: function(result) {
+				alert('Статус: ' + result);
+				loadADSLTable(1);
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				alert('Статус: ' + jqXHR.responseText);
+				loadADSLTable(1);
+			}
+		});
+    });
+    
+    /*
   //Обработка нажатия кнопки сохранить
     $(document).on("click", "#save", function() {
     	//Инициализируем сохранение
@@ -392,7 +424,7 @@ $(document).on("click", ".page-с", function (){
     		loadADSLTable(page);
     	else
     		loadADSLTableDel(page);
-    });
+    });*/
     
     
     /*

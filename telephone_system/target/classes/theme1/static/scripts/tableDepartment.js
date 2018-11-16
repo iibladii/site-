@@ -34,6 +34,17 @@ function viewDepartment(obj){
 	}
 }
 
+
+//Компараторы//////////////////////////////////////////////////////
+function compareByCode(dataA, dataB) {
+	if(dataA.code > dataB.code) return -1;
+	if(dataA.code < dataB.code) return 1;
+	if(dataA.code == dataB.code) return 0;
+}
+//data.sort(compareByCode);//Сортируем
+///////////////////////////////////////////////////////////////////
+
+
 //Отправка запроса на получение данных-> получение результата запровс -> отображение полученных данных
 function loadADSLTable(elem){
         $.ajax({
@@ -457,7 +468,7 @@ $(document).on("click", ".page-с", function (){
     		};
     		
     		//console.log(document.getElementById("code0").innerText);
-    		console.log(DepartmentDataObject);
+    		//console.log(DepartmentDataObject);
     		
     		$.ajax({
     			type: 'POST',

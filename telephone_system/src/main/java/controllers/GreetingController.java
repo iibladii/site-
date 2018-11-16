@@ -50,6 +50,7 @@ import controllers.Department;
 import object.CooperatorsDataObject;
 import object.DepartmentDataObject;
 import object.KartotekaDataObject;
+import object.SubdivisionDataObject;
 import repository.AdslRepository;
 import repository.KrossRepository;
 import repository.SecurityRepository;
@@ -357,7 +358,7 @@ public class GreetingController {
 			// Узнаем число записей и выберем записи с по
 			List<Subdivision> adsl = subdivisionRepository.findAll_('%' + name + '%', '%' + code + '%');
 			// Сортируем полученные значения
-			adsl.sort(Comparator.comparing(Subdivision::getName));
+			adsl.sort(Comparator.comparing(Subdivision::getCode));
 			Integer ch = subdivisionRepository.findAllcount_('%' + name + '%', '%' + code + '%');
 			// Инициализация число элементов номер страницы
 			subdivision adsl_view = new subdivision(ch, elem);
@@ -432,9 +433,10 @@ public class GreetingController {
 			return "Delete successful";
 	    }
 
+		/*
 		@Secured(value = { "ROLE_ADMIN" })
 		@RequestMapping(value = "/subdivision/subdivision_update")
-		@ResponseBody
+		@ResponseBody*/
 		/**
 		 * Иззменение наименования подразделения
 		 * @param name название подразделения
@@ -442,7 +444,7 @@ public class GreetingController {
 		 * @param code код подразделения
 		 * @return статус
 		 */
-		public String get_department_update(@RequestParam(value = "name") String name,
+		/*public String get_department_update(@RequestParam(value = "name") String name,
 				@RequestParam(value = "oldName") String oldName,
 				@RequestParam(value = "code", defaultValue = "0") int code) {
 			//Обновим данные
@@ -459,7 +461,7 @@ public class GreetingController {
 			else{
 				return "The record already exists";
 			}
-		}
+		}*/
 		
 		@Secured(value = { "ROLE_ADMIN" })
 		@RequestMapping(value = "/subdivision/subdivision_create")
@@ -1112,7 +1114,7 @@ public class GreetingController {
     	di.setCountPAge(countPage.intValue());
     	//Составим список наименований подразделений
     	//Iterable<Department> dList = departmentRepository.findAll(name);//Найдём все подразделения
-    	Iterable<Department> dList = departmentRepository.findAllCodeName(name, code);//Найдём все подразделения
+    	Iterable<Department> dList = departmentRepository.findAllCodeName(name, code);//Найдём все подразделения(Сортировка по коду)
     	int ch = 0;
     	for(Department department:dList) {//Сформируем список наименований всех подразделений
     		if(ch <= sizePage) {
@@ -1208,6 +1210,67 @@ public class GreetingController {
 		return list;
 	}
     
+	
+	
+	
+	
+	/*
+	@Secured(value = { "ROLE_ADMIN" })
+	@RequestMapping(value = "/subdivision/subdivision_update")
+	@ResponseBody*/
+	/**
+	 * Иззменение наименования подразделения
+	 * @param name название подразделения
+	 * @param oldName старое наименование
+	 * @param code код подразделения
+	 * @return статус
+	 */
+	/*public String get_department_update(@RequestParam(value = "name") String name,
+			@RequestParam(value = "oldName") String oldName,
+			@RequestParam(value = "code", defaultValue = "0") int code) {
+		//Обновим данные
+		if(subdivisionRepository.findAllcount(name)<1) {
+			List<Subdivision> adsl = subdivisionRepository.findAll(oldName);
+			Iterator<Subdivision> iter2 = adsl.iterator();
+			while (iter2.hasNext()) {
+				Subdivision ad = ((Subdivision) iter2.next());
+				ad.setName(name);
+				subdivisionRepository.save(ad);
+			}
+			return "Save success";
+		}
+		else{
+			return "The record already exists";
+		}
+	}*/
+	@Secured(value = { "ROLE_ADMIN" })
+    @RequestMapping(value = "/subdivisionList", method = RequestMethod.POST)
+    @ResponseBody
+    /**
+     * Обновление данных
+     * @return статус операции
+     */
+    public String subdivisionPOST(@RequestBody SubdivisionDataObject cdo) {
+		//Обновим данные
+		int count = subdivisionRepository.findAllcountbyNameCode(cdo.getsubdivisionName(), cdo.getsubdivisionCode());
+		//if(subdivisionRepository.findAllcountbyNameCode(cdo.getsubdivisionName(), cdo.getsubdivisionCode()) == 1) {
+			Subdivision sd = subdivisionRepository.findAllByNameCode(cdo.getsubdivisionName(), cdo.getsubdivisionCode());
+
+			sd.setName(cdo.getnewname());
+			sd.setCode(cdo.getNewcod());
+			subdivisionRepository.save(sd);
+
+			return "Save success";
+		//}
+		//else{
+		//	return "Отдел с таким наименованием отсутствует в базе";
+		//}
+	}
+	
+	
+	
+	
+	
     
 	@Secured(value = { "ROLE_ADMIN" })
     @RequestMapping(value = "/departmentList", method = RequestMethod.POST)

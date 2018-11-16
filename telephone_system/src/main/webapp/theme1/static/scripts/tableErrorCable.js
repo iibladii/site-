@@ -2,7 +2,7 @@ var flag=0;//Если 0-Режим просмотра 1-режим удален�
 var zap=-1;//Выделенная запись в таблице ADSL
 var page=1;//Текущая страница
 var mainURL;//URL
-
+/*
 function UNblockInput(){
 	$('#save').prop("disabled", false);//Разблокируем кнопку
 	$('#UserInfo input').prop("disabled", false);//Разблокируем
@@ -13,7 +13,7 @@ function blockInput(){
 	$('#save').attr('disabled', 'disabled');//Заблокируем кнопку
 	$('#UserInfo input').attr('disabled', 'disabled');//Заблокируем
 	$('#UserInfo select').attr('disabled', 'disabled');//Заблокируем
-}
+}*/
 
 //Клик по строке таблицы
 function viewclick(obj){
@@ -61,6 +61,7 @@ function loadADSLTable(elem){
 					'</tbody>';
 				}
 				else{
+					loadInfo(data.roleList[i]);
 					adslList+='<tbody>'+
 					//'<tr><td class="info" style="background: #cc0;">'+data.roleList[i]+'</td></tr>'+
 					
@@ -131,10 +132,13 @@ function loadADSLTableDel(elem){
 	});
 }
 
+
 //Загрузка инфы
 function loadInfo(str){
-	var elem6 = document.getElementById("UserInfo");//Таблица
-
+	
+	
+	document.getElementById("_cable_").value = str;
+/*
 	elem6.innerHTML=''+
 	'<div>Неисправные пары:</div>'+
 	'<div>'+
@@ -147,7 +151,7 @@ function loadInfo(str){
 		'<div>'+
 			'<div id="save_div"><button id="save" style="cursor:pointer">Сохранить</button></div>'+
 		'</div>'+
-	'</div>';
+	'</div>';*/
 }
 
 $(document).ready(function() {//При загрузке документа заполним таблицу
@@ -162,7 +166,7 @@ $(document).ready(function() {//При загрузке документа за�
 	mainURL = ref.substring(0, ch);
 	
 	loadInfo("");
-	blockInput();
+	//blockInput();
 	loadADSLTable(1);
 });
 
@@ -172,7 +176,7 @@ $(document).on('click','#btn',function(){
 	var elem = document.getElementById("menu_knopki");//Кнопка
 	var elem3 = document.getElementById("ADSLList");//Таблица
 	if(flag==0){
-		blockInput();
+		//blockInput();
 		flag=1;
 			elem.innerHTML ='&nbsp;'+
 			'<button  id="create" style="cursor:pointer"><img src="styles/kartoteka/img/plus.png" style="vertical-align: middle"></img>Создать</button>'+
@@ -182,7 +186,7 @@ $(document).on('click','#btn',function(){
 	}
 	else{
 		if(document.getElementById("adsl_Name").value!=''){
-			blockInput();
+			//blockInput();
 		}
 		flag=0;
 			elem.innerHTML ='&nbsp;'+
@@ -277,7 +281,7 @@ $(document).on("click", ".page-с", function (){
     //Обработка нажатия кнопки поиск
     $(document).on("click", "#poisk", function() {
     	loadInfo("");
-    	blockInput();
+    	//blockInput();
     	zap=-1;
     	if(flag==0)
     		loadADSLTable(1);

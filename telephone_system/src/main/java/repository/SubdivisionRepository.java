@@ -65,12 +65,29 @@ public interface SubdivisionRepository extends CrudRepository<Subdivision, Long>
     List<Subdivision> findAll(@Param("name") String name);
 	
 	/**
+	 * Поиск всех подразделений с заданным наименованием и кодом
+	 * @param name наименование подразделения
+	 * @return список подразделений
+	 */
+	@Query(value = "select a from Subdivision a WHERE a.name like :name and a.code like :code")
+    Subdivision findAllByNameCode(@Param("name") String name, @Param("code") String code);
+	
+	/**
 	 * Поиск количества подразделений с заданным наименованием
 	 * @param name наименование подразделения
 	 * @return число подразделений
 	 */
 	@Query(value = "select count(a) from Subdivision a WHERE a.name like :name")
     Integer findAllcount(@Param("name") String name);
+	
+	/**
+	 * Поиск количества подразделений с заданным наименованием и кодом
+	 * @param name наименование подразделения
+	 * @param code код подразделения
+	 * @return число подразделений
+	 */
+	@Query(value = "select count(a) from Subdivision a WHERE a.name like :name and a.code like :code")
+    Integer findAllcountbyNameCode(@Param("name") String name, @Param("code") String code);
 	
 	/**
 	 * Поиск всех подразделений
