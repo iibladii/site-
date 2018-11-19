@@ -62,7 +62,7 @@ $(document).ready(function() {//При загрузке документа за�
 			'&nbsp;'+
 			'<div>'+
 				'<div class="informationL">Имя:</div>'+
-				'<div class="informationR" id="fname"><input type="text" id="fname_in" size="28"></input></div>'+
+				'<div class="informationR" id="fname"><input type="text" id="fname_in" size="28" style="width: 250px;"></input></div>'+
 			'</div>'+
 			'&nbsp;'+
 			'<div>'+

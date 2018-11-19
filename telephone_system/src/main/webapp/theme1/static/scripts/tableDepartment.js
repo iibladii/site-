@@ -1,36 +1,22 @@
 var flag=0;//Если 0-Режим просмотра 1-режим удаления
 var zap=-1;//Выделенная запись в таблице ADSL
 var page=1;//Текущая страница
+var countPage=1;//Количество страниц
 var mainURL;//URL
 var currentLine = 0;//Выделенная пользователем строка
-/*
-function UNblockInput(){
-	$('#save').prop("disabled", false);//Разблокируем кнопку
-	$('#UserInfo input').prop("disabled", false);//Разблокируем
-	$('#UserInfo select').prop("disabled", false);//Разблокируем
-}
 
-function blockInput(){
-	$('#save').attr('disabled', 'disabled');//Заблокируем кнопку
-	$('#UserInfo input').attr('disabled', 'disabled');//Заблокируем
-	$('#UserInfo select').attr('disabled', 'disabled');//Заблокируем
-}
-*/
 //Клик по строке таблицы
 function viewclick(obj){
 	if(flag==0){
 		zap = obj.id;
-		loadADSLTable(page);
-		//UNblockInput();    		
+		loadADSLTable(page);  		
 	}
 }
 
 function viewDepartment(obj){
 	$("#view").dialog('open');
 	if(flag==0){
-		zap = obj.id;
-	//	loadADSLTable(page);
-		//UNblockInput();    		
+		zap = obj.id;	
 	}
 }
 
@@ -53,6 +39,7 @@ function loadADSLTable(elem){
             dataType: 'json',
             async: true,
             success: function(data) {
+            	countPage = data.countPAge;
                 var elem2 = document.getElementById("ADSLList");//Таблица
         		var adslList='<table border="1" id="usersTable" width="600px">'+
         			'<thead>'+
@@ -92,8 +79,8 @@ function loadADSLTable(elem){
         			if(data.page-2 > 0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page-2)+'">'+(data.page-2)+'</button>&nbsp;';
         			if(data.page-1 > 0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page-1)+'">'+(data.page-1)+'</button>&nbsp;';
         			if(data.page>0) button_p +='<button class="page-с" style="cursor:pointer; background:green"  value="'+data.page+'">'+data.page+'</button>&nbsp;';
-        			if(data.page+1 <= Math.ceil(parseInt(data.countPage)/20)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page+1)+'">'+(data.page+1)+'</button>&nbsp;';
-        			if(data.page+2 <= Math.ceil(parseInt(data.countPage)/20)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page+2)+'">'+data.page+2+'</button>&nbsp;';
+        			if(data.page+1 <= Math.ceil(data.countPAge)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page+1)+'">'+(data.page+1)+'</button>&nbsp;';
+        			if(data.page+2 <= Math.ceil(data.countPAge)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page+2)+'">'+data.page+2+'</button>&nbsp;';
         			button_p +='<button class="page-r" style="cursor:pointer">&gt;</button>&nbsp;';
         			button.innerHTML = button_p;   
             },
@@ -111,6 +98,7 @@ function loadADSLTableDel(elem){
         dataType: 'json',
         async: true,
         success: function(data) {
+        	countPage = data.countPAge;
             var elem2 = document.getElementById("ADSLList");//Таблица
     		var adslList='<table border="1" id="usersTable">'+
     			'<thead>'+
@@ -134,10 +122,10 @@ function loadADSLTableDel(elem){
     			if(data.page-2 > 0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page-2)+'">'+(data.page-2)+'</button>&nbsp;';
     			if(data.page-1 > 0) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page-1)+'">'+(data.page-1)+'</button>&nbsp;';
     			if(data.page>0) button_p +='<button class="page-с" style="cursor:pointer; background:green"  value="'+data.page+'">'+data.page+'</button>&nbsp;';
-    			if(data.page+1 <= Math.ceil(parseInt(data.countPage)/20)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page+1)+'">'+(data.page+1)+'</button>&nbsp;';
-    			if(data.page+2 <= Math.ceil(parseInt(data.countPage)/20)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page+2)+'">'+data.page+2+'</button>&nbsp;';
+    			if(data.page+1 <= Math.ceil(data.countPAge)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page+1)+'">'+(data.page+1)+'</button>&nbsp;';
+    			if(data.page+2 <= Math.ceil(data.countPAge)) button_p +='<button class="page-с" style="cursor:pointer" value="'+(data.page+2)+'">'+data.page+2+'</button>&nbsp;';
     			button_p +='<button class="page-r" style="cursor:pointer">&gt;</button>&nbsp;';
-    			button.innerHTML = button_p;   
+    			button.innerHTML = button_p;
               
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -145,29 +133,6 @@ function loadADSLTableDel(elem){
         }
     });
 }
-/*
-//Загрузка списка отделов в формате наименование/код в select2 в всплывающем окне
-function reloadSelect2(name, code){
-	if(name!='')
-		$.ajax({
-			type: 'GET',
-			url:   mainURL + '/getSubdivisionList?name=' + encodeURIComponent(name) + '&code=' + encodeURIComponent(code),
-			dataType: 'json',
-			async: true,
-			success: function(data) {
-				$('.js-example-basic-single').select2({
-					data: data
-				});
-			},
-			error: function(jqXHR, textStatus, errorThrown) {
-				alert(jqXHR.status + ' ' + jqXHR.responseText);
-			}
-		});
-	else
-		$('.js-example-basic-single').select2({
-			data: ''
-		});
-}*/
 
 //Заполним выподающий список списком подразделений
 function initSelect2Set(){
@@ -229,42 +194,6 @@ function loadInfo1(name, code){
 	
 	reloadSelect21(name, code);
 }
-
-
-/*
-//Загрузка данных
-function loadInfo(name, code){
-	var elem6 = document.getElementById("UserInfo");//Таблица
-	elem6.innerHTML=''+
-	'<div>Выбранный отдел:</div>'+
-	'<div>'+
-		'&nbsp;'+
-		'<div>'+
-			'<div>Код подразделения:</div><br/>'+
-			'<div><input style=" width:400px" type="text" id="adsl_Code" value="' + code + '" readonly="readonly"></input></div>'+
-		'</div>'+
-		'&nbsp;'+
-		'<div>'+
-			'<div>Наименование подразделения:</div><br/>'+
-			'<div><input style=" width:400px" type="text" id="adsl_Name" value="' + name + '" readonly="readonly"></input></div>'+
-		'</div>'+
-		'&nbsp;'+
-		'<div>'+
-			'<div">Сопоставленные отделы:</div><br/>'+
-			'<div style=" width:100%" id="selectSubdivision"></div>'+
-			'<br/>'+
-		'</div>'+
-		'<div>'+
-			'<div id="save_div"><button id="save" style="cursor:pointer">Сохранить</button></div>'+
-		'</div>'+
-	'</div>';
-
-	var elem = document.getElementById("selectSubdivision");
-	var dat = '<select id="subdivisionList_" class="js-example-basic-single" name="state" style="width: 100%;" multiple="multiple"></select>';
-	elem.innerHTML = dat;
-	
-	reloadSelect2(name, code);
-}*/
 
 //При загрузке документа заполним таблицу
 $(document).ready(function() {
@@ -340,32 +269,12 @@ $(document).on('click','#btn',function(){
 
 //Обработка нажатия на кнопку с номером страницы
 $(document).on("click", ".page-с", function (){
+	page = $(this).attr("value");
 	if(flag==0)
-		loadADSLTable($(this).attr("value"));
+		loadADSLTable(page);
 	else
-		loadADSLTableDel($(this).attr("value"));
+		loadADSLTableDel(page);
 });
-
-
-/*
-	//Обработка кликов по таблице->колонка удаления
-    $(document).on("click", "#usersTable tbody tr td.del", function() {
-    	//Если кликнули в режиме удаления
-    	if(flag==1){
-    		if($(this).text()=='') 
-    			$(this).text(function(index, text){
-    				text = 'x';
-    				return text;
-    			});
-    		else
-        		$(this).text(function(index, text){
-        			text = '';
-                    return text;
-        		});
-    	}
-    });
- */
-
 
     //Обработка нажатия кнопки поиск
     $(document).on("click", "#poisk", function() {
@@ -377,20 +286,6 @@ $(document).on("click", ".page-с", function (){
     	else
     		loadADSLTableDel(1);
     });
-    
-    
-    /*
-    //Клик по строке таблицы
-    $(document).on("click", "#usersTable tbody tr td.info", function() {
-    	if(flag==0){
-    		//console.log($(this).attr("class"));
-    		//console.log($(this).attr("id"));
-    		zap = $(this).attr("id");
-    		//zap=$(this).text();
-    		loadADSLTable(page);
-    		UNblockInput();    		
-    	}
-    });*/
       
   //Обработка нажатия кнопки создать
     $(document).on("click", "#create", function() {
@@ -402,7 +297,7 @@ $(document).on("click", ".page-с", function (){
     	else
     		$("#dialog").dialog('close');
     });
-/*    
+   
   //Обработка нажатия кнопки ввод во всплывающем окне
     $(document).on("click", "#vvod", function() {
     	//Проверим заполнение обязательных полей и сформируем сообщение с требованием заполнить поля
@@ -428,7 +323,7 @@ $(document).on("click", ".page-с", function (){
     			contentType: 'application/json; charset=utf-8',
     			data: JSON.stringify(DepartmentDataObject),
     			dataType: 'json',
-    			async: true,
+    			async: false,
     			success: function(result) {
     				alert('Статус: ' + result);
     				loadADSLTable(1);
@@ -443,7 +338,7 @@ $(document).on("click", ".page-с", function (){
     		alert(msg);
     	}
     });
-*/    
+  
   //Обработка нажатия кнопки сохранить
     $(document).on("click", "#_vvod", function() {
     	var msg =[];
@@ -466,9 +361,6 @@ $(document).on("click", ".page-с", function (){
     				'newname': document.getElementById("_department_").value,
     				'subdivisionName': arr
     		};
-    		
-    		//console.log(document.getElementById("code0").innerText);
-    		//console.log(DepartmentDataObject);
     		
     		$.ajax({
     			type: 'POST',

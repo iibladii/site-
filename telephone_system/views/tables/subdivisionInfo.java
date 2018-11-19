@@ -4,37 +4,55 @@ import java.util.ArrayList;
 
 //Класс
 public class subdivisionInfo {
-	    private ArrayList<String> adsl;
-	    private Integer count_elements;
-	    private Integer page;
-	    
-	    /*
-	     * count_elements - число елементов
-	     * page - номер текущей страницы
-	     */
-	    public subdivisionInfo(Integer count_elements, Integer page) {
-	    	this.adsl = new ArrayList<String>();
-	    	this.count_elements=count_elements;
-	    	this.page=page;
-	    }
+	private ArrayList<String> name;//Наименование отделов
+    private ArrayList<String> code;//Коды отделов
+    private Integer sizePage;//Размер передаваемой страницы
+    private Integer page;//Номер страницы
+    private Integer countPage;//Число страниц заданного размера в бд
+    
+    /**
+     * Конструктор
+     * @param page номер возвращаемой страницы
+     */
+    public subdivisionInfo(Integer page) {
+    	this.name = new ArrayList<String>();
+    	this.code = new ArrayList<String>();
+    	this.page=page;
+    }
 
-	    public void add(String adsl) {
-	    	this.adsl.add(adsl);
-	    }
-	    
-	    public ArrayList<String> getRoleList() {
-	        return adsl;
-	    }
-	    
-	    public Integer getCount_elements() {
-	        return count_elements;
-	    }
-	    
-	    public Integer getPage() {
-	        return page;
-	    }
-	    
-	    public Integer getSize() {
-	        return adsl.size();
-	    }
+    public void addName(String name) {
+    	this.name.add(name);
+    }
+    
+    public ArrayList<String> getName() {
+        return name;
+    }
+    
+    public ArrayList<String> getCode() {
+        return code;
+    }
+    
+    public void setCode(String code) {
+    	this.code.add(code);
+    }
+    
+    public Integer getSizePage() {
+        return sizePage;
+    }
+    
+    public void setSizePage(Integer sizePage) {
+    	this.sizePage = sizePage;
+    }
+    
+    public Integer getPage() {
+        return page;
+    }
+    
+    public Integer getCountPAge() {
+        return countPage;
+    }
+    
+    public void setCountPAge(Integer countPage) {
+    	this.countPage = countPage;
+    }
 }

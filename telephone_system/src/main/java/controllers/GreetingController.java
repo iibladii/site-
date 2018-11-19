@@ -73,6 +73,7 @@ import tables.adslInfo;
 import tables.companateSelect2;
 import tables.departmentInfo;
 import tables.subdivision;
+import tables.subdivisionInfo;
 import tables.subdivisionSelect2;
 import tables.errorCableInfo;
 import tables.krossT;
@@ -343,16 +344,63 @@ public class GreetingController {
 			return "success";
 		}
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		@Secured(value = { "ROLE_ADMIN" })
+	    @RequestMapping(value = "/subdivisionList", method = RequestMethod.GET)
+	    @ResponseBody
+		/**
+		 * Формирует и отправляет список отделов
+		 * @param page номер страницы
+		 * @param sizePage число строк в стаблице
+		 * @param name название отдела (если указано в фильтре)
+		 * @return список отделов
+		 */
+		public subdivisionInfo subdivision_info(@RequestParam Integer page, @RequestParam Integer sizePage, @RequestParam(required = false, defaultValue = "") String name, @RequestParam(required = false, defaultValue = "") String code) {
+	    	name = "%" + name + "%";
+	    	code = "%" + code + "%";
+	    	subdivisionInfo di = new subdivisionInfo(page);
+	    	//Сохраним размер страницы
+	    	di.setSizePage(sizePage);
+	    	//Сохраним число страниц полученное на основе шаблона
+	    	Double countPage = Math.ceil((double)subdivisionRepository.findAllcountNameCode(name, code)/(double)sizePage);
+	    	di.setCountPAge(countPage.intValue());
+	    	//Составим список наименований подразделений
+	    	String[][] dList = subdivisionRepository.findAllCodeName(name, code);//Найдём все подразделения(Сортировка по коду)
+	    	int ch = 0;
+	    	for(int i = (page-1) * sizePage; i < (dList.length < (page * sizePage) ? dList.length:page * sizePage); i++) {
+	    		//if(ch <= sizePage) {
+	    			di.addName(dList[i][0]);
+	    			di.setCode(dList[i][1]);
+	    		//}
+	    		ch++;
+	    		//if(ch == sizePage) return di;
+	    	}
+			return di;
+		}
+		
+		
+		
+		/*
 		@Secured(value = { "ROLE_ADMIN" })	
 		@RequestMapping(value = "/subdivision/subdivision_info")
-		@ResponseBody
+		@ResponseBody*/
 		/**
 		 * Получение данных о подразделениях
 		 * @param name наименование
 		 * @param elem число запрошенных строк
 		 * @param code Код подразделения
 		 * @return
-		 */
+		 *//*
 		public subdivision get_department_info(@RequestParam(value = "name") String name,
 				@RequestParam(value = "elem",defaultValue="1") Integer elem, @RequestParam(value= "code") String code) {
 			// Узнаем число записей и выберем записи с по
@@ -374,7 +422,7 @@ public class GreetingController {
 					iter2.next();
 			}
 			return adsl_view;
-		}
+		}*/
 	
 		@Secured(value = { "ROLE_ADMIN" })
 		@RequestMapping(value = "/subdivision/department_del")
@@ -1114,15 +1162,16 @@ public class GreetingController {
     	di.setCountPAge(countPage.intValue());
     	//Составим список наименований подразделений
     	//Iterable<Department> dList = departmentRepository.findAll(name);//Найдём все подразделения
-    	Iterable<Department> dList = departmentRepository.findAllCodeName(name, code);//Найдём все подразделения(Сортировка по коду)
+    	List<Department> dList = departmentRepository.findAllCodeName(name, code);//Найдём все подразделения(Сортировка по коду)
     	int ch = 0;
-    	for(Department department:dList) {//Сформируем список наименований всех подразделений
-    		if(ch <= sizePage) {
-    			di.addName(department.getName());
-    			di.setCode(department.getCode());
-    		}
-    		ch++;
-    		if(ch == sizePage) return di;
+    	//for(Department department:dList) {//Сформируем список наименований всех подразделений
+    	for(int i = (page-1) * sizePage; i < (dList.size() < (page * sizePage) ? dList.size():page * sizePage); i++) {
+    		//if(ch <= sizePage) {
+    			di.addName(dList.get(i).getName());
+    			di.setCode(dList.get(i).getCode());
+    		//}
+    		//ch++;
+    		//if(ch == sizePage) return di;
     	}
 		return di;
 	}
