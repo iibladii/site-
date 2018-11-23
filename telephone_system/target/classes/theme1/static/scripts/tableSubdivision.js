@@ -110,7 +110,7 @@ function loadADSLTableDel(elem){
     		*/	
     			for(var i=0;i < parseInt(data.name.length); i++){
 					adslList += '<tbody>'+
-									'<tr><td class="' + i + '" id="id' + i + '" width="20px">' + (i+1) + '</td>      <td width="20px" id="code' + i + '" class="' + i + '">' + data.code[i] + '</td>      <td  id="name' + i + '" class="' + i + '">' + data.name[i] + '</td><td width="10px">      <button id = "'+data.name[i]+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button>        </td></tr>'+
+									'<tr><td class="' + i + '" id="id' + i + '" width="20px">' + (i+1) + '</td>      <td width="20px" id="code' + i + '" class="' + i + '">' + data.code[i] + '</td>      <td  id="name' + i + '" class="' + i + '">' + data.name[i] + '</td><td width="10px"> <button id = "'+data.name[i] + '(' + data.code[i] + ')'+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button>        </td></tr>'+
 								'</tbody>';
     			}
 					
