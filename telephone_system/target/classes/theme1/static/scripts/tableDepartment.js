@@ -371,11 +371,11 @@ $(document).on("click", ".page-с", function (){
     			async: true,
     			success: function(result) {
     				alert('Статус: ' + result);
-    				loadADSLTable(1);
+    				loadADSLTable(page);
     			},
     			error: function(jqXHR, textStatus, errorThrown) {
     				alert('Статус: ' + jqXHR.responseText);
-    				loadADSLTable(1);
+    				loadADSLTable(page);
     			}
     		});
     	}

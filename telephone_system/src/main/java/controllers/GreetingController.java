@@ -423,15 +423,17 @@ public class GreetingController {
 			}
 			return adsl_view;
 		}*/
-	
+/*
 		@Secured(value = { "ROLE_ADMIN" })
 		@RequestMapping(value = "/subdivision/department_del")
 		@ResponseBody
+*/
 		/**
 		 * Удаление подразделения
 		 * @param name Наименование подразделения(Уникальное значение)
 		 * @return
 		 */
+/*
 		public String department_del(@RequestParam(value = "name") List<String> name) {
 			//Обновим данные
 			for(int i = 0; i < name.size(); i++) {
@@ -465,6 +467,7 @@ public class GreetingController {
 				return "The record already exists";
 			}
 		}
+*/
 		
 		@Secured(value = { "ROLE_ADMIN" })
 	    @RequestMapping(value = "/subdivisionList", method = RequestMethod.DELETE)

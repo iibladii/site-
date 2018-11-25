@@ -229,7 +229,7 @@ $(document).on("click", ".page-с", function (){
     $(document).on("click", "#modSubdiv", function() {
     	
     	var SubdivisionDataObject= {
-				'subdivisionName': document.getElementById("role" + currentLine).innerText,
+				'subdivisionName': document.getElementById("name" + currentLine).innerText,
 				'subdivisionCode': document.getElementById("code" + currentLine).innerText,
 				'newcod': document.getElementById("_code_").value,
 				'newname': document.getElementById("_name_").value
@@ -245,11 +245,11 @@ $(document).on("click", ".page-с", function (){
 			async: true,
 			success: function(result) {
 				alert('Статус: ' + result);
-				loadADSLTable(1);
+				loadADSLTable(page);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				alert('Статус: ' + jqXHR.responseText);
-				loadADSLTable(1);
+				loadADSLTable(page);
 			}
 		});
     });
