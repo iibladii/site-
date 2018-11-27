@@ -1426,8 +1426,10 @@ public class GreetingController {
 	 * @param name наименования отделов
 	 * @return данны в виде ('подразделение(код)')
 	 */
-    public List<DataListSelect2> select2KartotekaListSubdivision(@RequestParam(value = "name", required = false, defaultValue = "") String name, @RequestParam(value = "name", required = false, defaultValue = "") String code) {
-    	String[][] arr = subdivisionRepository.findAllCodeName(name, code);//Выберем все наименования и коды подразделений
+    public List<DataListSelect2> select2KartotekaListSubdivision(@RequestParam(value = "name", required = false, defaultValue = "") String name) {
+		String name_ = name.substring(0, name.indexOf('('));
+		String code_ = name.substring(name.indexOf('(') + 1, name.indexOf(')'));
+    	String[][] arr = subdivisionRepository.findAllCodeName(name_, code_);//Выберем все наименования и коды подразделений
     	//Структура данных содержащая информацию из выпадающего списка
     	List<DataListSelect2> list = new ArrayList<DataListSelect2>();
     	//Заполним данными список
@@ -1451,13 +1453,13 @@ public class GreetingController {
 	 * @return данны в виде ('подразделение(код)')
 	 */
     public List<DataListSelect2> select2KartotekaListDepartment(@RequestParam(value = "name", required = false, defaultValue = "") String name) {
-    	List<String> departmentList = departmentRepository.findAllDepartment();//Выберем все наименования и коды подразделений
+    	String[][] departmentList = departmentRepository.findAllDepartment();//Выберем все наименования и коды подразделений
     	//Подготовим данные для передачи
     	List<DataListSelect2> list = new ArrayList<DataListSelect2>();
-    	for(int i = 0; i < departmentList.size(); i++) {
+    	for(int i = 0; i < departmentList.length; i++) {
     		DataListSelect2 ds2 = new DataListSelect2();
     		ds2.setId(i);
-    		ds2.setText(departmentList.get(i));
+    		ds2.setText(departmentList[i][0] + '(' + departmentList[i][1] + ')');
     		ds2.setSelected(false);
     		list.add(ds2);
 		}
@@ -1676,18 +1678,18 @@ public class GreetingController {
 	 */
     public List<DataListSelect2> select2KartotekaListDepartmentModify(@RequestParam(value = "telephone", required = false, defaultValue = "") String number) {
     	//List<String> departmentList = departmentRepository.findAllDep(name);//Выберем все наименования и коды подразделений
-    	List<String> departmentList = departmentRepository.findAllDepartment();//Выберем все наименования и коды подразделений
+    	String[][] departmentList = departmentRepository.findAllDepartment();//Выберем все наименования и коды подразделений
     	
     	//Получим подразделение связанное с номером
     	String[][] dep = telephoneRepository.findDepartmentName(number);
     	
     	//Подготовим данные для передачи
     	List<DataListSelect2> list = new ArrayList<DataListSelect2>();
-    	for(int i = 0; i < departmentList.size(); i++) {
+    	for(int i = 0; i < departmentList.length; i++) {
     		DataListSelect2 ds2 = new DataListSelect2();
     		ds2.setId(i);
-    		ds2.setText(departmentList.get(i));
-    		if(departmentList.get(i).equals(dep[0][0]))
+    		ds2.setText(departmentList[i][0] + '(' + departmentList[i][0] + ')');
+    		if(departmentList[i][0].equals(dep[0][0]) && departmentList[i][1].equals(dep[0][1]))
     			ds2.setSelected(true);
     		else
     			ds2.setSelected(false);

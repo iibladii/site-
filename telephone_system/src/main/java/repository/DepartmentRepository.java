@@ -71,10 +71,10 @@ public interface DepartmentRepository extends CrudRepository<Department, Long> {
 	
 	/**
 	 * Поиск всех отделов
-	 * @return список наименований подразделений
+	 * @return список наименований, кодов подразделений
 	 */
-	@Query(value = "select a.name from Department a")
-    List<String> findAllDepartment();
+	@Query(value = "select a.name, a.code from Department a")
+    String[][] findAllDepartment();
 	
 	/**
 	 * Поиск списка всех отделов
