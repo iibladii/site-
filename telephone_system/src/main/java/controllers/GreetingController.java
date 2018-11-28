@@ -377,13 +377,10 @@ public class GreetingController {
 	    	//Составим список наименований подразделений
 	    	String[][] dList = subdivisionRepository.findAllCodeName(name, code);//Найдём все подразделения(Сортировка по коду)
 	    	int ch = 0;
-	    	for(int i = (page-1) * sizePage; i < (dList.length < (page * sizePage) ? dList.length:page * sizePage); i++) {
-	    		//if(ch <= sizePage) {
-	    			di.addName(dList[i][0]);
-	    			di.setCode(dList[i][1]);
-	    		//}
+	    	for(int i = (di.getPage() - 1) * sizePage; i < (dList.length < (di.getPage() * sizePage) ? dList.length:di.getPage() * sizePage); i++) {
+	    		di.addName(dList[i][0]);
+	    		di.setCode(dList[i][1]);
 	    		ch++;
-	    		//if(ch == sizePage) return di;
 	    	}
 			return di;
 		}
@@ -1160,21 +1157,15 @@ public class GreetingController {
     	//Сохраним размер страницы
     	di.setSizePage(sizePage);
     	//Сохраним число страниц полученное на основе шаблона
-    	//Double countPage = Math.ceil((double)departmentRepository.findAllcount(name)/(double)sizePage);
     	Double countPage = Math.ceil((double)departmentRepository.findAllcountNameCode(name, code)/(double)sizePage);
     	di.setCountPAge(countPage.intValue());
     	//Составим список наименований подразделений
-    	//Iterable<Department> dList = departmentRepository.findAll(name);//Найдём все подразделения
     	List<Department> dList = departmentRepository.findAllCodeName(name, code);//Найдём все подразделения(Сортировка по коду)
     	int ch = 0;
-    	//for(Department department:dList) {//Сформируем список наименований всех подразделений
-    	for(int i = (page-1) * sizePage; i < (dList.size() < (page * sizePage) ? dList.size():page * sizePage); i++) {
-    		//if(ch <= sizePage) {
-    			di.addName(dList.get(i).getName());
-    			di.setCode(dList.get(i).getCode());
-    		//}
-    		//ch++;
-    		//if(ch == sizePage) return di;
+    	//Сформируем список наименований всех подразделений
+    	for(int i = (di.getPage() - 1) * sizePage; i < (dList.size() < (di.getPage() * sizePage) ? dList.size():di.getPage() * sizePage); i++) {
+    		di.addName(dList.get(i).getName());
+    		di.setCode(dList.get(i).getCode());
     	}
 		return di;
 	}

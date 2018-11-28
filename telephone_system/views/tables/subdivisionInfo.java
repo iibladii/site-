@@ -53,6 +53,8 @@ public class subdivisionInfo {
     }
     
     public void setCountPAge(Integer countPage) {
+    	if(page > countPage)//Скорректируем максимальное значение номера страницы
+    		page = countPage;
     	this.countPage = countPage;
     }
 }

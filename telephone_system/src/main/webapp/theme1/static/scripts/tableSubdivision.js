@@ -28,6 +28,8 @@ function loadADSLTable(elem){
             dataType: 'json',
             async: true,
             success: function(data) {
+            	//Зададим номер текущей страницы
+            	page = data.countPAge>elem?elem:data.countPAge;
             	countPage = data.countPAge;
             	var elem2 = document.getElementById("ADSLList");//Таблица
         		var adslList='<table border="1" id="usersTable" width="600px">'+
@@ -86,6 +88,8 @@ function loadADSLTableDel(elem){
         dataType: 'json',
         async: true,
         success: function(data) {
+        	//Зададим номер текущей страницы
+        	page = data.countPAge>elem?elem:data.countPAge;
         	countPage = data.countPAge;
         	var elem2 = document.getElementById("ADSLList");//Таблица
     		var adslList='<table border="1" id="usersTable" width="600px">'+
@@ -97,17 +101,6 @@ function loadADSLTableDel(elem){
     					'<th width="10px"></th>'+
     				'</tr>'+
     			'</thead>';
-    		/*
-    			for(var i=0;i < parseInt(data.name.length); i++){
-    					//Вставка
-    					adslList+='<tbody>'+
-    					'<tr onClick = "viewclick(this)" id="' + i + '">'+
-    						'<td id="id' + i + '" width="20px">' + (i+1) + '</td>   <td width="20px" id="code' + i + '"   >' + data.code[i] + '</td>   <td  id="name' + i + '">' + data.name[i] + '</td>'+
-    						'<td  width="10px"> <button id = "'+data.name[i] + '(' + data.code[i] + ')' +'" class="del" style="cursor:pointer" onClick = "viewSubdivision(this)"><img src="styles/kartoteka/img/tableView.png" style="vertical-align: middle"></img></button> </td>'+
-    					'</tr>'+
-    					'</tbody>';
-    			}
-    		*/	
     			for(var i=0;i < parseInt(data.name.length); i++){
 					adslList += '<tbody>'+
 									'<tr><td class="' + i + '" id="id' + i + '" width="20px">' + (i+1) + '</td>      <td width="20px" id="code' + i + '" class="' + i + '">' + data.code[i] + '</td>      <td  id="name' + i + '" class="' + i + '">' + data.name[i] + '</td><td width="10px"> <button id = "'+data.name[i] + '(' + data.code[i] + ')'+'" class="del" style="cursor:pointer" onClick = "getdetails(this)"><img src="styles/kartoteka/img/tableDel.png" style="vertical-align: middle"></img></button>        </td></tr>'+
@@ -151,7 +144,6 @@ $(document).ready(function() {
 	mainURL = ref.substring(0, ch);
 	
 	loadInfo1("","");
-	//blockInput();
 	loadADSLTable(1);
 });
 
@@ -176,7 +168,6 @@ function getdetails(obj) {
 					loadADSLTable(1);
 				}
 			});
-			//blockInput();
 			loadADSLTable(page);
 		}
 	}
@@ -187,7 +178,6 @@ $(document).on('click','#btn',function(){
 	var elem = document.getElementById("menu_knopki");//Кнопка
 	var elem3 = document.getElementById("ADSLList");//Таблица
 	if(flag==0){
-		//blockInput();
 		flag=1;
 			elem.innerHTML ='&nbsp;'+
 			'<button  id="create" style="cursor:pointer"><img src="styles/kartoteka/img/plus.png" style="vertical-align: middle"></img>Создать</button>'+
@@ -214,10 +204,27 @@ $(document).on("click", ".page-с", function (){
 	else
 		loadADSLTableDel(page);
 });
+//Обработка нажатия на кнопку назад
+$(document).on("click", ".page-l", function (){
+	if(page > 1)
+	if(flag == 0)
+		loadADSLTable(page - 1);
+	else
+		loadADSLTableDel(page - 1);
+});
+//Обработка нажатия на кнопку вперёд
+$(document).on("click", ".page-r", function (){
+	if(flag==0)
+		loadADSLTable(page + 1);
+	else
+		loadADSLTableDel(page + 1);
+});
+
+
+
     //Обработка нажатия кнопки поиск
     $(document).on("click", "#poisk", function() {
     	loadInfo1("","");
-    	//blockInput();
     	zap=-1;
     	if(flag==0)
     		loadADSLTable(1);
@@ -235,7 +242,6 @@ $(document).on("click", ".page-с", function (){
 				'newname': document.getElementById("_name_").value
 		};
     	
-    	//console.log(SubdivisionDataObject);
     	$.ajax({
 			type: 'POST',
 			url:  mainURL + '/subdivisionList',

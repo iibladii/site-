@@ -62,32 +62,32 @@ $(document).ready(function() {//При загрузке документа за�
 			'&nbsp;'+
 			'<div>'+
 				'<div class="informationL">Имя:</div>'+
-				'<div class="informationR" id="fname"><input type="text" id="fname_in" size="28" style="width: 250px;"></input></div>'+
+				'<div class="informationR" id="fname"><input type="text" id="fname_in" size="28" style="width: 196px;"></input></div>'+
 			'</div>'+
 			'&nbsp;'+
 			'<div>'+
 				'<div class="informationL">Фамилия:</div>'+
-				'<div class="informationR" id="sname"><input type="text" id="sname_in" size="28"></input></div>'+
+				'<div class="informationR" id="sname"><input type="text" id="sname_in" size="28" style="width: 196px;"></input></div>'+
 			'</div>'+
 			'&nbsp;'+
 			'<div>'+
 				'<div class="informationL">Отчество:</div>'+
-				'<div class="informationR" id="tname"><input type="text" id="tname_in" size="28"></input></div>'+
+				'<div class="informationR" id="tname"><input type="text" id="tname_in" size="28" style="width: 196px;"></input></div>'+
 			'</div>'+
 			'&nbsp;'+
 			'<div>'+
 				'<div class="informationL">Логин:</div>'+
-				'<div class="informationR" id="login"><input type="text" id="login_in" size="28" readonly="readonly"></input></div>'+
+				'<div class="informationR" id="login"><input type="text" id="login_in" size="28" style="width: 196px;" readonly="readonly"></input></div>'+
 			'</div>'+
 			'&nbsp;'+
 			'<div>'+
 				'<div class="informationL">Новый пароль:</div>'+
-				'<div class="informationR" id="pass1"><input type="text" id="pass1_in" size="28"></input></div>'+
+				'<div class="informationR" id="pass1"><input type="text" id="pass1_in" size="28" style="width: 196px;"></input></div>'+
 			'</div>'+
 			'&nbsp;'+
 			'<div>'+
 				'<div class="informationL">Подтверждение пароля:</div>'+
-				'<div class="informationR"  id="pass2"><input type="text" id="pass2_in" size="28"></input></div>'+
+				'<div class="informationR"  id="pass2"><input type="text" id="pass2_in" size="28" style="width: 196px;"></input></div>'+
 			'</div>'+
 			'&nbsp;'+
 			'<div>'+

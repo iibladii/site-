@@ -39,6 +39,8 @@ function loadADSLTable(elem){
             dataType: 'json',
             async: true,
             success: function(data) {
+            	//Зададим номер текущей страницы
+            	page = data.countPAge>elem?elem:data.countPAge;
             	countPage = data.countPAge;
                 var elem2 = document.getElementById("ADSLList");//Таблица
         		var adslList='<table border="1" id="usersTable" width="600px">'+
@@ -98,6 +100,8 @@ function loadADSLTableDel(elem){
         dataType: 'json',
         async: true,
         success: function(data) {
+        	//Зададим номер текущей страницы
+        	page = data.countPAge>elem?elem:data.countPAge;
         	countPage = data.countPAge;
             var elem2 = document.getElementById("ADSLList");//Таблица
     		var adslList='<table border="1" id="usersTable">'+
@@ -208,7 +212,6 @@ $(document).ready(function() {
 	mainURL = ref.substring(0, ch);
 	
 	loadInfo1("","");
-	//blockInput();
 	loadADSLTable(1);	
 });
 
@@ -235,7 +238,6 @@ function getdetails(obj) {
 					loadADSLTable(1);
 				}
 			});
-			//blockInput();
 			loadADSLTable(page);
 		}
 	}
@@ -246,7 +248,6 @@ $(document).on('click','#btn',function(){
 	var elem = document.getElementById("menu_knopki");//Кнопка
 	var elem3 = document.getElementById("ADSLList");//Таблица
 	if(flag==0){
-		//blockInput();
 		flag=1;
 			elem.innerHTML ='&nbsp;'+
 			'<button  id="create" style="cursor:pointer"><img src="styles/kartoteka/img/plus.png" style="vertical-align: middle"></img>Создать</button>'+
@@ -255,9 +256,6 @@ $(document).on('click','#btn',function(){
 			loadADSLTableDel(page);
 	}
 	else{
-		//if(document.getElementById("adsl_Name").value!=''){
-		//	blockInput();
-		//}
 		flag=0;
 			elem.innerHTML ='&nbsp;'+
 			'<button id="create" style="cursor:pointer"><img src="styles/kartoteka/img/plus.png" style="vertical-align: middle"></img>Создать</button>'+
@@ -275,28 +273,42 @@ $(document).on("click", ".page-с", function (){
 	else
 		loadADSLTableDel(page);
 });
+//Обработка нажатия на кнопку назад
+$(document).on("click", ".page-l", function (){
+	if(page > 1)
+	if(flag == 0)
+		loadADSLTable(page - 1);
+	else
+		loadADSLTableDel(page - 1);
+});
+//Обработка нажатия на кнопку вперёд
+$(document).on("click", ".page-r", function (){
+	if(flag==0)
+		loadADSLTable(page + 1);
+	else
+		loadADSLTableDel(page + 1);
+});
 
-    //Обработка нажатия кнопки поиск
-    $(document).on("click", "#poisk", function() {
-    	loadInfo1("","");
-    	//blockInput();
-    	zap=-1;
-    	if(flag==0)
-    		loadADSLTable(1);
-    	else
-    		loadADSLTableDel(1);
-    });
+//Обработка нажатия кнопки поиск
+$(document).on("click", "#poisk", function() {
+    loadInfo1("","");
+    zap=-1;
+    if(flag==0)
+    	loadADSLTable(1);
+    else
+    	loadADSLTableDel(1);
+});
       
-  //Обработка нажатия кнопки создать
-    $(document).on("click", "#create", function() {
-    	if(!($("#dialog").dialog("isOpen")))
-    		{
-    			$("#dialog").dialog('open');
-    			initSelect2Set();
-    		}
-    	else
-    		$("#dialog").dialog('close');
-    });
+//Обработка нажатия кнопки создать
+$(document).on("click", "#create", function() {
+    if(!($("#dialog").dialog("isOpen")))
+    	{
+    		$("#dialog").dialog('open');
+    		initSelect2Set();
+    	}
+    else
+    	$("#dialog").dialog('close');
+});
    
   //Обработка нажатия кнопки ввод во всплывающем окне
     $(document).on("click", "#vvod", function() {
@@ -352,8 +364,7 @@ $(document).on("click", ".page-с", function (){
     		$('#_subdivisions_ option:selected').each(function() {
     			arr.push($(this).text());
     		});
-    		
-    		
+
     		var DepartmentDataObject= {
     				'departmentName': document.getElementById("name" + currentLine).innerText,
     				'departmentCode': document.getElementById("code" + currentLine).innerText,
