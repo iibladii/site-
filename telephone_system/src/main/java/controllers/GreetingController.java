@@ -823,29 +823,39 @@ public class GreetingController {
 		
 		List<Telephone> results = new ArrayList<Telephone>();
 		if(isDel==0) {
-			results = telephoneRepository.find("%" + number + "%", "%" + att1 + "%", "%" + att2 + "%",
-				"%" + room + "%", "%" + department + "%", "%" + adsl + "%", "%" + subdivision + "%",
-				"%" + subdivision_code + "%");
+			if(!subdivision.equals("") || !subdivision.equals(""))//Если подразделений нет включим в выборку номера без подразделений
+				results = telephoneRepository.find("%" + number + "%", "%" + att1 + "%", "%" + att2 + "%",
+						"%" + room + "%", "%" + department + "%", "%" + adsl + "%", "%" + subdivision + "%",
+						"%" + subdivision_code + "%");
+			else
+			{
+				results = telephoneRepository.find_NoSubdivision("%" + number + "%", "%" + att1 + "%", "%" + att2 + "%",
+						"%" + room + "%", "%" + department + "%", "%" + adsl + "%");
+			}
 		}
 		else
-			results = telephoneRepository.findDel("%" + number + "%", "%" + att1 + "%", "%" + att2 + "%",
+			if(!subdivision.equals("") || !subdivision.equals(""))
+			{
+				results = telephoneRepository.findDel("%" + number + "%", "%" + att1 + "%", "%" + att2 + "%",
 					"%" + room + "%", "%" + department + "%", "%" + adsl + "%", "%" + subdivision + "%",
 					"%" + subdivision_code + "%");
+			}
+			else
+			{
+				results = telephoneRepository.findDel_NoSubdivision("%" + number + "%", "%" + att1 + "%", "%" + att2 + "%",
+						"%" + room + "%", "%" + department + "%", "%" + adsl + "%");
+			}
 		
 		Iterator<Telephone> iterator = results.iterator();
-		int ch_page = 1;// Номер строки
-		while (iterator.hasNext()) {
-			iterator.next();
-			ch_page++;
-		}
-		table1 tb = new table1(page, ch_page);
-		// Вставляем через итератор (Модифицированный метод)
+		int ch_page = results.size();//Число строк
+		table1 tb = new table1(page<ch_page?page:ch_page, ch_page);//Если
+		// Вставляем через итератор (переделать запрос)
 		Iterator<Telephone> iterator2 = results.iterator();
 		int ch = 1;// Номер строки
 		while (iterator2.hasNext()) {
 			Telephone tl = (Telephone) iterator2.next();
-			if (ch > (page - 1) * count) {
-				if (ch <= (page * count)) {
+			if (ch > (tb.getPage_no() - 1) * count) {
+				if (ch <= (tb.getPage_no() * count)) {
 					
 							//Поиск элементов кросса//////////////////////////////
 							ArrayList<String> krs = new ArrayList<String>();
@@ -860,9 +870,27 @@ public class GreetingController {
 							}
 							//////////////////////////////////////////////////////
 							if(ch1 > 0)//Если элемент найден
-								tb.add(ch, tl.getNumber(), tl.getAtt1(), tl.getAtt2(), tl.getRoom(),
-									tl.getDepartment().getName(), tl.getSubdivision().getName(),
-									tl.getSubdivision().getCode(), tl.getAdsl().getName(), kr);
+							{
+								String number_ = tl.getNumber();
+								String att1_ = tl.getAtt1();
+								String att2_ = tl.getAtt2();
+								String room_ = tl.getRoom();
+								String department_ = tl.getDepartment().getName();
+								String subdivision_ = tl.getSubdivision() == null?"":tl.getSubdivision().getName();//Если subdivision == null оставим пустое место
+								String sbdivisionCode_ = tl.getSubdivision() == null?"":tl.getSubdivision().getCode();//Если subdivision == null оставим пустое место
+								
+								tb.add(ch,
+										number_,
+										att1_,
+										att2_,
+										room_,
+										department_,
+										subdivision_,
+										sbdivisionCode_, 
+										tl.getAdsl().getName(),
+										kr
+										);
+							}
 				} else
 					break;
 			}
@@ -1492,13 +1520,19 @@ public class GreetingController {
     	
     	//Получим объекты subdivision и department на основе данных запроса
     	//Получим department
-    	Department dep = departmentRepository.findOne(kdo.getDepartmentName());
+    	String dName = kdo.getDepartmentName().substring(0,kdo.getDepartmentName().indexOf("("));
+    	String dCode = kdo.getDepartmentName().substring(kdo.getDepartmentName().indexOf("(") + 1, kdo.getDepartmentName().indexOf(")"));
+    	Department dep = departmentRepository.findDep(dName, dCode);
+	
     	//Получим параметры name и code из subdivision
-    	String sdName = kdo.getSubdivisionName().substring(0,kdo.getSubdivisionName().indexOf("("));
-    	String sdCode = kdo.getSubdivisionName().substring(kdo.getSubdivisionName().indexOf("(") + 1, kdo.getSubdivisionName().indexOf(")"));
-    	//Получим объект subdivision
-    	Subdivision sd = subdivisionRepository.findObjectByCodeName(sdName, sdCode);
-
+    	Subdivision sd = null;
+		if(!kdo.getSubdivisionName().equals("")) {
+			String sdName = kdo.getSubdivisionName().substring(0,kdo.getSubdivisionName().indexOf("("));
+			String sdCode = kdo.getSubdivisionName().substring(kdo.getSubdivisionName().indexOf("(") + 1, kdo.getSubdivisionName().indexOf(")"));
+			//Получим объект subdivision
+			sd = subdivisionRepository.findObjectByCodeName(sdName, sdCode);
+		}
+		
     	//Create security т.к. вынесено в аттрибут не используем
     	Security secur = new Security();
     	secur.setNumber_dot(kdo.getAtt2());
@@ -1509,7 +1543,12 @@ public class GreetingController {
     	tp.setNumber(kdo.getTelephone());
     	tp.setAtt1(kdo.getAtt1());
     	tp.setAtt2(kdo.getAtt2());
+    	
+    	//Если подразделения нет оставим null
+    	
     	tp.setDepartment(dep);
+    	
+    	if(sd != null)
     	tp.setSubdivision(sd);
 
     	//Переделать(векроятно избыточный функционал)
@@ -1547,13 +1586,12 @@ public class GreetingController {
     @RequestMapping(value = "/kartoteka", method = RequestMethod.POST)
     @ResponseBody
     public String postKartoteka(@RequestBody KartotekaDataObject kdo) {
-    	//if(telephoneRepository.findCountNumber(kdo.getTelephone()) > 0)
-    	
     	//Изменим запись о номере в базе
-
     	//Получим объекты subdivision и department на основе данных запроса
     	//Получим department
-    	Department dep = departmentRepository.findOne(kdo.getDepartmentName());
+		String dName = kdo.getDepartmentName().substring(0,kdo.getDepartmentName().indexOf("("));
+    	String dCode = kdo.getDepartmentName().substring(kdo.getDepartmentName().indexOf("(") + 1, kdo.getDepartmentName().indexOf(")"));
+    	Department dep = departmentRepository.findDep(dName, dCode);
     	//Получим параметры name и code из subdivision
     	String sdName = kdo.getSubdivisionName().substring(0,kdo.getSubdivisionName().indexOf("("));
     	String sdCode = kdo.getSubdivisionName().substring(kdo.getSubdivisionName().indexOf("(") + 1, kdo.getSubdivisionName().indexOf(")"));
@@ -1564,8 +1602,8 @@ public class GreetingController {
     	//Проверим есть ли такая запись security
     	if(securityRepository.findCountRep(kdo.getAtt2())>0)
     		secur = securityRepository.findObjRep(kdo.getAtt2());
-    		//Если нету создаём
-    		//Create security т.к. вынесено в аттрибут не используем
+    	//Если нету создаём
+    	//Create security т.к. вынесено в аттрибут не используем
     	secur.setNumber_dot(kdo.getAtt2()); 		
     	securityRepository.save(secur);
     	
@@ -1611,11 +1649,6 @@ public class GreetingController {
     	for(int i = 0; i < kdo.getKross().length; i++) {
     		//Узнаем есть ли запись с таким параметром nam
     		Kross kross = new Kross();
-    		//if(krossRepository.findIfCross(kdo.getKross()[i])>0)
-    		//{
-    			//Kross[] kk = krossRepository.findObjCross(kdo.getKross()[i]);
-    		//	kross = kk[0];
-    		//}
     		String str = kdo.getKross()[i];
     		kross.setName(str);
     		kross.setTelephone(tp);

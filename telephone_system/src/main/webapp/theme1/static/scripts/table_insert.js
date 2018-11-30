@@ -1,5 +1,5 @@
 //<!--Генерация таблицы-->$("#poisk").click(function(){//Обработка нажатия кнопки с id = poisk             $('button').click(function(){//Обработка нажатий всех кнопок
-var current_number_button=1;
+var page=1;
 var max_number_button=5;
 var isDel = 0;
 var oldNumber;//Номер телефона с которым работаем
@@ -211,10 +211,11 @@ function departmentListInit(){
 		//Очистка
     	//$('#SubdivisionList_').select2( "destroy" );
 		
-    	
+    	nn = e.params.data.text;
+    	//console.log(mainURL + '/Select2kartotekaList_subdivision?name=' + JSON.stringify(nn));
 		$.ajax({
 	        type: 'GET',
-	        url:   mainURL + '/Select2kartotekaList_subdivision?name='+ e.params.data.text,
+	        url:   mainURL + '/Select2kartotekaList_subdivision?name=' + JSON.stringify(nn),
 	        dataType: 'json',
 	        async: true,
 	        success: function(result) {
@@ -250,19 +251,69 @@ $(document).ready(function() {
 	//Инициализация списка подразделений
 	departmentListInit();
 	
-	//Обрабатывает нажатие кнопки с классом page-p кнопки с номерами страниц
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	//Обработка нажатия на кнопку назад
+	$(document).on("click", ".page-l", function (){
+		if(page > 1)
+		if(flag == 0)
+			loadADSLTable(page - 1);
+		else
+			loadADSLTableDel(page - 1);
+	});
+	//Обработка нажатия на кнопку вперёд
+	$(document).on("click", ".page-r", function (){
+		if(flag==0)
+			loadADSLTable(page + 1);
+		else
+			loadADSLTableDel(page + 1);
+	});*/
+	
+	
+	
+	
+	//Обрабатывает нажатие кнопки с классом page-l кнопки с номерами страниц
 	$("body").on("click", ".page-l", function () {
-		getDataInitial((current_number_button-1) >= 1 ? current_number_button-- : current_number_button);
+		if(page > 1) page --;
 	});
 	
 	//Обрабатывает нажатие кнопки с классом page-p кнопки с номерами страниц
 	$("body").on("click", ".page-r", function (){
-		getDataInitial((current_number_button) < max_number_button ? current_number_button++ : current_number_button);
+		page ++;
 	});
 	
 	//Обрабатывает нажатие кнопки с классом page-p кнопки с номерами страниц
 	$("body").on("click", ".page-с", function (){
-		getDataInitial($(this).attr("value"));
+		page_ = $(this).attr("value");
+		getDataInitial(page);
+		page = page_;//Если не возникло ошибки перехода на новую страницу обновим номер текущей страницы
 	});
 	
 	
@@ -323,7 +374,7 @@ $(document).on("click", "#vvod", function() {
 	var note = document.getElementById("note").value
 	var place_ = document.getElementById("place_").value
 	
-	alert(arr);
+	//alert(arr);
 	
 	var KartotekaDataObject = {
 			'telephone': telephone,
@@ -406,7 +457,7 @@ $(document).on("click", "#_vvod", function() {
 		dataType: 'json',
 		async: true,
         success: function(result) {
-  			alert(result);
+  			//alert(result);
   			//Обновление таблицы при открытии страницы
   			getDataInitial('','','','','','','','','','');
         },

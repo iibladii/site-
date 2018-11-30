@@ -35,6 +35,15 @@ public interface DepartmentRepository extends CrudRepository<Department, Long> {
 	 * @param code код
 	 * @return список подраздеелний
 	 */
+	@Query(value = "select a from Department a WHERE a.name = :name and a.code = :code order by a.code")
+    Department findDep(@Param("name") String name, @Param("code") String code);
+	
+	/**
+	 * Поиск подразделений по коду и наименованию
+	 * @param name наименование
+	 * @param code код
+	 * @return список подраздеелний
+	 */
 	@Query(value = "select a from Department a WHERE a.name like :name and a.code like :code order by a.code")
     List<Department> findAllCodeName(@Param("name") String name, @Param("code") String code);
 	

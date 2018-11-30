@@ -106,24 +106,6 @@ $(document).ready(function() {//При загрузке документа за�
 	$('.js-example-basic-multiple').select2({
 		data: data_
 	});
-	/*
-	$.ajax({
-        type: 'GET',
-        url:   "/roleList" ,
-        dataType: 'json',
-        async: true,
-        success: function(result) {
-        	for (var i = 0; i < result.length; i++){
-        		data_.push(result[i]);
-        	}
-        	$('.js-example-basic-multiple').select2({
-        		data: data_
-        	});
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert(jqXHR.status + ' ' + jqXHR.responseText);
-        }
-    });*/
 	blockInput();
 });
 
