@@ -215,7 +215,7 @@ function departmentListInit(){
     	//console.log(mainURL + '/Select2kartotekaList_subdivision?name=' + JSON.stringify(nn));
 		$.ajax({
 	        type: 'GET',
-	        url:   mainURL + '/Select2kartotekaList_subdivision?name=' + JSON.stringify(nn),
+	        url:   mainURL + '/Select2kartotekaList_subdivision?name=' + nn,
 	        dataType: 'json',
 	        async: true,
 	        success: function(result) {
@@ -304,7 +304,7 @@ $(document).ready(function() {
 		if(page > 1) page --;
 	});
 	
-	//Обрабатывает нажатие кнопки с классом page-p кнопки с номерами страниц
+	//Обрабатывает нажатие кнопки с классом page-r кнопки с номерами страниц
 	$("body").on("click", ".page-r", function (){
 		page ++;
 	});
