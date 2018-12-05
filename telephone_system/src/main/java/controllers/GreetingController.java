@@ -1682,6 +1682,7 @@ public class GreetingController {
     		DataListSelect2 dl = new DataListSelect2();
     		dl.setId(chId); chId++;
     		dl.setText(arr[i][0]  + "(" + arr[i][1] + ")");
+    		if(sName.length>0)//Добаим в список если число подразделений>0
     		if(arr[i][0].equals(sName[0][0]) && arr[i][1].equals(sName[0][1]))
     			dl.setSelected(true);
     		else
@@ -1712,7 +1713,7 @@ public class GreetingController {
     	for(int i = 0; i < departmentList.length; i++) {
     		DataListSelect2 ds2 = new DataListSelect2();
     		ds2.setId(i);
-    		ds2.setText(departmentList[i][0] + '(' + departmentList[i][0] + ')');
+    		ds2.setText(departmentList[i][0] + '(' + departmentList[i][1] + ')');
     		if(departmentList[i][0].equals(dep[0][0]) && departmentList[i][1].equals(dep[0][1]))
     			ds2.setSelected(true);
     		else
