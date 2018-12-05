@@ -540,8 +540,27 @@ function viewclick(obj){
 	        }
 	    });
 		
-		//Получим данные о списке подразделений
+		//Осуществляет подгрузку отделов при выборе подразделения
+		$('#_DepartmentList_').on('select2:select', function (e) {
+	    	nn = e.params.data.text;
+			$.ajax({
+		        type: 'GET',
+		        url:   mainURL + '/Select2kartotekaList_subdivision?name=' + nn,
+		        dataType: 'json',
+		        async: true,
+		        success: function(result) {
+		        	$("#_SubdivisionList_").html('').select2();//Очистка поля
+		        	$('#_SubdivisionList_').select2({//Заполнение данными
+		        		data: result
+		        	});
+		        },
+		        error: function(jqXHR, textStatus, errorThrown) {
+		            alert(jqXHR.status + ' ' + jqXHR.responseText);
+		        }
+		    });
+		});
 		
+		//Получим данные о списке подразделений
 		$.ajax({
 	        type: 'GET',
 	        url:   mainURL + '/Select2kartotekaList_subdivisionModify?telephone=' + param,
@@ -559,10 +578,6 @@ function viewclick(obj){
 	            alert(jqXHR.status + ' ' + jqXHR.responseText);
 	        }
 	    });
-	//});
-		
-	//else
-	//	$("#dialogView").dialog('close');
 }
 
 //Отвечает за сокрытие лишних колонок в таблице
